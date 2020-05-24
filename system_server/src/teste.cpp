@@ -17,6 +17,7 @@ https://answers.ros.org/question/218978/using-the-mysql-database-in-ros-jade-pro
 #include <cppconn/prepared_statement.h>
 
 #include "dao/generalDao.hpp"
+#include "dao/distanceTableDao.hpp"
 
 #define EXAMPLE_HOST "localhost"
 #define EXAMPLE_USER "root"
@@ -33,15 +34,16 @@ int main(int argc, const char **argv)
     const string database(argc >= 5 ? argv[4] : EXAMPLE_DB);
 
     GeneralDao gDAO(url, user, pass, database);
-    std::unique_ptr<sql::ResultSet> results;
-    std::string stmt1 = "INSERT INTO `location` (`id_location`, `description`, `is_depot`, `x_pos`, `y_pos`, `a_pos`) VALUES ('6', 'tESTE', '0', '45', '54', '7.6')";
-    std::string stmt2 = "INSERT INTO `location` (`id_location`, `description`, `is_depot`, `x_pos`, `y_pos`, `a_pos`) VALUES ('7', 'tESTE', '0', '45', '54', '7.6')";
+    DistanceTableDao distDao(&gDAO);
+    std::vector<DistanceUnit> distanceVector;
 
-    std::vector<std::string> st;
-    st.push_back(stmt1);
-    st.push_back(stmt2);
+    distDao.getDistanceTable(distanceVector);
+   
 
-    gDAO.executeUpdate(st);
+    for (auto it : distanceVector)
+    {
+        std::cout << it.from << " " << it.to << " " << it.distance << std::endl;
+    }
     /*gDAO.executeUpdate(stmt);
 
     while (results->next())

@@ -1,3 +1,6 @@
+#ifndef GENERAL_DAO_HPP
+#define GENERAL_DAO_HPP
+
 #include <string>
 #include <vector>
 
@@ -22,3 +25,5 @@ public:
     bool executeUpdate(std::string statement);
     bool executeUpdate(std::vector<std::string> &statement);
 };
+
+#endif
