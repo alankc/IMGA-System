@@ -17,7 +17,7 @@ https://answers.ros.org/question/218978/using-the-mysql-database-in-ros-jade-pro
 #include <cppconn/prepared_statement.h>
 
 #include "dao/generalDao.hpp"
-#include "dao/distanceTableDao.hpp"
+#include "dao/locationDao.hpp"
 
 #define EXAMPLE_HOST "localhost"
 #define EXAMPLE_USER "root"
@@ -34,15 +34,15 @@ int main(int argc, const char **argv)
     const string database(argc >= 5 ? argv[4] : EXAMPLE_DB);
 
     GeneralDao gDAO(url, user, pass, database);
-    DistanceTableDao distDao(&gDAO);
-    std::vector<DistanceUnit> distanceVector;
+    LocationDao tmpDao(&gDAO);
+    std::vector<Location> tmpVec;
 
-    distDao.getDistanceTable(distanceVector);
+    tmpDao.getLocationList(tmpVec);
    
 
-    for (auto it : distanceVector)
+    for (auto it : tmpVec)
     {
-        std::cout << it.from << " " << it.to << " " << it.distance << std::endl;
+        std::cout << it.getId() << " " << it.getDescription() << " " << it.getX() << " " << it.getY() << " " << it.getIsDepot() << std::endl;
     }
     /*gDAO.executeUpdate(stmt);
 
