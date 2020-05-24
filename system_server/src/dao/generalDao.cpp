@@ -52,7 +52,7 @@ bool GeneralDao::executeQuery(std::string statement, std::unique_ptr<sql::Result
 
 bool GeneralDao::executeUpdate(std::string statement)
 {
-    bool sucess;
+    bool sucess = true;
     try
     {
         sql::Driver *driver = get_driver_instance();
@@ -62,7 +62,7 @@ bool GeneralDao::executeUpdate(std::string statement)
 
         std::unique_ptr<sql::PreparedStatement> pstmt;
         pstmt.reset(con->prepareStatement(statement));
-        sucess = (bool)pstmt->executeUpdate();
+        pstmt->executeUpdate();
     }
     catch (sql::SQLException &e)
     {
