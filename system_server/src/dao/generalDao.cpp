@@ -62,7 +62,7 @@ bool GeneralDao::executeUpdate(std::string statement)
 
         std::unique_ptr<sql::PreparedStatement> pstmt;
         pstmt.reset(con->prepareStatement(statement));
-        sucess = (bool) pstmt->executeUpdate();
+        sucess = (bool)pstmt->executeUpdate();
     }
     catch (sql::SQLException &e)
     {
@@ -83,26 +83,36 @@ bool GeneralDao::executeUpdate(std::string statement)
         sucess = false;
     }
 
-    return sucess;    
+    return sucess;
 }
 
-bool GeneralDao::executeUpdate(std::vector<std::string> statement)
+bool GeneralDao::executeUpdate(std::vector<std::string> &statement)
 {
-    bool sucess;
+    bool sucess = true;
+    std::unique_ptr<sql::Connection> con;
+
     try
     {
-        /*sql::Driver *driver = get_driver_instance();
+        sql::Driver *driver = get_driver_instance();
 
-        std::unique_ptr<sql::Connection> con(driver->connect(host, user, pass));
+
+        con.reset(driver->connect(host, user, pass));
         con->setSchema(database);
+        con->setAutoCommit(false);
 
         std::unique_ptr<sql::PreparedStatement> pstmt;
-        sql::
-        pstmt.reset(con->prepareStatement(statement));
-        sucess = (bool) pstmt->executeUpdate();*/
+
+        for (auto s : statement)
+        {
+            pstmt.reset(con->prepareStatement(s));
+            pstmt->executeUpdate();
+        }
+
+        con->commit();
     }
     catch (sql::SQLException &e)
     {
+        con->rollback();
         /*
       MySQL Connector/C++ throws three different exceptions:
 
@@ -120,5 +130,5 @@ bool GeneralDao::executeUpdate(std::vector<std::string> statement)
         sucess = false;
     }
 
-    return sucess;     
+    return sucess;
 }

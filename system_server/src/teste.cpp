@@ -34,9 +34,15 @@ int main(int argc, const char **argv)
 
     GeneralDao gDAO(url, user, pass, database);
     std::unique_ptr<sql::ResultSet> results;
-    std::string stmt = "SELECT * FROM location ORDER BY ASC;";
+    std::string stmt1 = "INSERT INTO `location` (`id_location`, `description`, `is_depot`, `x_pos`, `y_pos`, `a_pos`) VALUES ('6', 'tESTE', '0', '45', '54', '7.6')";
+    std::string stmt2 = "INSERT INTO `location` (`id_location`, `description`, `is_depot`, `x_pos`, `y_pos`, `a_pos`) VALUES ('7', 'tESTE', '0', '45', '54', '7.6')";
 
-    gDAO.executeQuery(stmt, results);
+    std::vector<std::string> st;
+    st.push_back(stmt1);
+    st.push_back(stmt2);
+
+    gDAO.executeUpdate(st);
+    /*gDAO.executeUpdate(stmt);
 
     while (results->next())
     {
@@ -47,7 +53,7 @@ int main(int argc, const char **argv)
                   << " y pos: " << results->getUInt("y_pos")
                   << " a pos: " << results->getDouble("a_pos")
                   << std::endl;
-    }
+    }*/
 
 
     /*cout << "Connector/C++ tutorial framework..." << endl;

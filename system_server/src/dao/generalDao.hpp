@@ -20,5 +20,5 @@ public:
     ~GeneralDao();
     bool executeQuery(std::string statement, std::unique_ptr<sql::ResultSet> &res);
     bool executeUpdate(std::string statement);
-    bool executeUpdate(std::vector<std::string> statement);
+    bool executeUpdate(std::vector<std::string> &statement);
 };
