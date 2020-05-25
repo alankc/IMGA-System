@@ -1,7 +1,5 @@
 #include "task.hpp"
 
-Task::Task(){}
-
 Task::Task(uint32_t id, uint32_t pickUpLocation, uint32_t deliveryLocation, uint16_t payload, double deadline) 
 {
 	this->id = id;

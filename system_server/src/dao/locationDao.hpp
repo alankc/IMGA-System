@@ -1,8 +1,6 @@
 #ifndef LOCATION_DAO_HPP
 #define LOCATION_DAO_HPP
 
-#include <vector>
-
 #include "generalDao.hpp"
 #include "../model/location.hpp"
 

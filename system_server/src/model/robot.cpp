@@ -2,8 +2,6 @@
 
 double Robot::maximumBattery = 100.0;
 
-Robot::Robot(){}
-
 Robot::Robot(uint32_t id, uint32_t depot, uint32_t currentLocation, uint32_t maximumPayload, double remainingBattery, double dischargeFactor, double batteryThreshold, double mediumVelocity)
 {
 	this->id = id;

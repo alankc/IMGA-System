@@ -17,7 +17,7 @@ https://answers.ros.org/question/218978/using-the-mysql-database-in-ros-jade-pro
 #include <cppconn/prepared_statement.h>
 
 #include "dao/generalDao.hpp"
-#include "dao/locationDao.hpp"
+#include "dao/robotDao.hpp"
 
 #define EXAMPLE_HOST "localhost"
 #define EXAMPLE_USER "root"
@@ -34,15 +34,18 @@ int main(int argc, const char **argv)
     const string database(argc >= 5 ? argv[4] : EXAMPLE_DB);
 
     GeneralDao gDAO(url, user, pass, database);
-    LocationDao tmpDao(&gDAO);
-    std::vector<Location> tmpVec;
+    RobotDao tmpDao(&gDAO);
+    std::vector<Robot> tmpVec;
 
-    tmpDao.getLocationList(tmpVec);
+    tmpDao.getRobotList(tmpVec);
    
 
     for (auto it : tmpVec)
     {
-        std::cout << it.getId() << " " << it.getDescription() << " " << it.getX() << " " << it.getY() << " " << it.getIsDepot() << std::endl;
+        std::cout << it.getId() << " " << it.getDepot() << " " 
+        << it.getCurrentLocation() << " " << it.getMaximumPayload() << " " 
+        << it.getRemainingBattery() << " " << it.getDischargeFactor() << " "
+        << it.getBatteryThreshold() << " " << it.getMediumVelocity() << std::endl;
     }
     /*gDAO.executeUpdate(stmt);
 

@@ -13,7 +13,6 @@ private:
 	double deadline;
 
 public:
-	Task();
 	Task(uint32_t id = 0, uint32_t pickUpLocation = 0, uint32_t deliveryLocation = 0, uint16_t payload = 0, double deadline = 0);
 
 	void setId(uint32_t id);

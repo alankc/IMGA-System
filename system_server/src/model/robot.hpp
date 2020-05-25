@@ -18,7 +18,6 @@ class Robot
 
 	public:
 		static double maximumBattery;
-		Robot();
 		Robot(uint32_t id = 0, uint32_t depot = 0, uint32_t currentLocation = 0, uint32_t maximumPayload = 0, double remainingBattery = 0, double dischargeFactor = 0, double batteryThreshold = 0, double mediumVelocity = 0);
 
 		void setId(uint32_t id);
