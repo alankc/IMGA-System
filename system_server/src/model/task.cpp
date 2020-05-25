@@ -64,6 +64,13 @@ bool operator== (const Task& t1, const Task &t2)
 	return t1.id == t2.id;
 }
 
+std::ostream& operator<<(std::ostream& os, const Task& t)
+{
+    os 	<< t.id << " " << t.pickUpLocation << " "
+		<< t.deliveryLocation << " " << t.payload << " " << t.deadline << std::endl;
+    return os;
+}
+
 bool Task::operator< (const Task &taskObj)
 {
 	return (this->id < taskObj.id);

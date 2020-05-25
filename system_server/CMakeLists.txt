@@ -120,6 +120,8 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  /src/dao
+  /src/model
 )
 
 ## Declare a C++ library

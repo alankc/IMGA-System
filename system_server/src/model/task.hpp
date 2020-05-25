@@ -2,6 +2,7 @@
 #define TASK_HPP
 
 #include <cstdint>
+#include <iostream>
 
 class Task
 {
@@ -28,6 +29,7 @@ public:
 	double getDeadline() const;
 
 	friend bool operator== (const Task& t1, const Task &t2);
+	friend std::ostream& operator<<(std::ostream& os, const Task& t);
 	bool operator< (const Task &taskObj);
 };
 
