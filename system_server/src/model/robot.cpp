@@ -19,6 +19,16 @@ void Robot::setId(uint32_t id)
 	this->id = id;
 }
 
+void Robot::setDescription(std::string description)
+{
+	this->description = description;
+}
+
+void Robot::setStatus(std::string status)
+{
+	this->status = status;
+}
+
 void Robot::setDepot(uint32_t depot)
 {
 	this->depot = depot;
@@ -57,6 +67,16 @@ void Robot::setMediumVelocity(double mediumVelocity)
 uint32_t Robot::getId() const
 {
 	return id;
+}
+
+std::string Robot::getDescription() const
+{
+	return description;
+}
+
+std::string Robot::getStatus() const
+{
+	return status;
 }
 
 uint32_t Robot::getDepot() const

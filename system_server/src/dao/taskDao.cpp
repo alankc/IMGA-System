@@ -24,6 +24,8 @@ bool TaskDao::getTaskList(std::vector<Task> &taskList, std::string status)
             tmp.setDeliveryLocation(res->getUInt("id_delivery_location"));
             tmp.setPayload(res->getUInt("payload"));
             tmp.setDeadline(res->getUInt("deadline"));
+            tmp.setStatus(res->getString("status"));
+            tmp.setDescription(res->getString("description"));
             taskList.push_back(tmp);
         }
     }

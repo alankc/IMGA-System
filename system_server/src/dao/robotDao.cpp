@@ -27,7 +27,9 @@ bool RobotDao::getRobotList(std::vector<Robot> &robotList)
             tmp.setDischargeFactor(res->getDouble("discharge_factor"));
             tmp.setBatteryThreshold(res->getDouble("battery_threshold"));
             tmp.setMediumVelocity(res->getDouble("medium_velocity"));
-
+            tmp.setStatus(res->getString("status"));
+            tmp.setDescription(res->getString("description"));
+            
             robotList.push_back(tmp);
         }
     }

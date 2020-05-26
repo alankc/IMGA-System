@@ -24,6 +24,11 @@ void Location::setY(uint32_t y)
 	this->y = y;
 }
 
+void Location::setA(double a)
+{
+	this->y = a;
+}
+
 void Location::setDescription(std::string description)
 {
 	this->description = description;
@@ -47,6 +52,11 @@ uint32_t Location::getX()
 uint32_t Location::getY()
 {
 	return y;
+}
+
+double Location::getA()
+{
+	return a;
 }
 
 std::string Location::getDescription()
