@@ -3,11 +3,14 @@
 
 #include <cstdint>
 #include <vector>
+#include <string>
 
 class Robot
 {
 	private:
 		uint32_t id;
+		std::string descriptiion;
+		std::string status;
 		uint32_t depot;
 		uint32_t currentLocation;
 		uint32_t maximumPayload;
@@ -15,6 +18,7 @@ class Robot
 		double dischargeFactor;
 		double batteryThreshold;
 		double mediumVelocity;
+		
 
 	public:
 		static double maximumBattery;
