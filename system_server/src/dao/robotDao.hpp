@@ -22,7 +22,7 @@ private:
 public:
     RobotDao(GeneralDao *gDao);
     ~RobotDao();
-    bool getRobotList(std::vector<Robot> &robotList);
+    bool getRobotList(std::vector<Robot> &robotList, std::string status);
     bool updateRobot(Robot &robot);
     bool updateRobot(std::vector<Robot> &robotList);
     bool updateRobotRequest(RobotRequestData robotRequestData);
