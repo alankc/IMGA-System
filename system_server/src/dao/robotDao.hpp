@@ -4,6 +4,16 @@
 #include "generalDao.hpp"
 #include "../model/robot.hpp"
 
+typedef struct _robotRequestData
+{
+	uint32_t id;
+	std::string status;
+	uint32_t currentLocation;
+	double remainingBattery;
+	double mediumVelocity;
+} RobotRequestData;
+
+
 class RobotDao
 {
 private:
@@ -13,6 +23,9 @@ public:
     RobotDao(GeneralDao *gDao);
     ~RobotDao();
     bool getRobotList(std::vector<Robot> &robotList);
+    bool updateRobot(Robot &robot);
+    bool updateRobot(std::vector<Robot> &robotList);
+    bool updateRobotRequest(RobotRequestData robotRequestData);
 };
 
 
