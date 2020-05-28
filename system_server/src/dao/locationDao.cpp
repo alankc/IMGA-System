@@ -22,6 +22,7 @@ bool LocationDao::getLocationList(std::vector<Location> &locationList)
             tmp.setId(res->getUInt("id_location"));
             tmp.setX(res->getUInt("x_pos"));
             tmp.setY(res->getUInt("y_pos"));
+            tmp.setA(res->getUInt("a_pos"));
             tmp.setDescription(res->getString("description"));
             tmp.setIsDepot(res->getBoolean("is_depot"));
 

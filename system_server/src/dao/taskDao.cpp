@@ -5,7 +5,7 @@ TaskDao::TaskDao(GeneralDao *gDao)
     this->gDao = gDao;
 }
 
-TaskDao::~TaskDao(){}
+TaskDao::~TaskDao() {}
 
 bool TaskDao::getTaskList(std::vector<Task> &taskList, std::string status)
 {
@@ -26,9 +26,12 @@ bool TaskDao::getTaskList(std::vector<Task> &taskList, std::string status)
             tmp.setDeadline(res->getUInt("deadline"));
             tmp.setStatus(res->getString("status"));
             tmp.setDescription(res->getString("description"));
+            tmp.setRobotInCharge(res->getUInt("id_robot_in_charge"));
+            tmp.setSeqNumber(res->getUInt("seq_number"));
+            
             taskList.push_back(tmp);
         }
     }
 
-    return tst;   
+    return tst;
 }
