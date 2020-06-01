@@ -18,6 +18,7 @@ https://answers.ros.org/question/218978/using-the-mysql-database-in-ros-jade-pro
 
 #include "dao/generalDao.hpp"
 #include "dao/robotDao.hpp"
+#include "controller/taskController.hpp"
 
 #define EXAMPLE_HOST "localhost"
 #define EXAMPLE_USER "root"
@@ -34,6 +35,9 @@ int main(int argc, const char **argv)
     const string database(argc >= 5 ? argv[4] : EXAMPLE_DB);
 
     GeneralDao gDAO(url, user, pass, database);
+
+    TaskController tc(&gDAO);
+
     RobotDao tmpDao(&gDAO);
     
     RobotRequestData r1;
