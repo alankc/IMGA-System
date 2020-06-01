@@ -1,7 +1,7 @@
 #include "robot.hpp"
 
 double Robot::maximumBattery = 100.0;
-const std::string STATUS_FREE =  "F";
+const std::string Robot::STATUS_FREE =  "F";
 
 Robot::Robot(uint32_t id, uint32_t depot, uint32_t currentLocation, uint32_t maximumPayload, double remainingBattery, double dischargeFactor, double batteryThreshold, double mediumVelocity)
 {
