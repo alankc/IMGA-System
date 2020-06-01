@@ -2,12 +2,19 @@
 
 #include <sstream>
 
+RobotDao::RobotDao() {}
+
 RobotDao::RobotDao(GeneralDao *gDao)
 {
     this->gDao = gDao;
 }
 
 RobotDao::~RobotDao() {}
+
+void RobotDao::setGeneralDao(GeneralDao *gDao)
+{
+    this->gDao = gDao;
+}
 
 bool RobotDao::getRobotList(std::vector<Robot> &robotList, std::string status)
 {

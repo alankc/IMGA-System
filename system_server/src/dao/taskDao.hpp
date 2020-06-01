@@ -6,12 +6,11 @@
 
 typedef struct _taskScheduledData
 {
-	uint32_t id;
-	std::string status;
-	uint32_t robotInCharge;
-	uint32_t seqNumber;
-}TaskScheduledData;
-
+    uint32_t id;
+    std::string status;
+    uint32_t robotInCharge;
+    uint32_t seqNumber;
+} TaskScheduledData;
 
 class TaskDao
 {
@@ -19,8 +18,10 @@ private:
     GeneralDao *gDao;
 
 public:
+    TaskDao();
     TaskDao(GeneralDao *gDao);
     ~TaskDao();
+    void setGeneralDao(GeneralDao *gDao);
     bool getTaskList(std::vector<Task> &taskList, std::string status);
     bool updateTask(Task &task);
     bool updateTask(std::vector<Task> &taskList);

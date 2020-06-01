@@ -20,8 +20,10 @@ private:
     GeneralDao *gDao;
     
 public:
+    RobotDao();
     RobotDao(GeneralDao *gDao);
     ~RobotDao();
+    void setGeneralDao(GeneralDao *gDao);
     bool getRobotList(std::vector<Robot> &robotList, std::string status);
     bool updateRobot(Robot &robot);
     bool updateRobot(std::vector<Robot> &robotList);

@@ -2,12 +2,19 @@
 
 #include <sstream>
 
+TaskDao::TaskDao(){}
+
 TaskDao::TaskDao(GeneralDao *gDao)
 {
     this->gDao = gDao;
 }
 
 TaskDao::~TaskDao() {}
+
+void TaskDao::setGeneralDao(GeneralDao *gDao)
+{
+    this->gDao = gDao;
+}
 
 bool TaskDao::getTaskList(std::vector<Task> &taskList, std::string status)
 {

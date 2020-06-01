@@ -17,7 +17,7 @@ https://answers.ros.org/question/218978/using-the-mysql-database-in-ros-jade-pro
 #include <cppconn/prepared_statement.h>
 
 #include "dao/generalDao.hpp"
-#include "dao/taskDao.hpp"
+#include "dao/robotDao.hpp"
 
 #define EXAMPLE_HOST "localhost"
 #define EXAMPLE_USER "root"
@@ -34,16 +34,17 @@ int main(int argc, const char **argv)
     const string database(argc >= 5 ? argv[4] : EXAMPLE_DB);
 
     GeneralDao gDAO(url, user, pass, database);
-    TaskDao tmpDao(&gDAO);
-    std::vector<Task> tmpVec;
+    RobotDao tmpDao(&gDAO);
+    
+    RobotRequestData r1;
+    r1.id = 0;
+    r1.currentLocation = 3;
+    r1.mediumVelocity = 3.3;
+    r1.remainingBattery = 17.96;
+    r1.status = "W";
 
-    tmpDao.getTaskList(tmpVec, "N");
+    tmpDao.updateRobotRequest(r1);
    
-
-    for (auto it : tmpVec)
-    {
-        std::cout << it;
-    }
     /*gDAO.executeUpdate(stmt);
 
     while (results->next())
