@@ -51,6 +51,8 @@ public:
 
 	friend bool operator==(const Robot &r1, const Robot &r2);
 	bool operator<(const Robot &robotObj);
+
+	static const std::string STATUS_FREE;
 };
 
 #endif
