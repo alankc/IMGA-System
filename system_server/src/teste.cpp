@@ -18,7 +18,7 @@ https://answers.ros.org/question/218978/using-the-mysql-database-in-ros-jade-pro
 
 #include "dao/generalDao.hpp"
 #include "dao/robotDao.hpp"
-#include "controller/taskController.hpp"
+#include "controller/generalController.hpp"
 
 #define EXAMPLE_HOST "localhost"
 #define EXAMPLE_USER "root"
@@ -36,9 +36,11 @@ int main(int argc, const char **argv)
 
     GeneralDao gDAO(url, user, pass, database);
 
-    TaskController tc(&gDAO);
+    GeneralController gc(url, user, pass, database);
 
-    RobotDao tmpDao(&gDAO);
+    gc.callScheduler();
+
+    /*RobotDao tmpDao(&gDAO);
     
     RobotRequestData r1;
     r1.id = 0;
@@ -47,7 +49,7 @@ int main(int argc, const char **argv)
     r1.remainingBattery = 17.96;
     r1.status = "W";
 
-    tmpDao.updateRobotRequest(r1);
+    tmpDao.updateRobotRequest(r1);*/
    
     /*gDAO.executeUpdate(stmt);
 

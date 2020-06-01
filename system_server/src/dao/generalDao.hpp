@@ -18,7 +18,9 @@ private:
     std::string user;
     std::string pass;
     std::string database;
+
 public:
+    GeneralDao();
     GeneralDao(std::string host, std::string user, std::string pass, std::string database);
     ~GeneralDao();
     bool executeQuery(std::string statement, std::unique_ptr<sql::ResultSet> &res);

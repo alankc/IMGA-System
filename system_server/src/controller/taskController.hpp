@@ -13,6 +13,7 @@ private:
     std::vector<Task> tasksToSchedule;
 
 public:
+    TaskController();
     TaskController(GeneralDao *gDao);
     ~TaskController();
 

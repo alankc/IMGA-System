@@ -1,5 +1,7 @@
 #include "robotController.hpp"
 
+RobotController::RobotController(GeneralDao *gDao) {}
+
 RobotController::RobotController(GeneralDao *gDao)
 {
     this->rd = RobotDao(gDao);

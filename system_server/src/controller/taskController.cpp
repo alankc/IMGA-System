@@ -1,5 +1,7 @@
 #include "taskController.hpp"
 
+TaskController::TaskController() {}
+
 TaskController::TaskController(GeneralDao *gDao)
 {
     this->td = TaskDao(gDao);

@@ -1,6 +1,8 @@
 #include "generalDao.hpp"
 #include <iostream>
 
+GeneralDao::GeneralDao(){}
+
 GeneralDao::GeneralDao(std::string host, std::string user, std::string pass, std::string database)
 {
     this->host = host;

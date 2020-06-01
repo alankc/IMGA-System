@@ -14,6 +14,7 @@ private:
     std::vector<Robot> freeRobots;
 
 public:
+    RobotController();
     RobotController(GeneralDao *gDao);
     ~RobotController();
 
