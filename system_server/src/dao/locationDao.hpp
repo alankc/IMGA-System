@@ -4,6 +4,13 @@
 #include "generalDao.hpp"
 #include "../model/location.hpp"
 
+typedef struct _DistanceUnit
+{
+    uint32_t from;
+    uint32_t to;
+    double distance;
+} DistanceUnit;
+
 class LocationDao
 {
 private:
@@ -13,6 +20,7 @@ public:
     LocationDao(GeneralDao *gDao);
     ~LocationDao();
     bool getLocationList(std::vector<Location> &locationList);
+    bool getDistanceTable(std::vector<DistanceUnit> &distanceVector);
 };
 
 #endif

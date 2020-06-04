@@ -11,17 +11,20 @@ GeneralController::~GeneralController() {}
 
 void GeneralController::callScheduler()
 {
-    auto& rVec = rc.getFreeRobots();
-    auto& tVec = tc.getTasksToSchedule();
+    rc.updateFreeRobots();
+    tc.updateTasksToSchedule();
+    
+    auto& robots = rc.getFreeRobots();
+    auto& tasks = tc.getTasksToSchedule();
 
     std::cout << "Robots: ";
-    for (auto r : rVec)
+    for (auto r : robots)
     {
         std::cout << r.getId() << " ";
     }
 
     std::cout << "\nTaks: ";
-    for (auto t : tVec)
+    for (auto t : tasks)
     {
         std::cout << t.getId() << " ";
     }    
