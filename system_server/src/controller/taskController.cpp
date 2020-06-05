@@ -9,11 +9,6 @@ TaskController::TaskController(GeneralDao *gDao)
 
 TaskController::~TaskController() {}
 
-std::vector<Task> &TaskController::getTasksToSchedule()
-{
-    return tasksToSchedule;
-}
-
 void TaskController::updateTasksToSchedule()
 {
     tasksToSchedule.clear();

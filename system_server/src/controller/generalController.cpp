@@ -14,7 +14,7 @@ void GeneralController::callScheduler()
     rc.updateFreeRobots();
     tc.updateTasksToSchedule();
     
-    auto& robots = rc.getFreeRobots();
+    /*auto& robots = rc.getFreeRobots();
     auto& tasks = tc.getTasksToSchedule();
 
     std::cout << "Robots: ";
@@ -27,5 +27,5 @@ void GeneralController::callScheduler()
     for (auto t : tasks)
     {
         std::cout << t.getId() << " ";
-    }    
+    }*/    
 }

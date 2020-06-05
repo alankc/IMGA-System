@@ -9,16 +9,6 @@ RobotController::RobotController(GeneralDao *gDao)
 
 RobotController::~RobotController() {}
 
-std::vector<Robot> &RobotController::getAllRobots()
-{
-    return allRobots;
-}
-
-std::vector<Robot> &RobotController::getFreeRobots()
-{
-    return freeRobots;
-}
-
 void RobotController::updateAllRobots()
 {
 }

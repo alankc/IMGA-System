@@ -18,11 +18,13 @@ public:
     RobotController(GeneralDao *gDao);
     ~RobotController();
 
-    std::vector<Robot>& getAllRobots();
-    std::vector<Robot>& getFreeRobots();
-
     void updateAllRobots();
     void updateFreeRobots();
+
+    Robot *getRobotById(uint32_t id);
+    Robot *getRobotByIndex(uint32_t index);
+    void copyRobotList(std::vector<Robot> &copy);
+    std::size_t getRobotListSize();    
 };
 
 #endif
