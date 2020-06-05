@@ -22,3 +22,28 @@ void TaskController::updateTasksToSchedule()
 bool TaskController::updateTaskScheduled(std::vector<uint32_t> tasks, std::vector<uint32_t> robots)
 {
 }
+
+Task *TaskController::getTaskById(uint32_t id)
+{
+    auto it = std::find(tasksToSchedule.begin(), tasksToSchedule.end(), id);
+
+    if (it != tasksToSchedule.end())
+        return &(*it);
+
+    return NULL;
+}
+
+Task *TaskController::getTaskByIndex(uint32_t index)
+{
+    return &tasksToSchedule[index];
+}
+
+void TaskController::copyTaskList(std::vector<Task> &copy)
+{
+    copy = std::vector<Task>(tasksToSchedule);
+}
+
+std::size_t TaskController::getTaskListSize()
+{
+    return tasksToSchedule.size();
+}

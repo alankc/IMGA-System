@@ -48,3 +48,8 @@ void RobotController::copyFreeRobotList(std::vector<Robot> &copy)
 {
     copy = std::vector<Robot>(freeRobots);
 }
+
+std::size_t RobotController::getFreeRobotListSize()
+{
+    return freeRobots.size();
+}
