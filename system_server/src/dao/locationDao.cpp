@@ -1,5 +1,7 @@
 #include "locationDao.hpp"
 
+LocationDao::LocationDao() {}
+
 LocationDao::LocationDao(GeneralDao *gDao)
 {
     this->gDao = gDao;

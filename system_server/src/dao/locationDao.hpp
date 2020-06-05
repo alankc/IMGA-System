@@ -17,6 +17,7 @@ private:
     GeneralDao *gDao;
 
 public:
+    LocationDao();
     LocationDao(GeneralDao *gDao);
     ~LocationDao();
     bool getLocationList(std::vector<Location> &locationList);
