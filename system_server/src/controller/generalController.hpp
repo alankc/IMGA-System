@@ -14,12 +14,11 @@ private:
     LocationController lc;
 
 public:
+    GeneralController();
     GeneralController(std::string host, std::string user, std::string pass, std::string database);
     ~GeneralController();
 
     void callScheduler();
-    void callUpdateRobots();
-    void listnerupdatesRobots();
 };
 
 #endif

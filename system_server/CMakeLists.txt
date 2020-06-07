@@ -121,6 +121,7 @@ include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
   /src/controller
+  /src/scheduler
   /src/dao
   /src/model
 )
@@ -138,7 +139,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-FILE(GLOB MyCPPSources src/dao/*.cpp src/model/*.cpp src/controller/*.cpp)
+FILE(GLOB MyCPPSources src/dao/*.cpp src/model/*.cpp src/scheduler/*.cpp src/controller/*.cpp)
 add_executable(${PROJECT_NAME}_node src/teste.cpp ${MyCPPSources})
 
 ## Rename C++ executable without prefix
