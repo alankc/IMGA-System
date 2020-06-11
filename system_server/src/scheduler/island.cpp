@@ -6,11 +6,14 @@
 #include <random>
 #include <algorithm>
 
-Island::Island(GAParameters gaP, uint64_t maxSubIteration, double migrationRate)
+Island::Island(GAParameters gaP, uint64_t maxSubIteration, double migrationRate, std::vector<Task> *taskList, std::vector<Robot> *robotList, std::vector<std::vector<double>> *distancematrix)
 {
     this->gaP = gaP;
     this->maxSubIteration = maxSubIteration;
     this->migrationRate = migrationRate;
+    Chromosome::setRobotList(robotList);
+    Chromosome::setTaskList(taskList);
+    Chromosome::setDistanceMatrix(distancematrix);
 }
 
 Island::~Island()

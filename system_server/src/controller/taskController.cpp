@@ -23,6 +23,11 @@ bool TaskController::updateTaskScheduled(std::vector<uint32_t> tasks, std::vecto
 {
 }
 
+std::vector<Task> *TaskController::getTaskList()
+{
+    return &tasksToSchedule;
+}
+
 Task *TaskController::getTaskById(uint32_t id)
 {
     auto it = std::find(tasksToSchedule.begin(), tasksToSchedule.end(), id);

@@ -20,6 +20,7 @@ public:
     void updateTasksToSchedule();
     bool updateTaskScheduled(std::vector<uint32_t> tasks, std::vector<uint32_t> robots);
 
+    std::vector<Task> *getTaskList();
     Task *getTaskById(uint32_t id);
     Task *getTaskByIndex(uint32_t index);
     void copyTaskList(std::vector<Task> &copy);

@@ -18,7 +18,7 @@ void LocationController::updateLocationList()
     if (!tst)
         std::cout << "Fail to update location list" << std::endl;
     else
-        std::cout << "Location list has been updated" << std::endl;    
+        std::cout << "Location list has been updated" << std::endl;
 }
 
 void LocationController::updateDistanceMatrix()
@@ -28,7 +28,7 @@ void LocationController::updateDistanceMatrix()
     distanceMatrix.clear();
     distanceMatrix.resize(maxId + 1);
     for (uint32_t i = 0; i < maxId + 1; i++)
-		distanceMatrix[i].resize(maxId + 1);
+        distanceMatrix[i].resize(maxId + 1);
 
     std::vector<DistanceUnit> dv;
     bool tst = ld.getDistanceTable(dv);
@@ -38,10 +38,10 @@ void LocationController::updateDistanceMatrix()
         {
             distanceMatrix[d.from][d.to] = d.distance;
         }
-        std::cout << "Distance matrix has been updated" << std::endl; 
+        std::cout << "Distance matrix has been updated" << std::endl;
     }
     else
-        std::cout << "Fail to update distance matrix" << std::endl; 
+        std::cout << "Fail to update distance matrix" << std::endl;
 }
 
 Location *LocationController::getLocationById(uint32_t id, bool isDepot)
@@ -90,4 +90,9 @@ void LocationController::setDistance(uint32_t from, uint32_t to, double distance
 double LocationController::getDistance(uint32_t from, uint32_t to)
 {
     return distanceMatrix[from][to];
+}
+
+std::vector<std::vector<double>> *LocationController::getDistanceMatrix()
+{
+    return &distanceMatrix;
 }

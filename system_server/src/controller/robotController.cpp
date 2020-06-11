@@ -29,6 +29,11 @@ void RobotController::updateFreeRobots()
         std::cout << "Free robots list has been updated" << std::endl;
 }
 
+std::vector<Robot> *RobotController::getFreeRobots()
+{
+    return &freeRobots;
+}
+
 Robot *RobotController::getFreeRobotById(uint32_t id)
 {
     auto it = std::find(freeRobots.begin(), freeRobots.end(), id);

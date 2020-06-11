@@ -27,6 +27,7 @@ public:
 
     void setDistance(uint32_t from, uint32_t to, double distance);
     double getDistance(uint32_t from, uint32_t to);
+    std::vector<std::vector<double>> *getDistanceMatrix();
 };
 
 #endif
