@@ -54,6 +54,7 @@ public:
 	std::vector<ChromosomeResult> getResult();
 	bool allScheduled();
 	void printResult();
+	void getResult(std::vector<uint32_t> &tasksScheduled, std::vector<uint32_t> &robots, std::vector<uint32_t> &tasksFailed);
 
 	//Methods to help with statics
 	double totalEnergy(bool allTasks);

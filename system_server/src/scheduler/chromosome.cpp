@@ -650,6 +650,22 @@ void Chromosome::printResult()
 	std::cout << std::setw(12) << "Fitness: " << fitness << std::endl;
 }
 
+void Chromosome::getResult(std::vector<uint32_t> &tasksScheduled, std::vector<uint32_t> &robotsScheduled, std::vector<uint32_t> &tasksFailed)
+{
+	for (uint16_t i = 0; i < taskList->size(); i++)
+	{
+		if (scheduled[i])
+		{
+			tasksScheduled.push_back(taskList->at(tasks[i]).getId());
+			robotsScheduled.push_back(robotList->at(robots[i]).getId());
+		}
+		else
+		{
+			tasksFailed.push_back(taskList->at(tasks[i]).getId());
+		}		
+	}	
+}
+
 double Chromosome::totalEnergy(bool allTasks)
 {
 	double totalEnergy = 0;

@@ -37,4 +37,5 @@ void GeneralController::callScheduler()
     is.solve();
     Chromosome best = is.getBest();
     best.printResult();
+
 }
