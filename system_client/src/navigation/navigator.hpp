@@ -8,15 +8,15 @@
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
-class Navigation
+class Navigator
 {
 private:
     std::string robot;
     std::string topic;
     std::string frame;
 public:
-    Navigation(std::string robot, std::string topic, std::string frame);
-    ~Navigation();
+    Navigator(std::string robot, std::string topic, std::string frame);
+    ~Navigator();
     bool navigateTo(double x, double y, double w);
 };
 

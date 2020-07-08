@@ -1,17 +1,17 @@
-#include "navigation.hpp"
+#include "navigator.hpp"
 
-Navigation::Navigation(std::string robot, std::string topic, std::string frame)
+Navigator::Navigator(std::string robot, std::string topic, std::string frame)
 {
     this->robot = robot;
     this->topic = topic;
     this->frame = frame;
 }
 
-Navigation::~Navigation()
+Navigator::~Navigator()
 {
 }
 
-bool Navigation::navigateTo(double x, double y, double w)
+bool Navigator::navigateTo(double x, double y, double w)
 {
     //tell the action client that we want to spin a thread by default
     MoveBaseClient ac(robot + "/" + topic, true);
