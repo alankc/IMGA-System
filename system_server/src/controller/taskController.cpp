@@ -19,7 +19,7 @@ void TaskController::updateTasksToSchedule()
         std::cout << "Tasks to schedule has been updated" << std::endl;
 }
 
-bool TaskController::updateTaskScheduled(std::vector<uint32_t> tasks, std::vector<uint32_t> robots)
+bool TaskController::updateTaskScheduled(std::vector<uint32_t> &tasksScheduled, std::vector<uint32_t> &robots, std::vector<uint32_t> &tasksFailed)
 {
 }
 

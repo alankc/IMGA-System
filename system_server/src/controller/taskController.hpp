@@ -18,7 +18,7 @@ public:
     ~TaskController();
 
     void updateTasksToSchedule();
-    bool updateTaskScheduled(std::vector<uint32_t> tasks, std::vector<uint32_t> robots);
+    bool updateTaskScheduled(std::vector<uint32_t> &tasksScheduled, std::vector<uint32_t> &robots, std::vector<uint32_t> &tasksFailed);
 
     std::vector<Task> *getTaskList();
     Task *getTaskById(uint32_t id);
