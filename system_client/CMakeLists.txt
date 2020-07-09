@@ -126,7 +126,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   /src/navigation
- 
+  /src/communication
 )
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -141,8 +141,8 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-FILE(GLOB MyCPPSources src/navigation/*.cpp)
-add_executable(${PROJECT_NAME}_node src/main.cpp ${MyCPPSources})
+FILE(GLOB MyCPPSourcesa src/navigation/*.cpp src/communication/*.cpp)
+add_executable(${PROJECT_NAME}_node src/main.cpp ${MyCPPSourcesa})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

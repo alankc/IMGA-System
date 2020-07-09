@@ -1,5 +1,5 @@
-#ifndef NAVIGATION_HPP
-#define NAVIGATION_HPP
+#ifndef NAVIGATOR_HPP
+#define NAVIGATOR_HPP
 
 #include <string>
 #include <ros/ros.h>
