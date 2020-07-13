@@ -1,19 +1,19 @@
 #include <ros/ros.h>
-#include "navigation/navigator.hpp"
-#include <system_client/MsgTaskList.h>
-#include "communication/communicator.hpp"
+#include "dao/robotDao.hpp"
 
-int main(int argc, char** argv){
-  ros::init(argc, argv, "simple_navigation_goals");
-  ros::start();
-  /*Navigator n("robot1", "move_base", "map");
+int main(int argc, char **argv)
+{
+  std::string host = "localhost";
+  std::string user = "root";
+  std::string pass = "281094";
+  std::string db = "ServerDB";
 
-  n.navigateTo(0.0, 0.0, 1.0);
+  GeneralDao gd(host, user, pass, db);
+  RobotDao rd(&gd);
+  Robot r;
+  rd.getRobot(0, r);
 
-  n.navigateTo(-1.0, 1.0, 1.0);*/
-  Communicator c;
-  c.run();
-  
-  ros::spin();
+  std::cout << r.getDescription() << std::endl;
+
   return 0;
 }

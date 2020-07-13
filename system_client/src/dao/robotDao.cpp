@@ -16,32 +16,28 @@ void RobotDao::setGeneralDao(GeneralDao *gDao)
     this->gDao = gDao;
 }
 
-Robot RobotDao::getRobot(uint32_t id)
+bool RobotDao::getRobot(uint32_t id, Robot &r)
 {
-    /*std::unique_ptr<sql::ResultSet> res;
-    std::string stmt = "SELECT * FROM robot WHERE status LIKE '%" + status + "%' ORDER BY id_robot ASC";
+    std::unique_ptr<sql::ResultSet> res;
+    std::string stmt = "SELECT * FROM robot WHERE id_robot = " + std::to_string(id) + ";";
 
     bool tst = gDao->executeQuery(stmt, res);
 
     if (tst)
     {
-        while (res->next())
-        {
-            Robot tmp;
-            tmp.setId(res->getUInt("id_robot"));
-            tmp.setDepot(res->getUInt("id_depot"));
-            tmp.setCurrentLocation(res->getUInt("id_current_location"));
-            tmp.setMaximumPayload(res->getUInt("max_payload"));
-            tmp.setRemainingBattery(res->getDouble("remaining_battery"));
-            tmp.setDischargeFactor(res->getDouble("discharge_factor"));
-            tmp.setBatteryThreshold(res->getDouble("battery_threshold"));
-            tmp.setMediumVelocity(res->getDouble("medium_velocity"));
-            tmp.setStatus(res->getString("status"));
-            tmp.setDescription(res->getString("description"));
+        res->next();
 
-            robotList.push_back(tmp);
-        }
+        r.setId(res->getUInt("id_robot"));
+        r.setDepot(res->getUInt("id_depot"));
+        r.setCurrentLocation(res->getUInt("id_current_location"));
+        r.setMaximumPayload(res->getUInt("max_payload"));
+        r.setRemainingBattery(res->getDouble("remaining_battery"));
+        r.setDischargeFactor(res->getDouble("discharge_factor"));
+        r.setBatteryThreshold(res->getDouble("battery_threshold"));
+        r.setMediumVelocity(res->getDouble("medium_velocity"));
+        r.setStatus(res->getString("status"));
+        r.setDescription(res->getString("description"));
     }
 
-    return tst;*/
+    return tst;
 }

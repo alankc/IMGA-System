@@ -24,7 +24,7 @@ public:
     RobotDao(GeneralDao *gDao);
     ~RobotDao();
     void setGeneralDao(GeneralDao *gDao);
-    Robot getRobot(uint32_t id);
+    bool getRobot(uint32_t id, Robot &r);
 };
 
 
