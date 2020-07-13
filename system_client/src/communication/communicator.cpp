@@ -1,4 +1,5 @@
 #include "communicator.hpp"
+#include <iostream>
 
 Communicator::Communicator(/* args */)
 {
@@ -8,42 +9,46 @@ Communicator::~Communicator()
 {
     thrRequest->detach();
     thrTask->detach();
-    delete(thrRequest);
-    delete(thrTask);
+    delete (thrRequest);
+    delete (thrTask);
 }
 
 void Communicator::listnerRequest()
 {
-    ros::Rate r(1);
-    while (1)
-    {
-        ROS_INFO("listnerRequest");
-        r.sleep();
-    }
-        
+    ros::NodeHandle nh;
+    ros::Subscriber sub = nh.subscribe(myResquestTopic, 10, &Communicator::callbackRequest, this);
+    while(ros::ok());
 }
 
-void Communicator::callbackRequest()
+void Communicator::callbackRequest(const system_client::MsgRequest &msg)
 {
+
 }
 
 void Communicator::listnerTask()
 {
-    ros::Rate r(1);
-    while (1)
-    {
-        ROS_INFO("listnerTask");
-        r.sleep();
-    }
-        
+    ros::NodeHandle nh;
+    ros::Subscriber sub = nh.subscribe(myTaskTopic, 10, &Communicator::callbackTask, this);
+    while(ros::ok());
 }
 
-void Communicator::callbackTask()
+void Communicator::callbackTask(const system_client::MsgTaskList &msg)
 {
+    //adicionar tarefas a lista do controlador
 }
 
 void Communicator::sendRobotData()
 {
+    //Requisitar dados do robô ao controlador
+    
+    
+    ros::NodeHandle nh;
+    ros::Publisher pub = nh.advertise<system_client::MsgRobotData>(srvRobotDataTopic, 10);
+
+    system_client::MsgRobotData msg;
+    pub.publish(msg);
+
+    ros::spinOnce();
 }
 
 void Communicator::run()
