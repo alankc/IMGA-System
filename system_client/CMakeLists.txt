@@ -18,7 +18,10 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
+set(FULL_PATH_TO_MYSQL_CONNECTOR_CPP_DIR /usr)
+include_directories(${FULL_PATH_TO_MYSQL_CONNECTOR_CPP_DIR}/include)
+include_directories(${FULL_PATH_TO_MYSQL_CONNECTOR_CPP_DIR}/include/cppconn)
+link_directories(${FULL_PATH_TO_MYSQL_CONNECTOR_CPP_DIR}/lib)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -127,6 +130,8 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   /src/navigation
   /src/communication
+  /src/dao
+  /src/model
 )
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -141,7 +146,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-FILE(GLOB MyCPPSourcesa src/navigation/*.cpp src/communication/*.cpp)
+FILE(GLOB MyCPPSourcesa src/navigation/*.cpp src/communication/*.cpp src/dao/*.cpp src/model/*.cpp)
 add_executable(${PROJECT_NAME}_node src/main.cpp ${MyCPPSourcesa})
 
 ## Rename C++ executable without prefix
@@ -156,10 +161,11 @@ add_executable(${PROJECT_NAME}_node src/main.cpp ${MyCPPSourcesa})
 add_dependencies(${PROJECT_NAME}_node ${PROJECT_NAME}_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
-target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_node
+  ${catkin_LIBRARIES}
+  mysqlcppconn
+)
+
 
 #############
 ## Install ##
