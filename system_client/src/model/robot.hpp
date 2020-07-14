@@ -33,6 +33,7 @@ public:
 	void setDischargeFactor(double dischargeFactor);
 	void setBatteryThreshold(double batteryThreshold);
 	void setMediumVelocity(double mediumVelocity);
+	void updateMediumVelocity(double distance, double time);
 
 	uint32_t getId() const;
 	std::string getDescription() const;

@@ -1,5 +1,7 @@
 #include "navigator.hpp"
 
+Navigator::Navigator() {}
+
 Navigator::Navigator(std::string robot, std::string topic, std::string frame)
 {
     this->robot = robot;
@@ -24,7 +26,6 @@ bool Navigator::navigateTo(double x, double y, double w)
 
     move_base_msgs::MoveBaseGoal goal;
 
-    //we'll send a goal to the robot to move 1 meter forward
     goal.target_pose.header.frame_id = frame;
     goal.target_pose.header.stamp = ros::Time::now();
 

@@ -128,10 +128,12 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  /src/navigation
+  /src/battery
   /src/communication
+  /src/controller
   /src/dao
   /src/model
+  /src/navigation
 )
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -146,7 +148,15 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-FILE(GLOB MyCPPSourcesa src/navigation/*.cpp src/communication/*.cpp src/dao/*.cpp src/model/*.cpp)
+FILE(
+  GLOB MyCPPSourcesa 
+  src/battery/*.cpp/*.cpp
+  src/communication/*.cpp
+  src/controller/*.cpp
+  src/dao/*.cpp
+  src/model/*.cpp
+  src/navigation/*.cpp
+)
 add_executable(${PROJECT_NAME}_node src/main.cpp ${MyCPPSourcesa})
 
 ## Rename C++ executable without prefix

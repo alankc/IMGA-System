@@ -15,6 +15,7 @@ private:
     std::string topic;
     std::string frame;
 public:
+    Navigator();
     Navigator(std::string robot, std::string topic, std::string frame);
     ~Navigator();
     bool navigateTo(double x, double y, double w);

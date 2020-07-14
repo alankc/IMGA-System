@@ -65,6 +65,11 @@ void Robot::setMediumVelocity(double mediumVelocity)
 	this->mediumVelocity = mediumVelocity;
 }
 
+void Robot::updateMediumVelocity(double distance, double time)
+{
+	this->mediumVelocity = distance / time;
+}
+
 uint32_t Robot::getId() const
 {
 	return id;
