@@ -22,8 +22,8 @@ private:
     std::string myTaskTopic;
 
     ros::NodeHandle nh;
-    ros::Publisher pubSrvRequest;
-    ros::Publisher pubSrvRobotData;
+    //ros::Publisher pubSrvRequest;
+    //ros::Publisher pubSrvRobotData;
     ros::Subscriber subRequest;
     ros::Subscriber subTask;
 
