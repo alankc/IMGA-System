@@ -7,10 +7,14 @@ TaskController::TaskController()
 
 TaskController::~TaskController(){}
 
-void TaskController::setTaskList(std::vector<Task> &taskList)
+void TaskController::clear()
 {
-    this->taskList.clear();
-    std::copy(taskList.begin(), taskList.end(), std::back_inserter(this->taskList));
+    taskList.clear();
+}
+
+void TaskController::push(system_client::MsgTask& t)
+{
+    taskList.push_back(t);
 }
 
 void TaskController::pop()
@@ -21,7 +25,7 @@ void TaskController::pop()
 
 bool TaskController::deleteTaskById(uint32_t id)
 {
-    auto it = std::find_if(taskList.begin(), taskList.end(), [&id](const Task & t) -> bool { return t.id == id; });
+    auto it = std::find_if(taskList.begin(), taskList.end(), [&id](const system_client::MsgTask & t) -> bool { return t.id == id; });
     bool tst = it != taskList.end();
     if (tst)
         taskList.erase(it);
@@ -29,21 +33,21 @@ bool TaskController::deleteTaskById(uint32_t id)
     return true;
 }
 
-Task *TaskController::getTaskById(uint32_t id)
+system_client::MsgTask *TaskController::getTaskById(uint32_t id)
 {
-    auto it = std::find_if(taskList.begin(), taskList.end(), [&id](const Task & t) -> bool { return t.id == id; });
+    auto it = std::find_if(taskList.begin(), taskList.end(), [&id](const system_client::MsgTask & t) -> bool { return t.id == id; });
     if (it != taskList.end())
         return &(*it);
 
     return NULL;
 }
 
-Task *TaskController::getTaskByIndex(uint32_t index)
+system_client::MsgTask *TaskController::getTaskByIndex(uint32_t index)
 {
     return &taskList[index];
 }
 
-std::vector<Task> *TaskController::getTaskList()
+std::vector<system_client::MsgTask> *TaskController::getTaskList()
 {
     return &taskList;
 }

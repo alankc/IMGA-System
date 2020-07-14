@@ -5,24 +5,22 @@
 #include <algorithm>
 #include <system_client/MsgTask.h>
 
-using namespace system_client;
-typedef MsgTask Task;
-
 class TaskController
 {
 private:
-    std::vector<Task> taskList;
+    std::vector<system_client::MsgTask> taskList;
 
 public:
     TaskController();
     ~TaskController();
 
-    void setTaskList(std::vector<Task>& taskList);
+    void clear();
+    void push(system_client::MsgTask& t);
     void pop();
     bool deleteTaskById(uint32_t id);
-    Task *getTaskById(uint32_t id);
-    Task *getTaskByIndex(uint32_t index);
-    std::vector<Task> *getTaskList();
+    system_client::MsgTask *getTaskById(uint32_t id);
+    system_client::MsgTask *getTaskByIndex(uint32_t index);
+    std::vector<system_client::MsgTask> *getTaskList();
     
 };
 
