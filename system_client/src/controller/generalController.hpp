@@ -7,6 +7,9 @@
 #include <system_client/MsgTaskList.h>
 #include <system_client/MsgRobotData.h>
 #include <mutex>
+#include <thread>
+#include <future>
+#include <chrono>
 
 #include "locationController.hpp"
 #include "robotController.hpp"
@@ -33,13 +36,17 @@ private:
     TaskController tc;
 
     Navigator nav;
+    //std::future navFtr;
+    std::mutex navMtx;
+    std::unique_lock<std::mutex> navLock;
 
     void callbackPubSrvRequest(const system_client::MsgRequest &msg);
     void callbackPubSrvRobotData();
     void callbackSubRequest(const system_client::MsgRequest &msg);
     void callbackSubTask(const system_client::MsgTaskList &msg);
 
-    void navigation();
+    void performTask(const system_client::MsgTask &t);
+    void performTasks();
 public:
     GeneralController(){};
     ~GeneralController(){};
