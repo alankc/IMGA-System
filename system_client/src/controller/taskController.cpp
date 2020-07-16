@@ -33,6 +33,15 @@ bool TaskController::deleteTaskById(uint32_t id)
     return true;
 }
 
+bool TaskController::getFirst(system_client::MsgTask& t)
+{
+    if (taskList.empty())
+        return false;
+
+    t = taskList[0];
+    return true;    
+}
+
 system_client::MsgTask *TaskController::getTaskById(uint32_t id)
 {
     auto it = std::find_if(taskList.begin(), taskList.end(), [&id](const system_client::MsgTask & t) -> bool { return t.id == id; });
