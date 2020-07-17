@@ -35,6 +35,18 @@ void GeneralController::callbackPubSrvRobotData()
     ros::spinOnce();
 }
 
+void GeneralController::callbackCancelTask(uint32_t id)
+{
+    system_client::MsgTask t;
+    if (tc.getFirst(t))
+    {
+        if (id == t.id)
+            navPrms.set_value();
+        else
+            tc.deleteTaskById(id);     
+    }
+}
+
 void GeneralController::callbackSubRequest(const system_client::MsgRequest &msg)
 {
     switch (msg.type)
@@ -44,6 +56,7 @@ void GeneralController::callbackSubRequest(const system_client::MsgRequest &msg)
         break;
 
     case system_client::MsgRequest::CANCEL_TASK:
+        callbackCancelTask(msg.data);
         break;
 
     default:
@@ -98,11 +111,15 @@ void GeneralController::performTasks()
 {
     navPrms = std::promise<void>();
     navFtr = navPrms.get_future();
-    system_client::MsgTask t;
-    t.id = 0;
-    t.pickUp = 0;
-    t.delivery = 1;
-    performTask(t);
+    ros::Rate r(5);
+
+    while (true)
+    {
+        system_client::MsgTask t;
+        if (tc.getFirst(t))
+            performTask(t);
+        r.sleep();
+    }
 }
 
 void GeneralController::run()
@@ -121,17 +138,7 @@ void GeneralController::run()
     subRequest = nh.subscribe("myResquestTopic", 100, &GeneralController::callbackSubRequest, this);
     subTask = nh.subscribe("myTaskTopic", 100, &GeneralController::callbackSubTask, this);
 
-    std::thread t1(&GeneralController::performTasks, this);
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-    navPrms.set_value();
-    t1.join();
-
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-
-    std::thread t2(&GeneralController::performTasks, this);
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-    navPrms.set_value();
-    t2.join();
+    std::thread prfTks(&GeneralController::performTasks, this);
 
     ros::spin();
 }
