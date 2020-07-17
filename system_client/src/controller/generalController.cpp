@@ -14,10 +14,14 @@ GeneralController::GeneralController()
     lc = LocationController(&gd);
     rc = RobotController(&gd, 0);
     tc = TaskController();
+    srvRequestTopic = "rqt123";
+    srvRobotDataTopic = "robdata";
 }
 
 void GeneralController::callbackPubSrvRequest(const system_client::MsgRequest &msg)
 {
+    pubSrvRequest.publish(msg);
+    ros::spinOnce();
 }
 
 void GeneralController::callbackPubSrvRobotData()
@@ -30,7 +34,6 @@ void GeneralController::callbackPubSrvRobotData()
     msg.minSpeed = r->getMediumVelocity();
     msg.status = r->getStatus();
 
-    ros::Publisher pubSrvRobotData = nh.advertise<system_client::MsgRobotData>(srvRobotDataTopic, 1);
     pubSrvRobotData.publish(msg);
     ros::spinOnce();
 }
@@ -43,7 +46,7 @@ void GeneralController::callbackCancelTask(uint32_t id)
         if (id == t.id)
             navPrms.set_value();
         else
-            tc.deleteTaskById(id);     
+            tc.deleteTaskById(id);
     }
 }
 
@@ -76,20 +79,27 @@ void GeneralController::performTask(const system_client::MsgTask t)
 
     //Going to pickup
     auto pickUp = lc.getLocationById(t.pickUp, false);
-    nav.navigateTo(0.1, 0.1, 1.3);
+    nav.navigateTo(pickUp->getX(), pickUp->getY(), pickUp->getA());
     while (nav.stillNavigating())
     {
         if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
         {
             nav.cancel();
-            tc.deleteTaskById(t.id);
             navPrms = std::promise<void>();
             navFtr = navPrms.get_future();
             return;
         }
         r.sleep();
     }
-
+    if (!nav.hasArrived())
+    {
+        system_client::MsgRequest m;
+        m.type = system_client::MsgRequest::FAIL_TASK;
+        m.data = t.id;
+        nav.cancel();
+        callbackPubSrvRequest(m);
+        return;
+    }
     //Going to delivery
     auto delivery = lc.getLocationById(t.delivery, false);
     nav.navigateTo(delivery->getX(), delivery->getY(), delivery->getA());
@@ -98,12 +108,20 @@ void GeneralController::performTask(const system_client::MsgTask t)
         if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
         {
             nav.cancel();
-            tc.deleteTaskById(t.id);
             navPrms = std::promise<void>();
             navFtr = navPrms.get_future();
             return;
         }
         r.sleep();
+    }
+    if (!nav.hasArrived())
+    {
+        system_client::MsgRequest m;
+        m.type = system_client::MsgRequest::FAIL_TASK;
+        m.data = t.id;
+        nav.cancel();
+        callbackPubSrvRequest(m);
+        return;
     }
 }
 
@@ -117,7 +135,11 @@ void GeneralController::performTasks()
     {
         system_client::MsgTask t;
         if (tc.getFirst(t))
+        {
             performTask(t);
+            tc.pop();
+        }
+
         r.sleep();
     }
 }
@@ -137,6 +159,9 @@ void GeneralController::run()
     //Start listeners request and tasks
     subRequest = nh.subscribe("myResquestTopic", 100, &GeneralController::callbackSubRequest, this);
     subTask = nh.subscribe("myTaskTopic", 100, &GeneralController::callbackSubTask, this);
+
+    pubSrvRobotData = nh.advertise<system_client::MsgRobotData>(srvRobotDataTopic, 1);
+    pubSrvRequest = nh.advertise<system_client::MsgRequest>(srvRequestTopic, 1);
 
     std::thread prfTks(&GeneralController::performTasks, this);
 

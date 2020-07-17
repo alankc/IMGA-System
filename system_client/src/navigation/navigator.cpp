@@ -47,7 +47,7 @@ void Navigator::cancel()
 bool Navigator::stillNavigating()
 {
     auto stt = mbc->getState();
-    return (stt == actionlib::SimpleClientGoalState::ACTIVE) | (stt == actionlib::SimpleClientGoalState::PENDING);
+    return (stt == actionlib::SimpleClientGoalState::ACTIVE) || (stt == actionlib::SimpleClientGoalState::PENDING);
 }
 
 bool Navigator::hasArrived()
