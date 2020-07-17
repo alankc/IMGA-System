@@ -25,6 +25,8 @@ public:
     void cancel();
     bool stillNavigating();
     bool hasArrived();
+
+    Navigator& operator= (const Navigator &navigator);
 };
 
 #endif

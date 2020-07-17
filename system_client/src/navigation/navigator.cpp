@@ -55,3 +55,14 @@ bool Navigator::hasArrived()
     auto stt = mbc->getState();
     return (stt == actionlib::SimpleClientGoalState::SUCCEEDED);
 }
+
+Navigator &Navigator::operator=(const Navigator &navigator)
+{
+    if (this != &navigator)
+    {
+        robot = navigator.robot;
+        topic = navigator.topic;
+        frame = navigator.frame;
+        mbc.reset(navigator.mbc.get());
+    }
+}
