@@ -14,12 +14,12 @@ void Location::setId(uint32_t id)
 	this->id = id;
 }
 
-void Location::setX(uint32_t x)
+void Location::setX(double x)
 {
 	this->x = x;
 }
 
-void Location::setY(uint32_t y)
+void Location::setY(double y)
 {
 	this->y = y;
 }
@@ -44,12 +44,12 @@ uint32_t Location::getId()
 	return id;
 }
 
-uint32_t Location::getX()
+double Location::getX()
 {
 	return x;
 }
 
-uint32_t Location::getY()
+double Location::getY()
 {
 	return y;
 }

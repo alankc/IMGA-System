@@ -1,6 +1,21 @@
 #include "generalController.hpp"
 #include <iostream>
 
+GeneralController::GeneralController()
+{
+    this->nav = Navigator("robot1");
+
+    std::string host = "localhost";
+    std::string user = "root";
+    std::string pass = "281094";
+    std::string db = "ServerDB";
+
+    gd = GeneralDao(host, user, pass, db);
+    lc = LocationController(&gd);
+    rc = RobotController(&gd, 0);
+    tc = TaskController();
+}
+
 void GeneralController::callbackPubSrvRequest(const system_client::MsgRequest &msg)
 {
 }
@@ -42,45 +57,81 @@ void GeneralController::callbackSubTask(const system_client::MsgTaskList &msg)
         tc.push(t);
 }
 
-void GeneralController::performTask(const system_client::MsgTask &t)
+void GeneralController::performTask(const system_client::MsgTask t)
 {
-    std::cout << "\n\n"
-              << t.deadline << std::endl;
-    std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(5000));
+    ros::Rate r(5);
+
+    //Going to pickup
+    auto pickUp = lc.getLocationById(t.pickUp, false);
+    nav.navigateTo(0.1, 0.1, 1.3);
+    while (nav.stillNavigating())
+    {
+        if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+        {
+            nav.cancel();
+            tc.deleteTaskById(t.id);
+            navPrms = std::promise<void>();
+            navFtr = navPrms.get_future();
+            return;
+        }
+        r.sleep();
+    }
+
+    //Going to delivery
+    auto delivery = lc.getLocationById(t.delivery, false);
+    nav.navigateTo(delivery->getX(), delivery->getY(), delivery->getA());
+    while (nav.stillNavigating())
+    {
+        if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+        {
+            nav.cancel();
+            tc.deleteTaskById(t.id);
+            navPrms = std::promise<void>();
+            navFtr = navPrms.get_future();
+            return;
+        }
+        r.sleep();
+    }
 }
 
 void GeneralController::performTasks()
 {
+    navPrms = std::promise<void>();
+    navFtr = navPrms.get_future();
     system_client::MsgTask t;
-    t.deadline = 16.9;
-    //while (!navMtx.try_lock());
-
-    //while (tc.getFirst(t))
-    //{
-    //navega para pick up
-    //espera navegação
-    //navThr = new std::thread();
-
-    auto future = std::async(std::launch::async, &GeneralController::performTask, this, std::ref(t));
-    auto status = future.wait_for(std::chrono::seconds(3));
-    std::promise<void> signal_exit;
-    while (status != std::future_status::timeout)
-    {
-        status = future.wait_for(std::chrono::duration<double, std::milli>(1000));
-    }
-    std::cout << "\n\n ready" << std::endl;
-    //}
+    t.id = 0;
+    t.pickUp = 0;
+    t.delivery = 1;
+    performTask(t);
 }
 
 void GeneralController::run()
 {
-    /*subRequest = nh.subscribe("myResquestTopic", 100, &GeneralController::callbackSubRequest, this);
+    //Get locations and distances
+    lc.updateLocationList();
+    lc.updateDistanceMatrix();
+
+    //Get robor data from DB
+    rc.updateRobotFromDB();
+
+    //Start navigation
+    nav.start();
+
+    //Start listeners request and tasks
+    subRequest = nh.subscribe("myResquestTopic", 100, &GeneralController::callbackSubRequest, this);
     subTask = nh.subscribe("myTaskTopic", 100, &GeneralController::callbackSubTask, this);
 
-    //falta general DAO
-    lc.updateLocationList();
-    lc.updateDistanceMatrix();*/
-    performTasks();
+    std::thread t1(&GeneralController::performTasks, this);
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    navPrms.set_value();
+    t1.join();
+
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    std::thread t2(&GeneralController::performTasks, this);
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    navPrms.set_value();
+    t2.join();
 
     ros::spin();
 }

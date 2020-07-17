@@ -6,7 +6,6 @@
 #include <system_client/MsgRequest.h>
 #include <system_client/MsgTaskList.h>
 #include <system_client/MsgRobotData.h>
-#include <mutex>
 #include <thread>
 #include <future>
 #include <chrono>
@@ -36,19 +35,18 @@ private:
     TaskController tc;
 
     Navigator nav;
-    //std::future navFtr;
-    std::mutex navMtx;
-    std::unique_lock<std::mutex> navLock;
+    std::promise<void> navPrms;
+    std::future<void> navFtr;
 
     void callbackPubSrvRequest(const system_client::MsgRequest &msg);
     void callbackPubSrvRobotData();
     void callbackSubRequest(const system_client::MsgRequest &msg);
     void callbackSubTask(const system_client::MsgTaskList &msg);
 
-    void performTask(const system_client::MsgTask &t);
+    void performTask(const system_client::MsgTask t);
     void performTasks();
 public:
-    GeneralController(){};
+    GeneralController();
     ~GeneralController(){};
     void run();
 };
