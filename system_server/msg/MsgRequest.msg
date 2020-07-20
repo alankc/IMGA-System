@@ -1,0 +1,7 @@
+uint8 type
+uint32 data
+uint8 ROBOT_DATA=0
+uint8 CANCEL_TASK=1
+uint8 PERFORMING_TASK=2
+uint8 SUCESS_TASK=3
+uint8 FAIL_TASK=4
