@@ -69,8 +69,21 @@ void GeneralController::callbackSubRequest(const system_client::MsgRequest &msg)
 
 void GeneralController::callbackSubTask(const system_client::MsgTaskList &msg)
 {
+    nav.cancel();
     for (auto t : msg.taskList)
         tc.push(t);
+}
+
+void GeneralController::goToDepot()
+{
+    auto depot = lc.getLocationById(rc.getRobot()->getDepot(), true);
+    if (depot == NULL)
+    {
+        lc.updateLocationList();
+        lc.updateDistanceMatrix();
+        depot = lc.getLocationById(rc.getRobot()->getDepot(), true);
+    }
+    nav.navigateTo(depot->getX(), depot->getY(), depot->getA());
 }
 
 void GeneralController::performTask(const system_client::MsgTask t)
@@ -79,6 +92,12 @@ void GeneralController::performTask(const system_client::MsgTask t)
 
     //Going to pickup
     auto pickUp = lc.getLocationById(t.pickUp, false);
+    if (pickUp == NULL)
+    {
+        lc.updateLocationList();
+        lc.updateDistanceMatrix();
+        pickUp = lc.getLocationById(t.pickUp, false);
+    }
     nav.navigateTo(pickUp->getX(), pickUp->getY(), pickUp->getA());
     while (nav.stillNavigating())
     {
@@ -102,6 +121,12 @@ void GeneralController::performTask(const system_client::MsgTask t)
     }
     //Going to delivery
     auto delivery = lc.getLocationById(t.delivery, false);
+    if (delivery == NULL)
+    {
+        lc.updateLocationList();
+        lc.updateDistanceMatrix();
+        delivery = lc.getLocationById(t.delivery, false);
+    }
     nav.navigateTo(delivery->getX(), delivery->getY(), delivery->getA());
     while (nav.stillNavigating())
     {
@@ -130,14 +155,24 @@ void GeneralController::performTasks()
     navPrms = std::promise<void>();
     navFtr = navPrms.get_future();
     ros::Rate r(5);
+    bool inDepot = true;
 
     while (true)
     {
         system_client::MsgTask t;
         if (tc.getFirst(t))
-        {
+        {   
+            inDepot = false;
             performTask(t);
             tc.pop();
+        }
+        else if (!inDepot)
+        {
+            inDepot = true;
+
+            //send msgs free
+            
+            goToDepot();
         }
 
         r.sleep();
