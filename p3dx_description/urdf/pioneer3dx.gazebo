@@ -54,7 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<gazebo>
 		<plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
 			<alwaysOn>true</alwaysOn>
-			<updateRate>40</updateRate>
+			<updateRate>100</updateRate>
 			<legacyMode>false</legacyMode>
 			<leftJoint>base_right_wheel_joint</leftJoint>
 			<rightJoint>base_left_wheel_joint</rightJoint>
@@ -79,7 +79,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<gazebo>
 		<plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
 			<alwaysOn>true</alwaysOn>
-			<updateRate>30.0</updateRate>
+			<updateRate>100</updateRate>
 			<bodyName>base_footprint</bodyName>
 			<topicName>base_pose_ground_truth</topicName>
 			<gaussianNoise>0.01</gaussianNoise>
@@ -94,7 +94,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<sensor type="gpu_ray" name="head_hokuyo_sensor">
 			<pose>0 0 0 0 0 0</pose>
 			<visualize>true</visualize>
-			<update_rate>50</update_rate>
+			<update_rate>100</update_rate>
 			<ray>
 				<scan>
 					<horizontal>

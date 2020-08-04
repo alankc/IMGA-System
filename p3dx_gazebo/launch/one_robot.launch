@@ -4,7 +4,7 @@
     <arg name="init_pose"/>
     <arg name="my_ns"/>
 
-    <node name="spawn_minibot_model" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="
+    <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="
         $(arg init_pose) 
         -urdf 
         -param /robot_description 
