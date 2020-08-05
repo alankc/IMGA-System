@@ -9,8 +9,8 @@
   <!-- AMCL -->
   <node pkg="amcl" type="amcl" name="amcl" output="screen">
 
-    <param name="min_particles" value="1000"/>
-    <param name="max_particles" value="10000"/>
+    <param name="min_particles" value="100"/>
+    <param name="max_particles" value="1000"/>
     <param name="kld_err" value="0.02"/>
     <param name="update_min_d" value="0.1"/>
     <param name="update_min_a" value="0.017453293"/>
@@ -21,7 +21,8 @@
     <param name="initial_pose_x" value="$(arg initial_pose_x)"/>
     <param name="initial_pose_y" value="$(arg initial_pose_y)"/>
     <param name="initial_pose_a" value="$(arg initial_pose_a)"/>
-    <param name="gui_publish_rate" value="20.0"/>
+    <param name="gui_publish_rate" value="10.0"/>
+    <param name="save_pose_rate" value="10.0"/>
     <param name="use_map_topic" value="true"/>
 
     <remap from="scan" to="/$(arg my_ns)/laser/scan"/>
@@ -46,6 +47,8 @@
     <param name="odom_alpha4" value="0.1"/>
     <param name="odom_frame_id" value="$(arg my_ns)_tf/odom"/>
     <param name="base_frame_id" value="$(arg my_ns)_tf/base_link"/>
+
+    <param name="tf_broadcast" value="true"/>
 
   </node>
 

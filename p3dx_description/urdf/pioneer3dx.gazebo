@@ -17,11 +17,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <robot>
-	<!-- ros_control plugin -->
+	<!-- ros_control plugin >
 	<gazebo>
 		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
 		</plugin>
-	</gazebo>
+	</gazebo-->
 	<!-- base_link -->
 	<gazebo reference="base_link">
 		<material>Gazebo/Red</material>
@@ -66,7 +66,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			<odometryFrame>odom</odometryFrame>
 			<robotBaseFrame>base_footprint</robotBaseFrame>
 			<publishWheelTF>true</publishWheelTF>
-			<publishWheelJointState>true</publishWheelJointState>
+			<publishWheelJointState>false</publishWheelJointState>
 			<publishOdomTF>true</publishOdomTF>
 			<rosDebugLevel>na</rosDebugLevel>
 			<wheelAcceleration>0</wheelAcceleration>
@@ -75,7 +75,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			<publishTf>1</publishTf>
 		</plugin>
 	</gazebo>
-	<!-- ground truth -->
+	<!-- ground truth >
 	<gazebo>
 		<plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
 			<alwaysOn>true</alwaysOn>
@@ -84,15 +84,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			<topicName>base_pose_ground_truth</topicName>
 			<gaussianNoise>0.01</gaussianNoise>
 			<frameName>map</frameName>
-			<!-- initialize odometry for fake localization -->
 			<xyzOffsets>0 0 0</xyzOffsets>
 			<rpyOffsets>0 0 0</rpyOffsets>
 		</plugin>
-	</gazebo>
+	</gazebo-->
 	<!-- lms100 -->
 	<gazebo reference="lms100">
 		<sensor type="gpu_ray" name="head_hokuyo_sensor">
-			<pose>0 0 0 0 0 0</pose>
+			<pose>0.12 0 0.26 0 0 0</pose>
 			<visualize>true</visualize>
 			<update_rate>100</update_rate>
 			<ray>
@@ -100,13 +99,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 					<horizontal>
 						<samples>360</samples>
 						<resolution>1</resolution>
-						<min_angle>-1.570796</min_angle>
-						<max_angle>1.570796</max_angle>
+						<min_angle>-3.141592654</min_angle>
+						<max_angle>3.141592654</max_angle>
 					</horizontal>
 				</scan>
 				<range>
 					<min>0.1</min>
-					<max>4.0</max>
+					<max>3.5</max>
 					<resolution>0.01</resolution>
 				</range>
 				<noise>

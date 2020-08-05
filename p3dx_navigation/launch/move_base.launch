@@ -5,24 +5,25 @@
 
   <!-- move_base -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-    <!--param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" /-->
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
     <param name="base_global_planner" value="navfn/NavfnROS" />
-    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/>
+    <!--param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/-->
     <rosparam file="$(find p3dx_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find p3dx_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
     <rosparam file="$(find p3dx_navigation)/param/local_costmap_params.yaml" command="load" />
     <rosparam file="$(find p3dx_navigation)/param/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find p3dx_navigation)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find p3dx_navigation)/param/dwa_local_planner_params.yaml" command="load" />
     <!--rosparam file="$(find p3dx_navigation)/param/dwa_local_planner_params.yaml" command="load" /-->
     <!--remap from="cmd_vel" to="$(arg my_ns)/cmd_vel"/-->
-    <remap from="odom" to="$(arg my_ns)/odom"/>
+    <!--remap from="odom" to="$(arg my_ns)/odom"/-->
     <remap from="map" to="/map"/>
-    <remap from="scan" to="/$(arg my_ns)/laser/scan" />
-    <!--param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" /-->
+    <!--remap from="scan" to="/$(arg my_ns)/laser/scan" /-->
+    <!--param name="DWAPlannerROS/min_vel_x" value="0.0" /-->
 
     <param name="~/global_costmap/robot_base_frame" value="$(arg my_ns)_tf/base_footprint" />
     <param name="~/local_costmap/robot_base_frame" value="$(arg my_ns)_tf/base_footprint" />
-    <param name="~/local_costmap/global_frame" value="$(arg my_ns)_tf/odom" />
+    <param name="~/local_costmap/global_frame" value="map" />
 
     <!--param name="~/EBandPlannerROS/max_vel_lin" value="0.3" />
     <param name="~/EBandPlannerROS/max_vel_th" value="0.1" /-->
