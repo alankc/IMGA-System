@@ -26,6 +26,7 @@ public:
     Robot *getFreeRobotByIndex(uint32_t index);
     void copyFreeRobotList(std::vector<Robot> &copy);
     std::size_t getFreeRobotListSize();    
+    void generateRobots(uint32_t numberOfRobots, uint32_t minpayload, uint32_t maxPayload, double minSpeed, double maxSpeed, double minDisFac, double maxDisFac, uint32_t numberOfDepots);
 };
 
 #endif

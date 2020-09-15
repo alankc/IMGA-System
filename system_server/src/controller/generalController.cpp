@@ -56,4 +56,18 @@ void GeneralController::callScheduler()
         }
         std::cout << std::endl;
     }
+
+    std::cout << "Robots" << std::endl;
+    rc.generateRobots(10, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
+    auto r = rc.getFreeRobots();
+    for (auto it : *r)
+    {
+        std::cout << it.getId() << " "
+                  << it.getDescription() << " "
+                  << it.getMaximumPayload() << " "
+                  << it.getCurrentLocation() << " "
+                  << it.getDepot() << " "
+                  << it.getMediumVelocity() << " "
+                  << it.getDischargeFactor() << std::endl;
+    }
 }
