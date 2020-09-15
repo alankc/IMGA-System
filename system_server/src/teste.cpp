@@ -1,3 +1,4 @@
+#include <ros/ros.h>
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
@@ -15,8 +16,10 @@ https://answers.ros.org/question/218978/using-the-mysql-database-in-ros-jade-pro
 #define EXAMPLE_PASS "281094"
 #define EXAMPLE_DB "ServerDB"
 
-int main(int argc, const char **argv)
+int main(int argc, char **argv)
 {
+    ros::init(argc, argv, "servidor");
+    
     std::string host = "localhost";
     std::string user = "root";
     std::string pass = "281094";

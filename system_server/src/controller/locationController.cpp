@@ -1,4 +1,5 @@
 #include "locationController.hpp"
+#include <random>
 
 LocationController::LocationController() {}
 
@@ -95,4 +96,48 @@ double LocationController::getDistance(uint32_t from, uint32_t to)
 std::vector<std::vector<double>> *LocationController::getDistanceMatrix()
 {
     return &distanceMatrix;
+}
+
+void LocationController::gerenateLocations(uint32_t numOfLocations, uint32_t numOfDepots, double minDistance, double maxDistance)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> randomDistance(minDistance, maxDistance);
+
+    locationList.clear();
+    for (uint32_t i = 0; i < numOfLocations; i++)
+    {
+        Location l;
+        l.setId(i);
+        l.setDescription("Location " + std::to_string(i));
+        if (i < numOfDepots)
+            l.setIsDepot(true);
+
+        this->locationList.push_back(l);
+    }
+
+    distanceMatrix.clear();
+    distanceMatrix.resize(numOfLocations);
+    for (uint32_t i = 0; i < numOfLocations + 1; i++)
+        distanceMatrix[i].resize(numOfLocations);
+
+    for (uint32_t i = 0; i < numOfLocations; i++)
+    {
+        for (uint32_t j = 0; j < numOfLocations; j++)
+        {
+            if (i == j)
+            {
+                distanceMatrix[i][j] = 0;
+            }
+            else if (locationList[i].getIsDepot() && locationList[j].getIsDepot())
+            {
+                distanceMatrix[i][j] = maxDistance;
+            }
+            else
+            {
+                distanceMatrix[i][j] = randomDistance(gen);
+            }
+            distanceMatrix[j][i] = distanceMatrix[i][j];
+        }
+    }
 }

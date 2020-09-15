@@ -17,7 +17,7 @@ GeneralController::~GeneralController() {}
 
 void GeneralController::callScheduler()
 {
-    rc.updateFreeRobots();
+    /*rc.updateFreeRobots();
     tc.updateTasksToSchedule();
     lc.updateLocationList();
     lc.updateDistanceMatrix();
@@ -36,6 +36,24 @@ void GeneralController::callScheduler()
     Island is(gaP, 100, 0.1, tasks, robots, distance);
     is.solve();
     Chromosome best = is.getBest();
-    best.printResult();
+    best.printResult();*/
 
+    lc.gerenateLocations(6, 3, 10, 50);
+    for (uint32_t i = 0; i < lc.getLocationListSize(); i++)
+    {
+        std::cout << lc.getLocationByIndex(i)->getId() << " "
+                  << lc.getLocationByIndex(i)->getDescription() << " depot = "
+                  << lc.getLocationByIndex(i)->getIsDepot() << std::endl;
+    }
+
+    auto d = lc.getDistanceMatrix();
+
+    for (uint32_t i = 0; i < lc.getLocationListSize(); i++)
+    {
+        for (uint32_t j = 0; j < lc.getLocationListSize(); j++)
+        {
+            std::cout << d->at(i).at(j) << " ";
+        }
+        std::cout << std::endl;
+    }
 }

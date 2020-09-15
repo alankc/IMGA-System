@@ -28,6 +28,7 @@ public:
     void setDistance(uint32_t from, uint32_t to, double distance);
     double getDistance(uint32_t from, uint32_t to);
     std::vector<std::vector<double>> *getDistanceMatrix();
+    void gerenateLocations(uint32_t numOfLocations, uint32_t numOfDepots, double minDistance, double maxDistance);
 };
 
 #endif
