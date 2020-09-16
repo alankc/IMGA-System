@@ -83,6 +83,7 @@ void RobotController::generateRobots(uint32_t numberOfRobots, uint32_t minpayloa
         r.setMediumVelocity(rndSpeed(gen));
         r.setDischargeFactor(rndDisFac(gen)); //por fazer
         r.setBatteryThreshold(0);
+        r.setRemainingBattery(0);
         freeRobots.push_back(r);
     }
 }

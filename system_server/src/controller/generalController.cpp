@@ -38,7 +38,7 @@ void GeneralController::callScheduler()
     Chromosome best = is.getBest();
     best.printResult();*/
 
-    lc.gerenateLocations(6, 3, 10, 50);
+    lc.gerenateLocations(10, 3, 10, 50);
     for (uint32_t i = 0; i < lc.getLocationListSize(); i++)
     {
         std::cout << lc.getLocationByIndex(i)->getId() << " "
@@ -58,7 +58,7 @@ void GeneralController::callScheduler()
     }
 
     std::cout << "Robots" << std::endl;
-    rc.generateRobots(10, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
+    rc.generateRobots(3, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
     auto r = rc.getFreeRobots();
     for (auto it : *r)
     {
@@ -70,4 +70,16 @@ void GeneralController::callScheduler()
                   << it.getMediumVelocity() << " "
                   << it.getDischargeFactor() << std::endl;
     }
+
+    std::cout << "Tasks" << std::endl;
+    auto crResult = tc.generateTasks(18, r, d, 3);
+    auto t = tc.getTaskList();
+    for (auto it : *t)
+    {
+        std::cout << it;
+    }
+
+    std::cout << "Chromossome" << std::endl;
+
+    crResult.printResult();
 }

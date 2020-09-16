@@ -108,8 +108,15 @@ bool operator==(const Task &t1, const Task &t2)
 
 std::ostream &operator<<(std::ostream &os, const Task &t)
 {
-	os << t.id << " " << t.pickUpLocation << " "
-	   << t.deliveryLocation << " " << t.payload << " " << t.deadline << std::endl;
+	os << t.id << " "
+	   << t.description << " "
+	   << t.status << " "
+	   << t.pickUpLocation << " "
+	   << t.deliveryLocation << " "
+	   << t.payload << " "
+	   << t.deadline << " "
+	   << t.robotInCharge
+	   << std::endl;
 	return os;
 }
 
