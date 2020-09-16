@@ -4,7 +4,11 @@
 #include <vector>
 
 #include "../model/task.hpp"
+#include "../model/robot.hpp"
+#include "../model/location.hpp"
 #include "../dao/taskDao.hpp"
+
+#include "../scheduler/chromosome.hpp"
 
 class TaskController
 {
@@ -25,6 +29,8 @@ public:
     Task *getTaskByIndex(uint32_t index);
     void copyTaskList(std::vector<Task> &copy);
     std::size_t getTaskListSize();
+
+    Chromosome generateTasks(uint32_t numberOfTasks, std::vector<Robot> *freeRobotList, std::vector<std::vector<double>> *distanceMatrix, uint32_t numberOfPlaces, uint32_t numberOfDepots);
 };
 
 #endif

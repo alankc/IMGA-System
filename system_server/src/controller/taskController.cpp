@@ -1,4 +1,5 @@
 #include "taskController.hpp"
+#include <random>
 
 TaskController::TaskController() {}
 
@@ -51,4 +52,26 @@ void TaskController::copyTaskList(std::vector<Task> &copy)
 std::size_t TaskController::getTaskListSize()
 {
     return tasksToSchedule.size();
+}
+
+Chromosome TaskController::generateTasks(uint32_t numberOfTasks, std::vector<Robot> *freeRobotList, std::vector<std::vector<double>> *distanceMatrix, uint32_t numberOfPlaces, uint32_t numberOfDepots)
+{
+    auto &robotList = *freeRobotList;
+    auto &dm = *distanceMatrix;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<uint32_t> depotDist(0, numberOfDepots - 1);
+    std::uniform_int_distribution<uint32_t> placeDist(numberOfDepots, numberOfPlaces - 1);
+    std::uniform_int_distribution<uint32_t> robotDist(0, robotList.size() - 1);
+
+    std::vector<double> timeDemand(robotList.size(), 0.0);
+
+    Chromosome result;
+
+    for (uint32_t i = 0; i < numberOfTasks; i++)
+    {
+        Task t;
+        t.setId(i)
+    }
 }
