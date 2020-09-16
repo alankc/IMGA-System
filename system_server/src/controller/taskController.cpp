@@ -74,6 +74,7 @@ Chromosome TaskController::generateTasks(uint32_t numberOfTasks, std::vector<Rob
     }
 
     //Defining vector of tasks
+    tasksToSchedule.clear();
     for (uint32_t i = 0; i < numberOfTasks; i++)
     {
         Task t;
@@ -123,8 +124,8 @@ Chromosome TaskController::generateTasks(uint32_t numberOfTasks, std::vector<Rob
 
         double timeToPickUp = r.computeTimeRequirement(dm[r.getCurrentLocation()][t.getPickUpLocation()]);
         double timeToDelivery = r.computeTimeRequirement(dm[t.getPickUpLocation()][t.getDeliveryLocation()]);
-        //add 5% de folga
-        double timeInTravel = (timeToPickUp + timeToDelivery) * (1.0 + 5.0 / 100.0);
+        //add 10% de folga
+        double timeInTravel = (timeToPickUp + timeToDelivery) * (1.0 + 10.0 / 100.0);
 
         double battery = r.computeBatteryRequirement(timeInTravel) + freeRobotList->at(robotIndex).getRemainingBattery();
         freeRobotList->at(robotIndex).setRemainingBattery(battery);
