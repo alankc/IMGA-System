@@ -66,7 +66,7 @@ void Island::globalMigration()
         migration(gaMigList[i], gaMigList[j]);
         i = (i + 2) % gaMigList.size();
         j = (j + 2) % gaMigList.size();
-    } 
+    }
 }
 
 void Island::solve()
@@ -91,11 +91,11 @@ void Island::solve()
     }
 
     std::vector<std::thread *> threadList;
-    for (uint64_t i = 0; i < gaP.maxIterations; i += maxSubIteration)
+    for (uint64_t i = 0; i < gaP.maxIterations; i++)
     {
         for (uint16_t j = 0; j < gaList.size(); j++)
         {
-            auto& ga = gaList[j];
+            auto &ga = gaList[j];
             std::thread *t = new std::thread(&GA::solve, ga);
             threadList.push_back(t);
         }
@@ -107,7 +107,7 @@ void Island::solve()
             t->join();
             delete (t);
 
-            auto& ga = gaList[j++];
+            auto &ga = gaList[j++];
             if (ga->getBest().allScheduled())
                 breakTst = true;
         }
@@ -121,9 +121,12 @@ void Island::solve()
     }
 
     best = gaList[0]->getBest();
+    listOfBests.clear();
+    listOfBests.push_back(best);
     for (uint16_t i = 1; i < gaList.size(); i++)
     {
         Chromosome tmp = gaList[i]->getBest();
+        listOfBests.push_back(tmp);
         if (best.getFitness() > tmp.getFitness())
             best = tmp;
         delete (gaList[i]);
@@ -135,4 +138,9 @@ void Island::solve()
 Chromosome Island::getBest()
 {
     return best;
+}
+
+std::vector<Chromosome> Island::getListOfBests()
+{
+    return listOfBests;
 }

@@ -84,7 +84,7 @@ void GeneralController::callScheduler()
     crResult.printResult();*/
     double hitRate = 0.0;
 
-    for (uint32_t i = 0; i < 100; i++)
+    for (uint32_t i = 0; i < 1; i++)
     {
         lc.gerenateLocations(10, 3, 10, 50);
         auto d = lc.getDistanceMatrix();
@@ -96,7 +96,7 @@ void GeneralController::callScheduler()
         gaP.populationSize = 100;
         gaP.mutationRate = 0.25;
         gaP.elitismRate = 0.05;
-        gaP.maxIterations = 1000;
+        gaP.maxIterations = 10;
         gaP.noChangeLimit = gaP.maxIterations;
 
         auto tasks = tc.getTaskList();
@@ -108,8 +108,11 @@ void GeneralController::callScheduler()
         Chromosome best = is.getBest();
         best.printResult();
 
-        if (best.allScheduled())
-            hitRate += 1.0/100.0;
+        auto bestList = is.getListOfBests();
+        for (uint32_t j = 0; j < bestList.size(); j++)
+            std::cout << bestList[j].allScheduled() << " ";
+
+        std::cout << std::endl;    
     }
 
     std::cout << "HitHate = " << hitRate << std::endl;
