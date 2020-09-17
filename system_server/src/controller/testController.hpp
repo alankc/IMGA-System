@@ -23,11 +23,22 @@ public:
     ~TestController();
 
     void static setControllers(RobotController *rc, TaskController *tc, LocationController *lc);
+
     /*
-    * Evaluate Hit Rate of islands varing mutation and elitsm
-    *
+    * Evaluate Hit Rate of islands varing mutation and elitsm from islands
     */
     void static hitRateTest(uint32_t repetitions, double min, double max, double step);
+
+    /*
+    * Evaluate Hit Rate of islands varing migration and subiterations 
+    */
+    void static Experiment2(uint32_t repetitions, double minMig, double maxMig, double stepMig, uint32_t minSubIt, uint32_t maxSubIt, uint32_t stepSubIt);
+   
+    /*
+    * Evaluate Hit Rate of islands varing tasnks and robots
+    *   Number of robots is defined by a function
+    */
+    void static Experiment3(uint32_t repetitions, double minT, double maxT, double stepT);
 };
 
 template <typename T>

@@ -124,6 +124,7 @@ void GeneralController::run()
     TestController tstController;
     tstController.setControllers(&rc, &tc, &lc);
 
-    TestController::hitRateTest(1000, 0.05, 0.3, 0.050);
+    //TestController::hitRateTest(1000, 0.05, 0.3, 0.050);
     //TestController::hitRateTest(100, 0.05, 0.05, 0.050);
+    TestController::Experiment2(10, 0.05, 0.10, 0.05, 10, 50, 10);
 }

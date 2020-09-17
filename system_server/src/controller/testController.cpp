@@ -94,3 +94,80 @@ void TestController::hitRateTest(uint32_t repetitions, double min, double max, d
         }
     }
 }
+
+void TestController::Experiment2(uint32_t repetitions, double minMig, double maxMig, double stepMig, uint32_t minSubIt, uint32_t maxSubIt, uint32_t stepSubIt)
+{
+    std::cout << "Migration"
+              << "\t"
+              << "Subiteration"
+              << "\t"
+              << "AvgTime"
+              << "\t"
+              << "stdTime"
+              << "\t"
+              << "HitRate"
+              << "\t"
+              << "IslandsHitRate" << std::endl;
+
+    for (double migration = minMig; migration <= maxMig + stepMig * 0.1; migration += stepMig)
+    {
+        for (uint32_t subIt = minSubIt; subIt <= maxSubIt; subIt += stepSubIt)
+        {
+            migration = std::round(migration * 100) / 100;
+
+            std::cout << migration << "\t" << subIt << "\t";
+
+            GAParameters gaP;
+            gaP.populationSize = 100;
+            gaP.mutationRate = 0.25;
+            gaP.elitismRate = 0.05;
+            gaP.maxIterations = std::round(1000.0/subIt); //1000 global iteration total
+            gaP.noChangeLimit = gaP.maxIterations;
+
+            std::vector<double> islandHitRate(36, 0.0);
+            double globalHitRate = 0.0;
+            std::vector<int64_t> timeDuration(repetitions);
+
+            for (uint32_t i = 0; i < repetitions; i++)
+            {
+                lc->gerenateLocations(10, 3, 10, 50);
+                auto d = lc->getDistanceMatrix();
+                rc->generateRobots(5, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
+                auto r = rc->getFreeRobots();
+                auto crResult = tc->generateTasks(15, r, d, 3);
+
+                auto tasks = tc->getTaskList();
+                auto robots = rc->getFreeRobots();
+                auto distance = lc->getDistanceMatrix();
+
+                Island is(gaP, subIt, migration, tasks, robots, distance);
+
+                auto start = std::chrono::high_resolution_clock::now();
+                is.solve();
+                auto stop = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+
+                timeDuration[i] = duration.count();
+
+                Chromosome best = is.getBest();
+                if (best.allScheduled())
+                    globalHitRate += 1.0 / (double)repetitions;
+
+                auto bestList = is.getListOfBests();
+                for (uint32_t j = 0; j < bestList.size(); j++)
+                    if (bestList[j].allScheduled())
+                        islandHitRate[j] += 1.0 / (double)repetitions;
+            }
+
+            double avgTime = computeMean<int64_t>(timeDuration);
+            double stdTime = std::sqrt(computeVariance<int64_t>(timeDuration, avgTime));
+
+            std::cout << avgTime << "\t" << stdTime << "\t" << globalHitRate;
+
+            for (uint32_t i = 0; i < islandHitRate.size(); i++)
+                std::cout << "\t" << islandHitRate[i];
+
+            std::cout << std::endl;
+        }
+    }
+}
