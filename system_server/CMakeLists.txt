@@ -124,10 +124,10 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  /src/controller
-  /src/scheduler
-  /src/dao
-  /src/model
+  src/controller
+  src/scheduler
+  src/dao
+  src/model
 )
 
 ## Declare a C++ library

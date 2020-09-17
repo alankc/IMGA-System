@@ -128,12 +128,12 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  /src/battery
-  /src/communication
-  /src/controller
-  /src/dao
-  /src/model
-  /src/navigation
+  src/battery
+  src/communication
+  src/controller
+  src/dao
+  src/model
+  src/navigation
 )
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
