@@ -117,3 +117,12 @@ void GeneralController::callScheduler()
 
     std::cout << "HitHate = " << hitRate << std::endl;
 }
+
+#include "testController.hpp"
+void GeneralController::run()
+{
+    TestController tstController;
+    tstController.setControllers(&rc, &tc, &lc);
+
+    TestController::hitRateTest(1000, 0.05, 0.4, 0.050);
+}

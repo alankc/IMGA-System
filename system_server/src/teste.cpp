@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     std::string db = "ServerDB";
     GeneralController gc(host, user, pass, db);
 
-    gc.callScheduler();
+    gc.run();
     
     
     return EXIT_SUCCESS;

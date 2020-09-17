@@ -30,6 +30,7 @@ public:
     ~GeneralController();
 
     void callScheduler();
+    void run();
 };
 
 #endif
