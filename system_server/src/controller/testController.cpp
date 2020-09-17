@@ -44,7 +44,7 @@ void TestController::hitRateTest(uint32_t repetitions, double min, double max, d
             gaP.populationSize = 100;
             gaP.mutationRate = mutation;
             gaP.elitismRate = elitism;
-            gaP.maxIterations = 10;
+            gaP.maxIterations = 20;
             gaP.noChangeLimit = gaP.maxIterations;
 
             std::vector<double> islandHitRate(36, 0.0);
@@ -55,7 +55,7 @@ void TestController::hitRateTest(uint32_t repetitions, double min, double max, d
             {
                 lc->gerenateLocations(10, 3, 10, 50);
                 auto d = lc->getDistanceMatrix();
-                rc->generateRobots(6, 1, 6, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
+                rc->generateRobots(6, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
                 auto r = rc->getFreeRobots();
                 auto crResult = tc->generateTasks(20, r, d, 3);
 
@@ -63,7 +63,7 @@ void TestController::hitRateTest(uint32_t repetitions, double min, double max, d
                 auto robots = rc->getFreeRobots();
                 auto distance = lc->getDistanceMatrix();
 
-                Island is(gaP, 100, 0.1, tasks, robots, distance);
+                Island is(gaP, 50, 0.1, tasks, robots, distance);
 
                 auto start = std::chrono::high_resolution_clock::now();
                 is.solve();
