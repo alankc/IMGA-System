@@ -55,9 +55,9 @@ void TestController::hitRateTest(uint32_t repetitions, double min, double max, d
             {
                 lc->gerenateLocations(10, 3, 10, 50);
                 auto d = lc->getDistanceMatrix();
-                rc->generateRobots(6, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
+                rc->generateRobots(5, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
                 auto r = rc->getFreeRobots();
-                auto crResult = tc->generateTasks(20, r, d, 3);
+                auto crResult = tc->generateTasks(15, r, d, 3);
 
                 auto tasks = tc->getTaskList();
                 auto robots = rc->getFreeRobots();
