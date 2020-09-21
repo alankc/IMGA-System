@@ -121,7 +121,7 @@ void TestController::Experiment2(uint32_t repetitions, double minMig, double max
             gaP.populationSize = 100;
             gaP.mutationRate = 0.25;
             gaP.elitismRate = 0.05;
-            gaP.maxIterations = std::round(1000.0/subIt); //1000 global iteration total
+            gaP.maxIterations = std::round(1000.0 / subIt); //1000 global iteration total
             gaP.noChangeLimit = gaP.maxIterations;
 
             std::vector<double> islandHitRate(36, 0.0);
@@ -168,6 +168,52 @@ void TestController::Experiment2(uint32_t repetitions, double minMig, double max
                 std::cout << "\t" << islandHitRate[i];
 
             std::cout << std::endl;
+        }
+    }
+}
+
+void TestController::Experiment3(uint32_t repetitions, uint32_t minT, uint32_t maxT, uint32_t stepT)
+{
+    std::cout << "Tasks"
+              << "\t"
+              << "Robots"
+              << "\t"
+              << "AvgTime"
+              << "\t"
+              << "stdTime"
+              << "\t"
+              << "HitRate"
+              << "\t"
+              << "IslandsHitRate" << std::endl;
+
+    GAParameters gaP;
+    gaP.populationSize = 100;
+    gaP.mutationRate = 0.25;
+    gaP.elitismRate = 0.05;
+    gaP.maxIterations = 50;
+    gaP.noChangeLimit = gaP.maxIterations * 0.25;
+
+    for (uint32_t nt = 0; nt < maxT; nt += stepT)
+    {
+        uint32_t nr = nt / 2;
+        for (uint32_t rep = 0; rep < repetitions; rep++)
+        {
+            lc->gerenateLocations(10, 3, 10, 50);
+            auto d = lc->getDistanceMatrix();
+            rc->generateRobots(nr, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
+            auto r = rc->getFreeRobots();
+            auto crResult = tc->generateTasks(nt, r, d, 3);
+
+            auto tasks = tc->getTaskList();
+            auto robots = rc->getFreeRobots();
+            auto distance = lc->getDistanceMatrix();
+
+            Island is(gaP, 50, 0.1, tasks, robots, distance);
+
+            auto start = std::chrono::high_resolution_clock::now();
+            is.solve();
+            auto stop = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
         }
     }
 }

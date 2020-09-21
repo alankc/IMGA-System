@@ -38,7 +38,7 @@ public:
     * Evaluate Hit Rate of islands varing tasnks and robots
     *   Number of robots is defined by a function
     */
-    void static Experiment3(uint32_t repetitions, double minT, double maxT, double stepT);
+    void static Experiment3(uint32_t repetitions, uint32_t minT, uint32_t maxT, uint32_t stepT);
 };
 
 template <typename T>
