@@ -118,7 +118,7 @@ void LocationController::gerenateLocations(uint32_t numOfLocations, uint32_t num
 
     distanceMatrix.clear();
     distanceMatrix.resize(numOfLocations);
-    for (uint32_t i = 0; i < numOfLocations + 1; i++)
+    for (uint32_t i = 0; i < numOfLocations; i++)
         distanceMatrix[i].resize(numOfLocations);
 
     for (uint32_t i = 0; i < numOfLocations; i++)
