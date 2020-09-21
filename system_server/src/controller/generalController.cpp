@@ -90,7 +90,7 @@ void GeneralController::callScheduler()
         auto d = lc.getDistanceMatrix();
         rc.generateRobots(5, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
         auto r = rc.getFreeRobots();
-        auto crResult = tc.generateTasks(20, r, d, 3);
+        //auto crResult = tc.generateTasks(20, r, d, 3);
 
         GAParameters gaP;
         gaP.populationSize = 100;
@@ -126,5 +126,6 @@ void GeneralController::run()
 
     //TestController::hitRateTest(1000, 0.05, 0.3, 0.050);
     //TestController::hitRateTest(100, 0.05, 0.05, 0.050);
-    TestController::Experiment2(1000, 0.15, 0.30, 0.05, 10, 100, 10);
+    //TestController::Experiment2(1000, 0.15, 0.30, 0.05, 10, 100, 10);
+    TestController::Experiment3(10, 25, 50, 5);
 }

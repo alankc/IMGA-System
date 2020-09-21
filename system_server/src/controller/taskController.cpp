@@ -105,11 +105,12 @@ Chromosome TaskController::generateTasks(uint32_t numberOfTasks, std::vector<Rob
 
 
     Chromosome rst;
-    rst.setTaskList(&tasksToSchedule);
-    rst.setRobotList(freeRobotList);
-    rst.setDistanceMatrix(distanceMatrix);
+    Chromosome::setTaskList(&tasksToSchedule);
+    Chromosome::setRobotList(freeRobotList);
+    Chromosome::setDistanceMatrix(distanceMatrix);
     auto &cs = rst.getScheduled();
-    cs = std::vector<bool>(tasksToSchedule.size(), false);
+    for (uint32_t i = 0; i < numberOfTasks; i++)
+        cs.push_back(false);
     auto &ct = rst.getTasks();
     std::copy(indxVec.begin(), indxVec.end(), std::back_inserter(ct));
     auto &cr = rst.getRobots();

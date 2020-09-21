@@ -201,7 +201,8 @@ void GA::initialize()
 
 	for (uint16_t i = 0; i < populationSize; i++)
 	{
-		Chromosome chrTmp(true);
+		Chromosome chrTmp;
+		chrTmp.initialize();
 		population.push_back(chrTmp);
 	}
 	std::sort(population.begin(), population.end());	

@@ -74,6 +74,7 @@ void Island::solve()
     GAParameters gaTmp = gaP;
     gaTmp.maxIterations = maxSubIteration;
     gaTmp.noChangeLimit = ((double)gaTmp.noChangeLimit / gaTmp.maxIterations) * maxSubIteration;
+    gaList.reserve(36);
     for (uint16_t i = 0; i < 3; i++)
     {
         for (uint16_t j = 0; j < 3; j++)
