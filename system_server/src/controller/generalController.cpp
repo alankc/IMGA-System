@@ -126,6 +126,7 @@ void GeneralController::run()
 
     //TestController::hitRateTest(1000, 0.05, 0.3, 0.050);
     //TestController::hitRateTest(100, 0.05, 0.05, 0.050);
-    //TestController::Experiment2(1000, 0.15, 0.30, 0.05, 10, 100, 10);
-    TestController::Experiment3(10, 25, 50, 5);
+    TestController::Experiment2(1000, 0.15, 0.15, 0.05, 60, 100, 10);
+    TestController::Experiment2(1000, 0.20, 0.30, 0.05, 10, 100, 10);
+    //TestController::Experiment3(5, 5, 50, 5);
 }

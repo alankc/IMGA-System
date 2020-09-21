@@ -57,7 +57,7 @@ void TestController::hitRateTest(uint32_t repetitions, double min, double max, d
                 auto d = lc->getDistanceMatrix();
                 rc->generateRobots(5, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
                 auto r = rc->getFreeRobots();
-                //auto crResult = tc->generateTasks(15, r, d, 3);
+                auto crResult = tc->generateTasks(15, r, d, 3);
 
                 auto tasks = tc->getTaskList();
                 auto robots = rc->getFreeRobots();
@@ -134,7 +134,7 @@ void TestController::Experiment2(uint32_t repetitions, double minMig, double max
                 auto d = lc->getDistanceMatrix();
                 rc->generateRobots(5, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
                 auto r = rc->getFreeRobots();
-                //auto crResult = tc->generateTasks(15, r, d, 3);
+                auto crResult = tc->generateTasks(15, r, d, 3);
 
                 auto tasks = tc->getTaskList();
                 auto robots = rc->getFreeRobots();
