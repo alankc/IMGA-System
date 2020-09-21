@@ -214,7 +214,7 @@ void TestController::Experiment3(uint32_t repetitions, uint32_t minT, uint32_t m
             auto tasks = tc->getTaskList();
             auto distance = lc->getDistanceMatrix();
 
-            Island is(gaP, 100, 0.05, tasks, robots, distance); //verificar!!
+            Island is(gaP, 50, 0.05, tasks, robots, distance); //verificar!!
 
             auto start = std::chrono::high_resolution_clock::now();
             is.solve();
@@ -224,8 +224,7 @@ void TestController::Experiment3(uint32_t repetitions, uint32_t minT, uint32_t m
             timeDuration[rep] = duration.count();
 
             Chromosome best = is.getBest();
-            if (best.allScheduled())
-                globalHitRate += 1.0 / (double)repetitions;  
+            globalHitRate += ((double)best.numberOfScheduled()/nt) / (double)repetitions;  
         }
 
         double avgTime = computeMean<int64_t>(timeDuration);
