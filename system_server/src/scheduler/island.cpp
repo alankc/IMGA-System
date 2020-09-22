@@ -15,6 +15,7 @@ Island::Island(GAParameters gaP, uint64_t maxSubIteration, double migrationRate,
     Chromosome::setRobotList(robotList);
     Chromosome::setTaskList(taskList);
     Chromosome::setDistanceMatrix(distancematrix);
+    this->seconds = 0;
 }
 
 Island::~Island()
