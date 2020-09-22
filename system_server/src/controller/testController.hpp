@@ -6,6 +6,29 @@
 #include "taskController.hpp"
 #include <cmath>
 
+typedef struct _Exp3Result
+{
+	int64_t timeToScheduling = 0;
+	double scheduledPercentage = 0.0;
+
+	double energyExpected = 0.0;
+	double energyObtained = 0.0;
+	double timeExpected = 0.0;
+	double timeObtained = 0.0;
+ 	uint64_t payloadExpected = 0;
+	uint64_t payloadObtained = 0;
+
+	double meanNormEnergyE = 0.0;
+	double stdNormEnergyE = 0.0;
+	double meanNormEnergyO = 0.0;
+	double stdNormEnergyO = 0.0;
+	
+	double meanNormPayloadE = 0.0;
+	double stdNormPayloadE = 0.0;	
+	double meanNormPayloadO = 0.0;	
+	double stdNormPayloadO = 0.0;	
+} Exp3Result;
+
 class TestController
 {
 private:
