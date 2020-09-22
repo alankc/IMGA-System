@@ -263,15 +263,15 @@ void TestController::Experiment3(uint32_t repetitions, uint32_t minT, uint32_t m
             std::cout << std::fixed << r.meanNormEnergyE << "\t" << r.stdNormEnergyE << "\t";
             std::cout << std::fixed << r.meanNormEnergyO << "\t" << r.stdNormEnergyO << "\t";
             std::cout << std::fixed << r.meanNormPayloadE << "\t" << r.stdNormPayloadE << "\t";
-            std::cout << std::fixed << r.meanNormPayloadO << "\t" << r.stdNormPayloadO << "\t\t";
+            std::cout << std::fixed << r.meanNormPayloadO << "\t" << r.stdNormPayloadO << "\t";
 
             auto bestList = is.getListOfBests();
             for (uint32_t j = 0; j < bestList.size(); j++)
             {
                 if (bestList[j].allScheduled())
-                    std::cout << 1 << "\t";
+                    std::cout << "\t" << 1;
                 else
-                    std::cout << 0 << "\t";
+                    std::cout << "\t" << 0;
             }
 
             std::cout << std::endl;
