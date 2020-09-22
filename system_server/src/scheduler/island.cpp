@@ -5,6 +5,7 @@
 #include <cmath>
 #include <random>
 #include <algorithm>
+#include <chrono>
 
 Island::Island(GAParameters gaP, uint64_t maxSubIteration, double migrationRate, std::vector<Task> *taskList, std::vector<Robot> *robotList, std::vector<std::vector<double>> *distancematrix)
 {
@@ -71,10 +72,14 @@ void Island::globalMigration()
 
 void Island::solve()
 {
+
+    auto start = std::chrono::high_resolution_clock::now();
+
     GAParameters gaTmp = gaP;
     gaTmp.maxIterations = maxSubIteration;
     gaTmp.noChangeLimit = ((double)gaTmp.noChangeLimit / gaTmp.maxIterations) * maxSubIteration;
     gaList.reserve(36);
+
     for (uint16_t i = 0; i < 3; i++)
     {
         for (uint16_t j = 0; j < 3; j++)
@@ -118,6 +123,14 @@ void Island::solve()
         if (breakTst)
             break;
 
+        if (seconds > 0)
+        {
+            auto stop = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+            if (duration.count() >= seconds * 1000.0)
+                break;
+        }
+
         globalMigration();
     }
 
@@ -144,4 +157,9 @@ Chromosome Island::getBest()
 std::vector<Chromosome> Island::getListOfBests()
 {
     return listOfBests;
+}
+
+void Island::setTimeLimit(uint32_t seconds)
+{
+    this->seconds = seconds;
 }
