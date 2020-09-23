@@ -215,7 +215,7 @@ void TestController::Experiment3(uint32_t repetitions, uint32_t minT, uint32_t m
             Island is(gaP, 50, 0.05, tasks, robots, distance); //verificar!!
 
             auto start = std::chrono::high_resolution_clock::now();
-            is.setTimeLimit(10);
+            is.setTimeLimit(90);
             is.solve();
             auto stop = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
