@@ -112,7 +112,7 @@ void GeneralController::callScheduler()
         for (uint32_t j = 0; j < bestList.size(); j++)
             std::cout << bestList[j].allScheduled() << " ";
 
-        std::cout << std::endl;    
+        std::cout << std::endl;
     }
 
     std::cout << "HitHate = " << hitRate << std::endl;
@@ -128,6 +128,17 @@ void GeneralController::run()
     //TestController::hitRateTest(100, 0.05, 0.05, 0.050);
     //TestController::Experiment2(2, 0.15, 0.15, 0.05, 60, 100, 10);
     //TestController::Experiment2(1000, 0.20, 0.30, 0.05, 10, 100, 10);
+
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    *   Verificar for (uint16_t k = 0; k < 4; k++) no island.cpp !!!!
+    *  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    */
+
     TestController::Experiment3(1000, 5, 35, 5);
     TestController::Experiment3(1000, 40, 50, 10);
+
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    *   Verificar for (uint16_t k = 0; k < 4; k++) no island.cpp !!!!
+    *  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    */
 }
