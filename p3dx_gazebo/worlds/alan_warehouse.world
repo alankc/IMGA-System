@@ -593,36 +593,36 @@
       <include>
         <uri>model://product_park</uri>
       </include>
-      <pose frame="">24.5 8.5 0 0 0 1.570796327</pose>
+      <pose frame="">25.5 8.5 0 0 0 1.570796327</pose>
     </model>
 
     <model name="product_park_02">
       <include>
         <uri>model://product_park</uri>
       </include>
-      <pose frame="">24.5 4.5 0 0 0 1.570796327</pose>
+      <pose frame="">25.5 4.5 0 0 0 1.570796327</pose>
     </model>
 
     <model name="product_park_03">
       <include>
         <uri>model://product_park</uri>
       </include>
-      <pose frame="">24.5 0.0 0 0 0 1.570796327</pose>
+      <pose frame="">25.5 0.0 0 0 0 1.570796327</pose>
     </model>
 
     <model name="product_park_04">
       <include>
         <uri>model://product_park</uri>
       </include>
-      <pose frame="">24.5 -4.5 0 0 0 1.570796327</pose>
+      <pose frame="">25.5 -4.5 0 0 0 1.570796327</pose>
     </model>
 
     <model name="product_park_05">
       <include>
         <uri>model://product_park</uri>
       </include>
-      <pose frame="">24.5 -8.5 0 0 0 1.570796327</pose>
-    </model>
+      <pose frame="">25.5 -8.5 0 0 0 1.570796327</pose>
+    </model>   
     <!--*********************************************-->
     <!--*********************************************-->
     <!--*********************************************-->
