@@ -524,71 +524,112 @@
 
 
     <!--*********************************************-->
-    <!--****************Robot Park******************-->
+    <!--****************Robot Park*******************-->
     <!--*********************************************-->
     <model name="robot_park_01">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">14.5 -10.5 0 0 0 0</pose>
+      <pose frame="">14.5 -15.5 0 0 0 0</pose>
     </model>
 
     <model name="robot_park_02">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">7.5 -10.5 0 0 0 0</pose>
+      <pose frame="">7.5 -15.5 0 0 0 0</pose>
     </model>
 
     <model name="robot_park_03">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">-7.5 -10.5 0 0 0 0</pose>
+      <pose frame="">-7.5 -15.5 0 0 0 0</pose>
     </model>
 
     <model name="robot_park_04">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">-14.5 -10.5 0 0 0 0</pose>
+      <pose frame="">-14.5 -15.5 0 0 0 0</pose>
     </model>
 
     <model name="robot_park_05">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">14.5 10.5 0 0 0 3.141592654</pose>
+      <pose frame="">14.5 15.5 0 0 0 3.141592654</pose>
     </model>
     <model name="robot_park_06">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">7.5 10.5 0 0 0 3.141592654</pose>
+      <pose frame="">7.5 15.5 0 0 0 3.141592654</pose>
     </model>
 
     <model name="robot_park_07">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">-7.5 10.5 0 0 0 3.141592654</pose>
+      <pose frame="">-7.5 15.5 0 0 0 3.141592654</pose>
     </model>
 
     <model name="robot_park_08">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">-14.5 10.5 0 0 0 3.141592654</pose>
+      <pose frame="">-14.5 15.5 0 0 0 3.141592654</pose>
+    </model>
+    <!--*********************************************-->
+    <!--*********************************************-->
+    <!--*********************************************-->
+
+
+    <!--*********************************************-->
+    <!--****************Task Park********************-->
+    <!--*********************************************-->
+    <!--*********************************************-->
+    <model name="product_park_01">
+      <include>
+        <uri>model://product_park</uri>
+      </include>
+      <pose frame="">24.5 8.5 0 0 0 1.570796327</pose>
     </model>
 
+    <model name="product_park_02">
+      <include>
+        <uri>model://product_park</uri>
+      </include>
+      <pose frame="">24.5 4.5 0 0 0 1.570796327</pose>
+    </model>
 
+    <model name="product_park_03">
+      <include>
+        <uri>model://product_park</uri>
+      </include>
+      <pose frame="">24.5 0.0 0 0 0 1.570796327</pose>
+    </model>
+
+    <model name="product_park_04">
+      <include>
+        <uri>model://product_park</uri>
+      </include>
+      <pose frame="">24.5 -4.5 0 0 0 1.570796327</pose>
+    </model>
+
+    <model name="product_park_05">
+      <include>
+        <uri>model://product_park</uri>
+      </include>
+      <pose frame="">24.5 -8.5 0 0 0 1.570796327</pose>
+    </model>
     <!--*********************************************-->
     <!--*********************************************-->
     <!--*********************************************-->
 
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>-4.70385 10.895 16.2659 -0 0.921795 -1.12701</pose>
+        <pose>0.8 0.0 12.0 0 1.5708 0</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
