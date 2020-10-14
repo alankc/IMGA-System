@@ -40,8 +40,7 @@
 
         <include file="$(find p3dx_navigation)/launch/move_base.launch">
             <arg name="my_ns" value="$(arg my_ns)" />
-        </include>
+        </include>        
     </group>
-
-
+    
 </launch>
