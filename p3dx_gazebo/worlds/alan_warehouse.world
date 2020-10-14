@@ -530,55 +530,55 @@
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">14.5 -15.5 0 0 0 0</pose>
+      <pose frame="">14.5 -15 0 0 0 0</pose>
     </model>
 
     <model name="robot_park_02">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">7.5 -15.5 0 0 0 0</pose>
+      <pose frame="">7.5 -15 0 0 0 0</pose>
     </model>
 
     <model name="robot_park_03">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">-7.5 -15.5 0 0 0 0</pose>
+      <pose frame="">-7.5 -15 0 0 0 0</pose>
     </model>
 
     <model name="robot_park_04">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">-14.5 -15.5 0 0 0 0</pose>
+      <pose frame="">-14.5 -15 0 0 0 0</pose>
     </model>
 
     <model name="robot_park_05">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">14.5 15.5 0 0 0 3.141592654</pose>
+      <pose frame="">14.5 15 0 0 0 3.141592654</pose>
     </model>
     <model name="robot_park_06">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">7.5 15.5 0 0 0 3.141592654</pose>
+      <pose frame="">7.5 15 0 0 0 3.141592654</pose>
     </model>
 
     <model name="robot_park_07">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">-7.5 15.5 0 0 0 3.141592654</pose>
+      <pose frame="">-7.5 15 0 0 0 3.141592654</pose>
     </model>
 
     <model name="robot_park_08">
       <include>
         <uri>model://robot_park</uri>
       </include>
-      <pose frame="">-14.5 15.5 0 0 0 3.141592654</pose>
+      <pose frame="">-14.5 15 0 0 0 3.141592654</pose>
     </model>
     <!--*********************************************-->
     <!--*********************************************-->
@@ -593,35 +593,35 @@
       <include>
         <uri>model://product_park</uri>
       </include>
-      <pose frame="">25.5 8.5 0 0 0 1.570796327</pose>
+      <pose frame="">26 8.5 0 0 0 1.570796327</pose>
     </model>
 
     <model name="product_park_02">
       <include>
         <uri>model://product_park</uri>
       </include>
-      <pose frame="">25.5 4.5 0 0 0 1.570796327</pose>
+      <pose frame="">26 4.5 0 0 0 1.570796327</pose>
     </model>
 
     <model name="product_park_03">
       <include>
         <uri>model://product_park</uri>
       </include>
-      <pose frame="">25.5 0.0 0 0 0 1.570796327</pose>
+      <pose frame="">26 0.0 0 0 0 1.570796327</pose>
     </model>
 
     <model name="product_park_04">
       <include>
         <uri>model://product_park</uri>
       </include>
-      <pose frame="">25.5 -4.5 0 0 0 1.570796327</pose>
+      <pose frame="">26 -4.5 0 0 0 1.570796327</pose>
     </model>
 
     <model name="product_park_05">
       <include>
         <uri>model://product_park</uri>
       </include>
-      <pose frame="">25.5 -8.5 0 0 0 1.570796327</pose>
+      <pose frame="">26 -8.5 0 0 0 1.570796327</pose>
     </model>   
     <!--*********************************************-->
     <!--*********************************************-->
