@@ -93,7 +93,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<sensor type="gpu_ray" name="head_hokuyo_sensor">
 			<pose>0.12 0 0.26 0 0 0</pose>
 			<visualize>false</visualize>
-			<update_rate>1000</update_rate>
+			<update_rate>100</update_rate>
 			<ray>
 				<scan>
 					<horizontal>
