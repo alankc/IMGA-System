@@ -23,7 +23,7 @@
             <uri>file://media/materials/scripts/gazebo.material</uri>
             <name>Gazebo/Grey</name>
           </script>
-          <ambient>1 1 1 1</ambient>
+          <ambient>1 0.764706 0.305882 1</ambient>
         </material>
         <meta>
           <layer>0</layer>
@@ -52,7 +52,7 @@
             <uri>file://media/materials/scripts/gazebo.material</uri>
             <name>Gazebo/Grey</name>
           </script>
-          <ambient>1 1 1 1</ambient>
+          <ambient>1 0.764706 0.305882 1</ambient>
         </material>
         <meta>
           <layer>0</layer>
@@ -81,13 +81,42 @@
             <uri>file://media/materials/scripts/gazebo.material</uri>
             <name>Gazebo/Grey</name>
           </script>
-          <ambient>1 1 1 1</ambient>
+          <ambient>1 0.764706 0.305882 1</ambient>
         </material>
         <meta>
           <layer>0</layer>
         </meta>
       </visual>
       <pose frame=''>0.015 0 0 0 -0 1.5708</pose>
+    </link>
+    <link name='Wall_5'>
+      <collision name='Wall_5_Collision'>
+        <geometry>
+          <box>
+            <size>3.91 0.1 0.7</size>
+          </box>
+        </geometry>
+        <pose frame=''>0 0 0.35 0 -0 0</pose>
+      </collision>
+      <visual name='Wall_5_Visual'>
+        <pose frame=''>0 0 0.35 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>3.91 0.1 0.7</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+          <ambient>1 0.764706 0.305882 1</ambient>
+        </material>
+        <meta>
+          <layer>0</layer>
+        </meta>
+      </visual>
+      <pose frame=''>0 0 0 0 -0 0</pose>
     </link>
     <static>1</static>
   </model>
