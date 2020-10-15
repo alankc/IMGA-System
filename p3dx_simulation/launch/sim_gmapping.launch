@@ -14,19 +14,16 @@
         <arg name="my_ns" value="robot1" />
         <arg name="robot_name" value="Robot1" />
         <arg name="initial_pose_x" value="-23"/>
-        <arg name="initial_pose_y" value="-12"/>
-        <arg name="initial_pose_a" value="0.0"/>
+        <arg name="initial_pose_y" value="-13"/>
+        <arg name="initial_pose_a" value="1.570796327"/>
 
         <param name="tf_prefix" value="$(arg my_ns)_tf" />
 
         <include file="$(find p3dx_gazebo)/launch/one_robot.launch">
-            <arg name="init_pose" value="-x $(arg initial_pose_x) -y $(arg initial_pose_y) -z 0" />
+            <arg name="init_pose" value="-x $(arg initial_pose_x) -y $(arg initial_pose_y) -z 0 -Y $(arg initial_pose_a)" />
             <arg name="robot_name" value="$(arg robot_name)" />
             <arg name="my_ns" value="$(arg my_ns)" />
         </include>
-
-        <node pkg="tf" type="static_transform_publisher" name="static_world_to_odom_publisher" args="0 0 0 0 0 0 /world /odom 100"/>
-
     </group>
 
     <include file="$(find p3dx_navigation)/launch/gmapping.launch">
