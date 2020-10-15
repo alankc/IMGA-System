@@ -15,7 +15,7 @@
         <arg name="robot_name" value="Robot1" />
         <arg name="initial_pose_x" value="-23"/>
         <arg name="initial_pose_y" value="-13"/>
-        <arg name="initial_pose_a" value="1.570796327"/>
+        <arg name="initial_pose_a" value="0"/>
 
         <param name="tf_prefix" value="$(arg my_ns)_tf" />
 
