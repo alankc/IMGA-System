@@ -1,0 +1,36 @@
+<launch>
+    <!-- No namespace here as we will share this description. 
+       Access with slash at the beginning -->
+    <arg name="robot_model" default="$(find p3dx_description)/urdf/pioneer3dx.xacro"/>
+    <param name="robot_description" command="$(find xacro)/xacro '$(arg robot_model)'"/>
+
+    <param name="/use_sim_time" value="true" />
+
+    <!-- Load world -->
+    <include file="$(find p3dx_gazebo)/launch/alan_warehouse.launch" />
+
+    <!-- BEGIN ROBOT 1-->
+    <group ns="robot1">
+        <arg name="my_ns" value="robot1" />
+        <arg name="robot_name" value="Robot1" />
+        <arg name="initial_pose_x" value="-23"/>
+        <arg name="initial_pose_y" value="-12"/>
+        <arg name="initial_pose_a" value="0.0"/>
+
+        <param name="tf_prefix" value="$(arg my_ns)_tf" />
+
+        <include file="$(find p3dx_gazebo)/launch/one_robot.launch">
+            <arg name="init_pose" value="-x $(arg initial_pose_x) -y $(arg initial_pose_y) -z 0" />
+            <arg name="robot_name" value="$(arg robot_name)" />
+            <arg name="my_ns" value="$(arg my_ns)" />
+        </include>
+
+        <node pkg="tf" type="static_transform_publisher" name="static_world_to_odom_publisher" args="0 0 0 0 0 0 /world /odom 100"/>
+
+    </group>
+
+    <include file="$(find p3dx_navigation)/launch/gmapping.launch">
+        <arg name="my_ns" value="robot1" />
+    </include>
+
+</launch>
