@@ -31,11 +31,15 @@
             <arg name="my_ns" value="$(arg my_ns)" />
         </include>
 
-        <include file="$(find p3dx_navigation)/launch/amcl.launch">
+        <!--include file="$(find p3dx_navigation)/launch/amcl.launch">
             <arg name="my_ns" value="$(arg my_ns)" />
             <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
             <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
             <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+        </include-->
+
+        <include file="$(find p3dx_navigation)/launch/fake_localization.launch">
+            <arg name="my_ns" value="$(arg my_ns)" />
         </include>
 
         <include file="$(find p3dx_navigation)/launch/move_base.launch">
@@ -43,7 +47,7 @@
         </include>
     </group>
 
-    <!-- BEGIN ROBOT 2-->
+    <!-- BEGIN ROBOT 2>
     <group ns="robot2">
         <arg name="my_ns" value="robot2" />
         <arg name="robot_name" value="Robot2" />
@@ -69,9 +73,9 @@
         <include file="$(find p3dx_navigation)/launch/move_base.launch">
             <arg name="my_ns" value="$(arg my_ns)" />
         </include>
-    </group>
+    </group-->
 
-    <!-- BEGIN ROBOT 3-->
+    <!-- BEGIN ROBOT 3>
     <group ns="robot3">
         <arg name="my_ns" value="robot3" />
         <arg name="robot_name" value="Robot3" />
@@ -97,9 +101,9 @@
         <include file="$(find p3dx_navigation)/launch/move_base.launch">
             <arg name="my_ns" value="$(arg my_ns)" />
         </include>
-    </group>
+    </group-->
 
-    <!-- BEGIN ROBOT 4-->
+    <!-- BEGIN ROBOT 4>
     <group ns="robot4">
         <arg name="my_ns" value="robot4" />
         <arg name="robot_name" value="Robot4" />
@@ -125,10 +129,10 @@
         <include file="$(find p3dx_navigation)/launch/move_base.launch">
             <arg name="my_ns" value="$(arg my_ns)" />
         </include>
-    </group>
+    </group-->
 
 
-    <!-- BEGIN ROBOT 5-->
+    <!-- BEGIN ROBOT 5>
     <group ns="robot5">
         <arg name="my_ns" value="robot5" />
         <arg name="robot_name" value="Robot5" />
@@ -154,7 +158,7 @@
         <include file="$(find p3dx_navigation)/launch/move_base.launch">
             <arg name="my_ns" value="$(arg my_ns)" />
         </include>
-    </group>
+    </group-->
 
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find p3dx_simulation)/rviz/config.rviz"/>
 </launch>

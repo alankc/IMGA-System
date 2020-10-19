@@ -1,0 +1,11 @@
+<launch>
+    <!-- Arguments -->
+    <arg name="my_ns"/>
+
+    <!-- Run fake localization compatible with AMCL output -->
+    <node pkg="fake_localization" type="fake_localization" name="fake_localization" output="screen">
+        <param name="odom_frame_id" value="$(arg my_ns)_tf/odom"/>
+        <param name="base_frame_id" value="$(arg my_ns)_tf/base_link"/>
+    </node>
+
+</launch>
