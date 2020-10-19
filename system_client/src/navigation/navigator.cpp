@@ -2,6 +2,7 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <tf/tf.h>
 
 Navigator::Navigator() {}
 
@@ -34,7 +35,14 @@ void Navigator::navigateTo(double x, double y, double w)
 
     goal.target_pose.pose.position.x = x;
     goal.target_pose.pose.position.y = y;
-    goal.target_pose.pose.orientation.w = w;
+
+    tf::Quaternion qt;
+    qt.setRPY(0, 0, w);
+
+    goal.target_pose.pose.orientation.x = qt.getX();
+    goal.target_pose.pose.orientation.y = qt.getY();
+    goal.target_pose.pose.orientation.z = qt.getZ();
+    goal.target_pose.pose.orientation.w = qt.getW();
 
     mbc->sendGoal(goal);
 }
