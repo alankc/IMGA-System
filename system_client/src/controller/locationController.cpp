@@ -15,6 +15,12 @@ void LocationController::updateLocationList()
 {
     locationList.clear();
     bool tst = ld.getLocationList(locationList);
+    for (uint32_t i = 0; i < locationList.size(); i++)
+    {
+        if (locationList[i].getIsDepot())
+            depotList.push_back(locationList[i]);
+    }
+
     if (!tst)
         std::cout << "Fail to update location list" << std::endl;
     else
