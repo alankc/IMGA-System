@@ -26,7 +26,7 @@ void Location::setY(double y)
 
 void Location::setA(double a)
 {
-	this->y = a;
+	this->a = a;
 }
 
 void Location::setDescription(std::string description)
