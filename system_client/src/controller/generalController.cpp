@@ -268,6 +268,18 @@ void GeneralController::run()
     //Start navigation
     nav.start();
 
+    system_client::MsgTask t;
+    t.id = 0;
+    t.deadline = 100;
+    t.pickUp = 1;
+    t.delivery = 2;
+    tc.push(t);
+    t.id = 1;
+    t.deadline = 200;
+    t.pickUp = 2;
+    t.delivery = 3;
+    tc.push(t);
+
     //Start listeners request and tasks
     subRequest = nh.subscribe("myResquestTopic", 10, &GeneralController::callbackSubRequest, this);
     subTask = nh.subscribe("myTaskTopic", 10, &GeneralController::callbackSubTask, this);
