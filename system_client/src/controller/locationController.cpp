@@ -14,6 +14,7 @@ LocationController::~LocationController()
 void LocationController::updateLocationList()
 {
     locationList.clear();
+    depotList.clear();
     bool tst = ld.getLocationList(locationList);
     for (uint32_t i = 0; i < locationList.size(); i++)
     {
