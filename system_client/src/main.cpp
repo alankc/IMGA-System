@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "talker");
 
-  ros::NodeHandle vel;
+  /*ros::NodeHandle vel;
   ros::Publisher vel_pub = vel.advertise<geometry_msgs::Twist>("/robot1/cmd_vel", 100);
   geometry_msgs::Twist msg;
   msg.linear.x = 0.0;
@@ -38,9 +38,6 @@ int main(int argc, char **argv)
 
   ros::NodeHandle amcl;
   ros::Subscriber sub_amcl = amcl.subscribe("/robot1/amcl_pose", 100, poseAMCLCallback);
-
-  /*GeneralController gc;
-  gc.run();*/
 
   Navigator n("robot1");
   n.start();
@@ -79,7 +76,10 @@ int main(int argc, char **argv)
   if (n.hasArrived())
     std::cout << "hasArrived" << std::endl;
   else
-    std::cout << "deu ruim" << std::endl;
+    std::cout << "deu ruim" << std::endl;*/
+
+  GeneralController gc;
+  gc.run();
 
   return 0;
 }

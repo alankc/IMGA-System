@@ -89,8 +89,10 @@ void GeneralController::goToDepot()
 void GeneralController::performTask(const system_client::MsgTask t)
 {
     ros::Rate r(5);
+    ros::Duration d(3.0);
 
     //Going to pickup
+    std::cout << "Going to pickup" << std::endl;
     auto pickUp = lc.getLocationById(t.pickUp, false);
     if (pickUp == NULL)
     {
@@ -98,28 +100,65 @@ void GeneralController::performTask(const system_client::MsgTask t)
         lc.updateDistanceMatrix();
         pickUp = lc.getLocationById(t.pickUp, false);
     }
-    nav.navigateTo(pickUp->getX(), pickUp->getY(), pickUp->getA());
-    while (nav.stillNavigating())
+
+    if (rc.getRobot()->getCurrentLocation() != pickUp->getId())
     {
-        if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+        nav.navigateTo(pickUp->getX(), pickUp->getY(), pickUp->getA());
+        while (nav.stillNavigating())
         {
+            //Used to cancel task in execution
+            if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+            {
+                nav.cancel();
+                navPrms = std::promise<void>();
+                navFtr = navPrms.get_future();
+                return;
+            }
+            r.sleep();
+        }
+        if (!nav.hasArrived())
+        {
+            system_client::MsgRequest m;
+            m.type = system_client::MsgRequest::FAIL_TASK;
+            m.data = t.id;
             nav.cancel();
-            navPrms = std::promise<void>();
-            navFtr = navPrms.get_future();
+            callbackPubSrvRequest(m);
             return;
         }
-        r.sleep();
+
+        //Set current location
+        rc.getRobot()->setCurrentLocation(pickUp->getId());
+        d.sleep();
+        ros::spinOnce();
+
+        //Turn around 180 degres
+        std::cout << "Turn around 180 degres" << std::endl;
+        nav.navigateTo(pickUp->getX(), pickUp->getY(), -pickUp->getA());
+        while (nav.stillNavigating())
+        {
+            //Used to cancel task in execution
+            if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+            {
+                nav.cancel();
+                navPrms = std::promise<void>();
+                navFtr = navPrms.get_future();
+                return;
+            }
+            r.sleep();
+        }
+        if (!nav.hasArrived())
+        {
+            system_client::MsgRequest m;
+            m.type = system_client::MsgRequest::FAIL_TASK;
+            m.data = t.id;
+            nav.cancel();
+            callbackPubSrvRequest(m);
+            return;
+        }
     }
-    if (!nav.hasArrived())
-    {
-        system_client::MsgRequest m;
-        m.type = system_client::MsgRequest::FAIL_TASK;
-        m.data = t.id;
-        nav.cancel();
-        callbackPubSrvRequest(m);
-        return;
-    }
+
     //Going to delivery
+    std::cout << "Going to delivery" << std::endl;
     auto delivery = lc.getLocationById(t.delivery, false);
     if (delivery == NULL)
     {
@@ -127,27 +166,65 @@ void GeneralController::performTask(const system_client::MsgTask t)
         lc.updateDistanceMatrix();
         delivery = lc.getLocationById(t.delivery, false);
     }
-    nav.navigateTo(delivery->getX(), delivery->getY(), delivery->getA());
-    while (nav.stillNavigating())
+
+    if (rc.getRobot()->getCurrentLocation() != delivery->getId())
     {
-        if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+        nav.navigateTo(delivery->getX(), delivery->getY(), delivery->getA());
+        while (nav.stillNavigating())
         {
+            if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+            {
+                nav.cancel();
+                navPrms = std::promise<void>();
+                navFtr = navPrms.get_future();
+                return;
+            }
+            r.sleep();
+        }
+        if (!nav.hasArrived())
+        {
+            system_client::MsgRequest m;
+            m.type = system_client::MsgRequest::FAIL_TASK;
+            m.data = t.id;
             nav.cancel();
-            navPrms = std::promise<void>();
-            navFtr = navPrms.get_future();
+            callbackPubSrvRequest(m);
             return;
         }
-        r.sleep();
+
+        //Set current location
+        rc.getRobot()->setCurrentLocation(delivery->getId());
+        d.sleep();
+        ros::spinOnce();
+
+        //Turn around 180 degres
+        std::cout << "Turn around 180 degres" << std::endl;
+        nav.navigateTo(delivery->getX(), delivery->getY(), -delivery->getA());
+        while (nav.stillNavigating())
+        {
+            //Used to cancel task in execution
+            if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+            {
+                nav.cancel();
+                navPrms = std::promise<void>();
+                navFtr = navPrms.get_future();
+                return;
+            }
+            r.sleep();
+        }
+        if (!nav.hasArrived())
+        {
+            system_client::MsgRequest m;
+            m.type = system_client::MsgRequest::FAIL_TASK;
+            m.data = t.id;
+            nav.cancel();
+            callbackPubSrvRequest(m);
+            return;
+        }
     }
-    if (!nav.hasArrived())
-    {
-        system_client::MsgRequest m;
-        m.type = system_client::MsgRequest::FAIL_TASK;
-        m.data = t.id;
-        nav.cancel();
-        callbackPubSrvRequest(m);
-        return;
-    }
+    system_client::MsgRequest m;
+    m.type = system_client::MsgRequest::SUCESS_TASK;
+    m.data = t.id;
+    callbackPubSrvRequest(m);
 }
 
 void GeneralController::performTasks()
@@ -161,17 +238,17 @@ void GeneralController::performTasks()
     {
         system_client::MsgTask t;
         if (tc.getFirst(t))
-        {   
+        {
             inDepot = false;
             performTask(t);
             tc.pop();
         }
-        else if (!inDepot)
+        else if (!inDepot) //Case performed all tasks and it is not in the depot, go to it
         {
             inDepot = true;
 
             //send msgs free
-            
+            std::cout << "Going to depot" << std::endl;
             goToDepot();
         }
 
