@@ -5,6 +5,7 @@ const std::string Robot::STATUS_FREE = "FR";
 const std::string Robot::STATUS_WORKING = "W";
 const std::string Robot::STATUS_TO_DEPOT = "D";
 const std::string Robot::STATUS_FAIL = "FA";
+const std::string Robot::STATUS_CHARGING = "C";
 
 Robot::Robot(uint32_t id, uint32_t depot, uint32_t currentLocation, uint32_t maximumPayload, double remainingBattery, double dischargeFactor, double batteryThreshold, double mediumVelocity)
 {
