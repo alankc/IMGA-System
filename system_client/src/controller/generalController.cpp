@@ -43,7 +43,7 @@ void GeneralController::callbackCancelTask(uint32_t id)
     system_client::MsgTask t;
     if (tc.getFirst(t))
     {
-        if (id == t.id) 
+        if (id == t.id)
             navPrms.set_value();
         else
             tc.deleteTaskById(id);
@@ -90,6 +90,14 @@ void GeneralController::goToDepot()
         depot = lc.getLocationById(rc.getRobot()->getDepot(), true);
     }
     nav.navigateTo(depot->getX(), depot->getY(), depot->getA());
+
+    while (nav.stillNavigating())
+        ; //wait arrive in depot
+
+    if (!nav.hasArrived())
+    {
+        rc.getRobot()->setCurrentLocation(rc.getRobot()->getDepot());
+    }
 }
 
 void GeneralController::performTask(const system_client::MsgTask t)
