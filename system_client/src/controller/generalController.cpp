@@ -43,7 +43,7 @@ void GeneralController::callbackCancelTask(uint32_t id)
     system_client::MsgTask t;
     if (tc.getFirst(t))
     {
-        if (id == t.id)
+        if (id == t.id) 
             navPrms.set_value();
         else
             tc.deleteTaskById(id);
@@ -54,8 +54,14 @@ void GeneralController::callbackSubRequest(const system_client::MsgRequest &msg)
 {
     switch (msg.type)
     {
-    case system_client::MsgRequest::ROBOT_DATA:
+    case system_client::MsgRequest::ROBOT_CHECK:
         callbackPubSrvRobotData();
+        break;
+
+    case system_client::MsgRequest::FREE_ROBOT:
+        break;
+
+    case system_client::MsgRequest::CHARGE_BATTERY:
         break;
 
     case system_client::MsgRequest::CANCEL_TASK:
@@ -90,8 +96,12 @@ void GeneralController::performTask(const system_client::MsgTask t)
 {
     ros::Rate r(5);
     ros::Duration d(3.0);
+    system_client::MsgRequest taskStatus;
+    taskStatus.data = t.id;
+    taskStatus.type = system_client::MsgRequest::PERFORMING_PICK_UP;
 
     //Going to pickup
+    callbackPubSrvRequest(taskStatus);
     std::cout << "Going to pickup" << std::endl;
     auto pickUp = lc.getLocationById(t.pickUp, false);
     if (pickUp == NULL)
@@ -118,11 +128,10 @@ void GeneralController::performTask(const system_client::MsgTask t)
         }
         if (!nav.hasArrived())
         {
-            system_client::MsgRequest m;
-            m.type = system_client::MsgRequest::FAIL_TASK;
-            m.data = t.id;
+            taskStatus.type = system_client::MsgRequest::FAIL_TASK;
+            taskStatus.data = t.id;
             nav.cancel();
-            callbackPubSrvRequest(m);
+            callbackPubSrvRequest(taskStatus);
             return;
         }
 
@@ -148,16 +157,17 @@ void GeneralController::performTask(const system_client::MsgTask t)
         }
         if (!nav.hasArrived())
         {
-            system_client::MsgRequest m;
-            m.type = system_client::MsgRequest::FAIL_TASK;
-            m.data = t.id;
+            taskStatus.type = system_client::MsgRequest::FAIL_TASK;
+            taskStatus.data = t.id;
             nav.cancel();
-            callbackPubSrvRequest(m);
+            callbackPubSrvRequest(taskStatus);
             return;
         }
     }
 
     //Going to delivery
+    taskStatus.type = system_client::MsgRequest::PERFORMING_DELIVERY;
+    callbackPubSrvRequest(taskStatus);
     std::cout << "Going to delivery" << std::endl;
     auto delivery = lc.getLocationById(t.delivery, false);
     if (delivery == NULL)
@@ -183,11 +193,10 @@ void GeneralController::performTask(const system_client::MsgTask t)
         }
         if (!nav.hasArrived())
         {
-            system_client::MsgRequest m;
-            m.type = system_client::MsgRequest::FAIL_TASK;
-            m.data = t.id;
+            taskStatus.type = system_client::MsgRequest::FAIL_TASK;
+            taskStatus.data = t.id;
             nav.cancel();
-            callbackPubSrvRequest(m);
+            callbackPubSrvRequest(taskStatus);
             return;
         }
 
@@ -213,18 +222,16 @@ void GeneralController::performTask(const system_client::MsgTask t)
         }
         if (!nav.hasArrived())
         {
-            system_client::MsgRequest m;
-            m.type = system_client::MsgRequest::FAIL_TASK;
-            m.data = t.id;
+            taskStatus.type = system_client::MsgRequest::FAIL_TASK;
+            taskStatus.data = t.id;
             nav.cancel();
-            callbackPubSrvRequest(m);
+            callbackPubSrvRequest(taskStatus);
             return;
         }
     }
-    system_client::MsgRequest m;
-    m.type = system_client::MsgRequest::SUCESS_TASK;
-    m.data = t.id;
-    callbackPubSrvRequest(m);
+    taskStatus.type = system_client::MsgRequest::SUCESS_TASK;
+    taskStatus.data = t.id;
+    callbackPubSrvRequest(taskStatus);
 }
 
 void GeneralController::performTasks()
