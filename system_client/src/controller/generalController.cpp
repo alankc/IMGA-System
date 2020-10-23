@@ -98,7 +98,13 @@ void GeneralController::goToDepot()
     if (!nav.hasArrived())
     {
         rc.getRobot()->setCurrentLocation(rc.getRobot()->getDepot());
+        rc.getRobot()->setStatus(Robot::STATUS_FREE);
     }
+    else
+    {
+        rc.getRobot()->setStatus(Robot::STATUS_FAIL);
+    }
+    
 }
 
 void GeneralController::performTask(const system_client::MsgTask t)
@@ -196,7 +202,7 @@ void GeneralController::performTask(const system_client::MsgTask t)
     if (rc.getRobot()->getCurrentLocation() != delivery->getId())
     {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-        
+
         nav.navigateTo(delivery->getX(), delivery->getY(), delivery->getA());
         while (nav.stillNavigating())
         {
@@ -270,6 +276,7 @@ void GeneralController::performTasks()
         if (tc.getFirst(t))
         {
             inDepot = false;
+            rc.getRobot()->setStatus(Robot::STATUS_WORKING);
             performTask(t);
             tc.pop();
         }
@@ -279,6 +286,7 @@ void GeneralController::performTasks()
 
             //send msgs free
             std::cout << "Going to depot" << std::endl;
+            rc.getRobot()->setStatus(Robot::STATUS_TO_DEPOT);
             goToDepot();
         }
 
