@@ -1,5 +1,6 @@
 #include "generalController.hpp"
 #include <iostream>
+#include <chrono>
 
 GeneralController::GeneralController()
 {
@@ -121,6 +122,8 @@ void GeneralController::performTask(const system_client::MsgTask t)
 
     if (rc.getRobot()->getCurrentLocation() != pickUp->getId())
     {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
         nav.navigateTo(pickUp->getX(), pickUp->getY(), pickUp->getA());
         while (nav.stillNavigating())
         {
@@ -142,6 +145,11 @@ void GeneralController::performTask(const system_client::MsgTask t)
             callbackPubSrvRequest(taskStatus);
             return;
         }
+
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        double time = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() / 1000.0;
+        double distance = lc.getDistance(rc.getRobot()->getCurrentLocation(), pickUp->getId());
+        rc.getRobot()->updateMediumVelocity(distance, time);
 
         //Set current location
         rc.getRobot()->setCurrentLocation(pickUp->getId());
@@ -187,6 +195,8 @@ void GeneralController::performTask(const system_client::MsgTask t)
 
     if (rc.getRobot()->getCurrentLocation() != delivery->getId())
     {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        
         nav.navigateTo(delivery->getX(), delivery->getY(), delivery->getA());
         while (nav.stillNavigating())
         {
@@ -207,6 +217,11 @@ void GeneralController::performTask(const system_client::MsgTask t)
             callbackPubSrvRequest(taskStatus);
             return;
         }
+
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        double time = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() / 1000.0;
+        double distance = lc.getDistance(rc.getRobot()->getCurrentLocation(), delivery->getId());
+        rc.getRobot()->updateMediumVelocity(distance, time);
 
         //Set current location
         rc.getRobot()->setCurrentLocation(delivery->getId());
