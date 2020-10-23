@@ -103,6 +103,7 @@ void GeneralController::goToDepot()
     else
     {
         rc.getRobot()->setStatus(Robot::STATUS_FAIL);
+        callbackPubSrvRobotData();
     }
     
 }
