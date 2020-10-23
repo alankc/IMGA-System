@@ -17,6 +17,9 @@ GeneralController::GeneralController()
     tc = TaskController();
     srvRequestTopic = "rqt123";
     srvRobotDataTopic = "robdata";
+
+    stopTask = false;
+    goToCharge = false;
 }
 
 void GeneralController::callbackPubSrvRequest(const system_client::MsgRequest &msg)
@@ -90,22 +93,31 @@ void GeneralController::goToDepot()
         lc.updateDistanceMatrix();
         depot = lc.getLocationById(rc.getRobot()->getDepot(), true);
     }
+    std::cout << "Going to depot" << std::endl;
+    rc.getRobot()->setStatus(Robot::STATUS_TO_DEPOT);
     nav.navigateTo(depot->getX(), depot->getY(), depot->getA());
 
     while (nav.stillNavigating())
         ; //wait arrive in depot
 
-    if (!nav.hasArrived())
+    if (nav.hasArrived())
     {
-        rc.getRobot()->setCurrentLocation(rc.getRobot()->getDepot());
-        rc.getRobot()->setStatus(Robot::STATUS_FREE);
+        if (goToCharge)
+        {
+            rc.getRobot()->setCurrentLocation(rc.getRobot()->getDepot());
+            rc.getRobot()->setStatus(Robot::STATUS_CHARGING);
+        }
+        else
+        {
+            rc.getRobot()->setCurrentLocation(rc.getRobot()->getDepot());
+            rc.getRobot()->setStatus(Robot::STATUS_FREE);
+        }
     }
     else
     {
         rc.getRobot()->setStatus(Robot::STATUS_FAIL);
         callbackPubSrvRobotData();
     }
-    
 }
 
 void GeneralController::performTask(const system_client::MsgTask t)
@@ -116,6 +128,10 @@ void GeneralController::performTask(const system_client::MsgTask t)
     taskStatus.data = t.id;
     taskStatus.type = system_client::MsgRequest::PERFORMING_PICK_UP;
 
+    navPrms = std::promise<void>();
+    navFtr = navPrms.get_future();
+
+    rc.getRobot()->setStatus(Robot::STATUS_WORKING);
     //Going to pickup
     callbackPubSrvRequest(taskStatus);
     std::cout << "Going to pickup" << std::endl;
@@ -271,13 +287,12 @@ void GeneralController::performTasks()
     ros::Rate r(5);
     bool inDepot = true;
 
-    while (true)
+    while (ros::ok())
     {
         system_client::MsgTask t;
-        if (tc.getFirst(t))
+        if (tc.getFirst(t) && !goToCharge)
         {
             inDepot = false;
-            rc.getRobot()->setStatus(Robot::STATUS_WORKING);
             performTask(t);
             tc.pop();
         }
@@ -285,10 +300,10 @@ void GeneralController::performTasks()
         {
             inDepot = true;
 
-            //send msgs free
-            std::cout << "Going to depot" << std::endl;
-            rc.getRobot()->setStatus(Robot::STATUS_TO_DEPOT);
             goToDepot();
+
+            while (goToCharge) //Waiting untill fully charged
+                r.sleep();
         }
 
         r.sleep();

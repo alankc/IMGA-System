@@ -37,6 +37,8 @@ private:
     Navigator nav;
     std::promise<void> navPrms;
     std::future<void> navFtr;
+    volatile bool stopTask;
+    volatile bool goToCharge;
 
     void callbackPubSrvRequest(const system_client::MsgRequest &msg);
     void callbackPubSrvRobotData();
