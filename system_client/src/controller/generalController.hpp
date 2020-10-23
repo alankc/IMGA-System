@@ -35,8 +35,6 @@ private:
     TaskController tc;
 
     Navigator nav;
-    std::promise<void> navPrms;
-    std::future<void> navFtr;
     volatile bool stopTask;
     volatile bool goToCharge;
 

@@ -48,7 +48,7 @@ void GeneralController::callbackCancelTask(uint32_t id)
     if (tc.getFirst(t))
     {
         if (id == t.id)
-            navPrms.set_value();
+            stopTask = true;
         else
             tc.deleteTaskById(id);
     }
@@ -102,16 +102,11 @@ void GeneralController::goToDepot()
 
     if (nav.hasArrived())
     {
+        rc.getRobot()->setCurrentLocation(rc.getRobot()->getDepot());
         if (goToCharge)
-        {
-            rc.getRobot()->setCurrentLocation(rc.getRobot()->getDepot());
             rc.getRobot()->setStatus(Robot::STATUS_CHARGING);
-        }
         else
-        {
-            rc.getRobot()->setCurrentLocation(rc.getRobot()->getDepot());
             rc.getRobot()->setStatus(Robot::STATUS_FREE);
-        }
     }
     else
     {
@@ -128,8 +123,7 @@ void GeneralController::performTask(const system_client::MsgTask t)
     taskStatus.data = t.id;
     taskStatus.type = system_client::MsgRequest::PERFORMING_PICK_UP;
 
-    navPrms = std::promise<void>();
-    navFtr = navPrms.get_future();
+    stopTask = false;
 
     rc.getRobot()->setStatus(Robot::STATUS_WORKING);
     //Going to pickup
@@ -151,11 +145,10 @@ void GeneralController::performTask(const system_client::MsgTask t)
         while (nav.stillNavigating())
         {
             //Used to cancel task in execution
-            if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+            if (stopTask)
             {
                 nav.cancel();
-                navPrms = std::promise<void>();
-                navFtr = navPrms.get_future();
+                stopTask = false;
                 return;
             }
             r.sleep();
@@ -185,11 +178,10 @@ void GeneralController::performTask(const system_client::MsgTask t)
         while (nav.stillNavigating())
         {
             //Used to cancel task in execution
-            if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+            if (stopTask)
             {
                 nav.cancel();
-                navPrms = std::promise<void>();
-                navFtr = navPrms.get_future();
+                stopTask = false;
                 return;
             }
             r.sleep();
@@ -223,11 +215,10 @@ void GeneralController::performTask(const system_client::MsgTask t)
         nav.navigateTo(delivery->getX(), delivery->getY(), delivery->getA());
         while (nav.stillNavigating())
         {
-            if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+            if (stopTask)
             {
                 nav.cancel();
-                navPrms = std::promise<void>();
-                navFtr = navPrms.get_future();
+                stopTask = false;
                 return;
             }
             r.sleep();
@@ -257,11 +248,10 @@ void GeneralController::performTask(const system_client::MsgTask t)
         while (nav.stillNavigating())
         {
             //Used to cancel task in execution
-            if (!(navFtr.wait_for(std::chrono::milliseconds(0)) == std::future_status::timeout))
+            if (stopTask)
             {
                 nav.cancel();
-                navPrms = std::promise<void>();
-                navFtr = navPrms.get_future();
+                stopTask = false;
                 return;
             }
             r.sleep();
@@ -282,8 +272,6 @@ void GeneralController::performTask(const system_client::MsgTask t)
 
 void GeneralController::performTasks()
 {
-    navPrms = std::promise<void>();
-    navFtr = navPrms.get_future();
     ros::Rate r(5);
     bool inDepot = true;
 
@@ -341,7 +329,18 @@ void GeneralController::run()
     pubSrvRobotData = nh.advertise<system_client::MsgRobotData>(srvRobotDataTopic, 10);
     pubSrvRequest = nh.advertise<system_client::MsgRequest>(srvRequestTopic, 10);
 
+    ros::Duration d(30);
+    d.sleep();
+
     std::thread prfTks(&GeneralController::performTasks, this);
 
+    /*stopTask = true;
+    goToCharge = true;
+    //Notificar falha de todas
+    tc.clear();
+    d.sleep();
+    d.sleep();
+    goToCharge = false;
+    tc.push(t);*/
     ros::spin();
 }
