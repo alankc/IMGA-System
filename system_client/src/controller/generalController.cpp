@@ -21,7 +21,7 @@ GeneralController::GeneralController()
     stopTask = false;
     goToCharge = false;
 
-    bs = BatterySimulator(20, 1, 0.001);
+    bs = BatterySimulator(100, 1, 0.001);
 }
 
 void GeneralController::callbackPubSrvRequest(const system_client::MsgRequest &msg)
@@ -320,7 +320,10 @@ void GeneralController::callbackBattery()
                 callbackPubSrvRequest(msg);
                 tc.pop();
             }
+            //Carregar bateria quando chegar no deposityo
         }
+        auto rbt = rc.getRobot();
+        std::cout << *rbt << std::endl;
         r.sleep();
         ros::spinOnce();
     }

@@ -154,16 +154,16 @@ bool Robot::operator<(const Robot &robotObj)
 
 std::ostream &operator<<(std::ostream &os, const Robot &r)
 {
-	os << r.id << ' ';
-	os << r.description << ' ';
-	os << r.status << ' ';
-	os << r.depot << ' ';
-	os << r.currentLocation << ' ';
-	os << r.maximumPayload << ' ';
-	os << r.remainingBattery << ' ';
-	os << r.dischargeFactor << ' ';
-	os << r.batteryThreshold << ' ';
-	os << r.mediumVelocity << ' ';
+	os << r.id << " ";
+	os << r.description << " ";
+	os << r.status << " ";
+	os << r.depot << " ";
+	os << r.currentLocation << " ";
+	os << r.maximumPayload << " ";
+	os << r.remainingBattery << " ";
+	os << r.dischargeFactor << " ";
+	os << r.batteryThreshold << " ";
+	os << r.mediumVelocity << " ";
 	
 	return os;
 }
