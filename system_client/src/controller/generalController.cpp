@@ -329,11 +329,7 @@ void GeneralController::run()
     pubSrvRobotData = nh.advertise<system_client::MsgRobotData>(srvRobotDataTopic, 10);
     pubSrvRequest = nh.advertise<system_client::MsgRequest>(srvRequestTopic, 10);
 
-    ros::Duration d(30);
-    d.sleep();
-
     std::thread prfTks(&GeneralController::performTasks, this);
-
     /*stopTask = true;
     goToCharge = true;
     //Notificar falha de todas

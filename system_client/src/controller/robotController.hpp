@@ -12,6 +12,8 @@ private:
     RobotDao rd;
     uint32_t id;
     Robot r;
+
+    void batterySimulator();
 public:
     RobotController();
     RobotController(GeneralDao *gDao, uint32_t id);
