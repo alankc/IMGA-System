@@ -85,8 +85,7 @@ void Island::solve()
     {
         for (uint16_t j = 0; j < 3; j++)
         {
-            //for (uint16_t k = 0; k < 4; k++)
-            uint16_t k = 0;
+            for (uint16_t k = 0; k < 4; k++)
             {
                 gaTmp.selectionMode = static_cast<GA::SelectionMode>(i);
                 gaTmp.crossoverMode = static_cast<GA::CrossoverMode>(j);
