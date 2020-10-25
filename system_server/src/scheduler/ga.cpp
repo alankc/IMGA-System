@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <random>
 #include <iostream>
+#include <chrono>
 
 GA::GA(/* args */)
 {
@@ -13,19 +14,22 @@ GA::GA(/* args */)
 
 	elitismRate = 0.2;
 	mutationRate = 0.5;
+
+	seconds = -1;
 }
 
 GA::GA(GAParameters gaParameters)
 {
 	this->populationSize = gaParameters.populationSize;
 	this->maxIterations = gaParameters.maxIterations;
-	this->noChangeLimit = gaParameters.noChangeLimit;	
+	this->noChangeLimit = gaParameters.noChangeLimit;
 	this->goalFitness = gaParameters.goalFitness;
 	this->elitismRate = gaParameters.elitismRate;
 	this->mutationRate = gaParameters.mutationRate;
 	this->selectionMode = gaParameters.selectionMode;
 	this->crossoverMode = gaParameters.crossoverMode;
 	this->mutationMode = gaParameters.mutationMode;
+	this->seconds = -1;
 
 	switch (selectionMode)
 	{
@@ -36,13 +40,13 @@ GA::GA(GAParameters gaParameters)
 
 	case rank:
 		this->selectionFunction = [this]() { this->rankSelection(); };
-		this->acumulateTotalFitnessFunction = [this]() { this->rankAcumulateTotalFitness(); };	
+		this->acumulateTotalFitnessFunction = [this]() { this->rankAcumulateTotalFitness(); };
 		break;
 
-	case tournament:	
+	case tournament:
 	default:
 		this->selectionFunction = [this]() { this->tournamentSelection(2); };
-		this->acumulateTotalFitnessFunction = [this]() { this->tournamentAcumulateTotalFitness(); };	
+		this->acumulateTotalFitnessFunction = [this]() { this->tournamentAcumulateTotalFitness(); };
 		break;
 	}
 
@@ -56,7 +60,7 @@ GA::GA(GAParameters gaParameters)
 		this->crossoverFunction = Chromosome::positionBasedCrossover;
 		break;
 
-	case orderBased:			
+	case orderBased:
 	default:
 		this->crossoverFunction = Chromosome::orderBasedCrossover;
 		break;
@@ -70,7 +74,7 @@ GA::GA(GAParameters gaParameters)
 
 	case scramble:
 		this->mutationFunction = Chromosome::scrambleMutation;
-		break;	
+		break;
 
 	case inversion:
 		this->mutationFunction = Chromosome::inversionMutation;
@@ -81,7 +85,6 @@ GA::GA(GAParameters gaParameters)
 		this->mutationFunction = Chromosome::displacementMutation;
 		break;
 	}
-	
 }
 
 GA::~GA()
@@ -99,24 +102,24 @@ void GA::rouletteWheelSelection()
 	double s = 0;
 	uint16_t i = sizeDist(gen);
 	while (s < max)
-	{	
+	{
 		i = (i + 1) % populationSize;
-		s += 1.0 / population[i].getFitness();		
-	}	
+		s += 1.0 / population[i].getFitness();
+	}
 	c1 = i;
 
 	max = valueDist(gen);
 	s = 0;
 	i = sizeDist(gen);
 	while (s < max)
-	{	
+	{
 		i = (i + 1) % populationSize;
 		s += 1.0 / population[i].getFitness();
 	}
-	c2 = i;	
+	c2 = i;
 
 	if (population[c2].getFitness() < population[c1].getFitness())
-		std::swap(c1, c2);	
+		std::swap(c1, c2);
 }
 
 void GA::rouletteWheelAcumulateTotalFitness()
@@ -137,21 +140,21 @@ void GA::rankSelection()
 	double s = 0;
 	uint16_t i = sizeDist(gen);
 	while (s < max)
-	{	
+	{
 		i = (i + 1) % populationSize;
-		s += 1.0 / (i + 1);		
-	}	
+		s += 1.0 / (i + 1);
+	}
 	c1 = i;
 
 	max = valueDist(gen);
 	s = 0;
 	i = sizeDist(gen);
 	while (s < max)
-	{	
+	{
 		i = (i + 1) % populationSize;
-		s += 1.0 / (i + 1);	
+		s += 1.0 / (i + 1);
 	}
-	c2 = i;	
+	c2 = i;
 
 	if (population[c2].getFitness() < population[c1].getFitness())
 		std::swap(c1, c2);
@@ -182,7 +185,7 @@ void GA::tournamentSelection(uint16_t size)
 			c1 = tempMaxSeq1;
 
 		if (population[tempMaxSeq2].getFitness() < population[c2].getFitness())
-			c2 = tempMaxSeq2;	
+			c2 = tempMaxSeq2;
 	}
 
 	if (population[c2].getFitness() < population[c1].getFitness())
@@ -205,12 +208,13 @@ void GA::initialize()
 		chrTmp.initialize();
 		population.push_back(chrTmp);
 	}
-	std::sort(population.begin(), population.end());	
+	std::sort(population.begin(), population.end());
 	best = population[0];
 }
 
 void GA::solve()
 {
+	auto start = std::chrono::high_resolution_clock::now();
 	const uint16_t elitismMaxIndex = std::round(populationSize * elitismRate);
 	const uint16_t crossoverMaxIndex = std::round(populationSize * (1 - elitismRate));
 	const uint16_t mutationMaxIndex = std::round(populationSize * mutationRate);
@@ -228,12 +232,13 @@ void GA::solve()
 	//goalFitness < best.getFitness() work just in the first time
 	//No nedd sort becaus population its sorted during the migration
 	acumulateTotalFitnessFunction();
-	while ((goalFitness < population[0].getFitness()) && (iteration < maxIterations) && (noChangeCounter < noChangeLimit))
+	bool tstSeconds = true;
+	while (tstSeconds && (goalFitness < population[0].getFitness()) && (iteration < maxIterations) && (noChangeCounter < noChangeLimit))
 	{
 		//Elitism
 		for (uint16_t i = 0; i < elitismMaxIndex; i++)
-			tempPopulation.push_back(population[i]);		
-			
+			tempPopulation.push_back(population[i]);
+
 		//Selection, Crossover
 		for (uint16_t i = 0; i < crossoverMaxIndex; i++)
 		{
@@ -241,7 +246,7 @@ void GA::solve()
 			selectionFunction();
 
 			//Crossover
-			auto tmp = crossoverFunction(population[c1], population[c2]);		
+			auto tmp = crossoverFunction(population[c1], population[c2]);
 			tempPopulation.push_back(tmp);
 		}
 
@@ -268,6 +273,12 @@ void GA::solve()
 			std::cout << "Iteration: " << iteration << "\t"
 					  << "Best Fitness: " << best.getFitness() << "\n";*/
 		iteration++;
+
+		if ((seconds < 0) ||
+			(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - start).count() <=  seconds))
+			tstSeconds = true;
+		else
+			tstSeconds = false;
 	}
 
 	//std::cout << "\n*** THE END ***\n";
@@ -278,7 +289,7 @@ Chromosome GA::getBest()
 	return best;
 }
 
-std::vector<Chromosome>& GA::getPopulation()
+std::vector<Chromosome> &GA::getPopulation()
 {
 	return population;
 }
@@ -304,4 +315,9 @@ void GA::printPopulation()
 	}
 	std::cout << "\n"
 			  << std::endl;
+}
+
+void GA::setTimeLimit(int64_t seconds)
+{
+	this->seconds = seconds;
 }

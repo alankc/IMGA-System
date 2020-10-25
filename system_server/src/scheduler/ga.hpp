@@ -42,6 +42,9 @@ class GA
 		Chromosome getBest();
 		std::vector<Chromosome>& getPopulation();
 		void printPopulation();	
+	
+		void setTimeLimit(int64_t seconds);
+
 	private:
 		//paramters
 		SelectionMode selectionMode;
@@ -66,6 +69,9 @@ class GA
 		std::function<void(Chromosome &c)> mutationFunction;
 
 		Chromosome best;
+
+		//Time restriction for experiment
+		int64_t seconds;
 
 		void rouletteWheelSelection();
 		void rouletteWheelAcumulateTotalFitness();
