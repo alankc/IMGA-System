@@ -150,7 +150,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 FILE(
   GLOB MyCPPSourcesa 
-  src/battery/*.cpp/*.cpp
+  src/battery/*.cpp
   src/communication/*.cpp
   src/controller/*.cpp
   src/dao/*.cpp

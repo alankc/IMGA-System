@@ -1,30 +1,11 @@
 #include <ros/ros.h>
-#include <tf/tf.h>
-#include "geometry_msgs/Twist.h"
-
 #include "controller/generalController.hpp"
-#include "geometry_msgs/PoseWithCovarianceStamped.h"
-
-double poseAMCLx, poseAMCLy, poseAMCLa;
-void poseAMCLCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msgAMCL)
-{
-  poseAMCLx = msgAMCL->pose.pose.position.x;
-  poseAMCLy = msgAMCL->pose.pose.position.y;
-
-  tf::Quaternion q(msgAMCL->pose.pose.orientation.x,
-                   msgAMCL->pose.pose.orientation.y,
-                   msgAMCL->pose.pose.orientation.z,
-                   msgAMCL->pose.pose.orientation.w);
-  tf::Matrix3x3 m(q);
-  double roll, pitch, yaw;
-  m.getRPY(roll, pitch, yaw);
-
-  poseAMCLa = yaw;
-}
+#include "battery/batterySimulator.hpp"
 
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "talker");
+  ros::NodeHandle nh;
 
   /*ros::NodeHandle vel;
   ros::Publisher vel_pub = vel.advertise<geometry_msgs::Twist>("/robot1/cmd_vel", 100);
@@ -78,8 +59,21 @@ int main(int argc, char **argv)
   else
     std::cout << "deu ruim" << std::endl;*/
 
-  GeneralController gc;
-  gc.run();
+  //GeneralController gc;
+  //gc.run();
+
+  BatterySimulator bS(30, 5, 0.1);
+  ros::Rate r(2);
+  uint16_t i = 0;
+  double batt = bS.getRemaningBattery();
+
+  while (batt >= 0 && ros::ok())
+  {
+    std::cout << i++ << "---" << batt << std::endl;
+    r.sleep();
+    batt = bS.getRemaningBattery();
+  }
+  
 
   return 0;
 }
