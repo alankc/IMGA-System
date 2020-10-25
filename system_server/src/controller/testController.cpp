@@ -192,15 +192,24 @@ void TestController::Experiment3(uint32_t repetitions, uint32_t minT, uint32_t m
 
         std::cout << "Tasks:" << nt << "\tRobots:" << nr << "\n";
         std::cout << "Iteration\t";
-        std::cout << "timeToScheduling\t" << "scheduledPercentage\t";
-        std::cout << "fitnessExpected\t" << "fitnessObtained\t";
-        std::cout << "energyExpected\t" << "energyObtained\t";
-        std::cout << "timeExpected\t" << "timeObtained\t";
-        std::cout << "payloadExpected\t" << "payloadObtained\t";
-        std::cout << "meanNormEnergyE\t" << "stdNormEnergyE\t";
-        std::cout << "meanNormEnergyO\t" << "stdNormEnergyO\t";
-        std::cout << "meanNormPayloadE\t" << "stdNormPayloadE\t";
-        std::cout << "meanNormPayloadO\t" << "stdNormPayloadO\t\tIslands" << std::endl;
+        std::cout << "timeToScheduling\t"
+                  << "scheduledPercentage\t";
+        std::cout << "fitnessExpected\t"
+                  << "fitnessObtained\t";
+        std::cout << "energyExpected\t"
+                  << "energyObtained\t";
+        std::cout << "timeExpected\t"
+                  << "timeObtained\t";
+        std::cout << "payloadExpected\t"
+                  << "payloadObtained\t";
+        std::cout << "meanNormEnergyE\t"
+                  << "stdNormEnergyE\t";
+        std::cout << "meanNormEnergyO\t"
+                  << "stdNormEnergyO\t";
+        std::cout << "meanNormPayloadE\t"
+                  << "stdNormPayloadE\t";
+        std::cout << "meanNormPayloadO\t"
+                  << "stdNormPayloadO\t\tIslands" << std::endl;
 
         for (uint32_t rep = 0; rep < repetitions; rep++)
         {
@@ -275,6 +284,118 @@ void TestController::Experiment3(uint32_t repetitions, uint32_t minT, uint32_t m
             }
 
             std::cout << std::endl;
+        }
+
+        // std::cout << avgTime << "\t" << stdTime << "\t" << globalHitRate << std::endl;
+    }
+}
+
+void TestController::ExperimentGAPure(uint32_t repetitions, uint32_t minT, uint32_t maxT, uint32_t stepT)
+{
+    GAParameters gaP;
+    gaP.populationSize = 500;
+    gaP.mutationRate = 0.25;
+    gaP.elitismRate = 0.05;
+    gaP.maxIterations = 1500;
+    gaP.noChangeLimit = gaP.maxIterations * 0.50;
+    gaP.crossoverMode = GA::CrossoverMode::positionBased;
+    gaP.selectionMode = GA::SelectionMode::tournament;
+    gaP.mutationMode = GA::MutationMode::exchange;
+
+    for (uint32_t nt = minT; nt <= maxT; nt += stepT)
+    {
+        uint32_t nr = std::round(0.00190476 * nt * nt + 0.16190476 * nt + 2.14285714);
+        gaP.populationSize = nt * 10;
+
+        std::vector<int64_t> timeDuration(repetitions);
+
+        std::cout << "Tasks:" << nt << "\tRobots:" << nr << "\n";
+        std::cout << "Iteration\t";
+        std::cout << "timeToScheduling\t"
+                  << "scheduledPercentage\t";
+        std::cout << "fitnessExpected\t"
+                  << "fitnessObtained\t";
+        std::cout << "energyExpected\t"
+                  << "energyObtained\t";
+        std::cout << "timeExpected\t"
+                  << "timeObtained\t";
+        std::cout << "payloadExpected\t"
+                  << "payloadObtained\t";
+        std::cout << "meanNormEnergyE\t"
+                  << "stdNormEnergyE\t";
+        std::cout << "meanNormEnergyO\t"
+                  << "stdNormEnergyO\t";
+        std::cout << "meanNormPayloadE\t"
+                  << "stdNormPayloadE\t";
+        std::cout << "meanNormPayloadO\t"
+                  << "stdNormPayloadO" << std::endl;
+
+        for (uint32_t rep = 0; rep < repetitions; rep++)
+        {
+            lc->gerenateLocations(10, 3, 10, 50);
+            auto d = lc->getDistanceMatrix();
+            rc->generateRobots(nr, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
+            auto robots = rc->getFreeRobots();
+            auto goalChrm = tc->generateTasks(nt, robots, d, 3);
+            auto tasks = tc->getTaskList();
+            auto distance = lc->getDistanceMatrix();
+
+            GA ga(gaP); //verificar!!
+            Chromosome::setRobotList(robots);
+            Chromosome::setTaskList(tasks);
+            Chromosome::setDistanceMatrix(distance);
+            ga.initialize();
+
+            auto start = std::chrono::high_resolution_clock::now();
+            ga.setTimeLimit(90);
+            ga.solve();
+            auto stop = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+
+            Chromosome best = ga.getBest();
+
+            Exp3Result r;
+
+            r.timeToScheduling = duration.count();
+            r.scheduledPercentage = (double)best.numberOfScheduled() / (double)nt;
+
+            r.energyExpected = goalChrm.totalEnergy(false);
+            r.energyObtained = best.totalEnergy(false);
+
+            r.timeExpected = goalChrm.totalTime(false);
+            r.timeObtained = best.totalTime(false);
+
+            r.payloadExpected = goalChrm.totalPayload(false);
+            r.payloadObtained = best.totalPayload(false);
+
+            auto energyVec = goalChrm.totalEnergyByRobot(true, false);
+            auto payloadVec = goalChrm.totalPayloadByRobot(true, false);
+
+            r.meanNormEnergyE = computeMean<double>(energyVec);
+            r.stdNormEnergyE = std::sqrt(computeVariance<double>(energyVec, r.meanNormEnergyE));
+
+            r.meanNormPayloadE = computeMean<double>(payloadVec);
+            r.stdNormPayloadE = std::sqrt(computeVariance<double>(payloadVec, r.meanNormPayloadE));
+
+            energyVec = best.totalEnergyByRobot(true, false);
+            payloadVec = best.totalPayloadByRobot(true, false);
+
+            r.meanNormEnergyO = computeMean<double>(energyVec);
+            r.stdNormEnergyO = std::sqrt(computeVariance<double>(energyVec, r.meanNormEnergyO));
+
+            r.meanNormPayloadO = computeMean<double>(payloadVec);
+            r.stdNormPayloadO = std::sqrt(computeVariance<double>(payloadVec, r.meanNormPayloadO));
+
+            std::cout << rep << "\t";
+            std::cout << std::fixed << r.timeToScheduling << "\t" << r.scheduledPercentage << "\t";
+            std::cout << std::fixed << goalChrm.getFitness() << "\t" << best.getFitness() << "\t";
+            std::cout << std::fixed << r.energyExpected << "\t" << r.energyObtained << "\t";
+            std::cout << std::fixed << r.timeExpected << "\t" << r.timeObtained << "\t";
+            std::cout << std::fixed << r.payloadExpected << "\t" << r.payloadObtained << "\t";
+            std::cout << std::fixed << r.meanNormEnergyE << "\t" << r.stdNormEnergyE << "\t";
+            std::cout << std::fixed << r.meanNormEnergyO << "\t" << r.stdNormEnergyO << "\t";
+            std::cout << std::fixed << r.meanNormPayloadE << "\t" << r.stdNormPayloadE << "\t";
+            std::cout << std::fixed << r.meanNormPayloadO << "\t" << r.stdNormPayloadO << std::endl;
         }
 
         // std::cout << avgTime << "\t" << stdTime << "\t" << globalHitRate << std::endl;

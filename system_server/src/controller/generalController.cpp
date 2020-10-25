@@ -134,8 +134,8 @@ void GeneralController::run()
     *  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     */
 
-    TestController::Experiment3(1000, 5, 35, 5);
-    TestController::Experiment3(1000, 40, 50, 10);
+    TestController::ExperimentGAPure(10, 5, 35, 5);
+    TestController::ExperimentGAPure(10, 40, 50, 10);
 
     /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     *   Verificar for (uint16_t k = 0; k < 4; k++) no island.cpp !!!!

@@ -62,6 +62,12 @@ public:
     *   Number of robots is defined by a function
     */
     void static Experiment3(uint32_t repetitions, uint32_t minT, uint32_t maxT, uint32_t stepT);
+
+    /*
+    * Evaluate Hit Rate of GA pure
+    *   Number of robots is defined by a function
+    */
+    void static ExperimentGAPure(uint32_t repetitions, uint32_t minT, uint32_t maxT, uint32_t stepT);
 };
 
 template <typename T>
