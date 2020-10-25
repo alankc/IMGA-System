@@ -52,6 +52,7 @@ public:
 
 	friend bool operator==(const Robot &r1, const Robot &r2);
 	bool operator<(const Robot &robotObj);
+	friend std::ostream &operator<<(std::ostream &os, const Robot &r);
 
 	static const std::string STATUS_FREE;
 	static const std::string STATUS_WORKING;
