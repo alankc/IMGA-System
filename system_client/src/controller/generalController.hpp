@@ -14,6 +14,7 @@
 #include "robotController.hpp"
 #include "taskController.hpp"
 #include "../navigation/navigator.hpp"
+#include "../battery/batterySimulator.hpp"
 
 class GeneralController
 {
@@ -38,12 +39,15 @@ private:
     volatile bool stopTask;
     volatile bool goToCharge;
 
+    BatterySimulator bs;
+
     void callbackPubSrvRequest(const system_client::MsgRequest &msg);
     void callbackPubSrvRobotData();
     void callbackSubRequest(const system_client::MsgRequest &msg);
     void callbackCancelTask(uint32_t id);
     void callbackSubTask(const system_client::MsgTaskList &msg);
     void goToDepot();
+    void callbackBattery();
     
     void performTask(const system_client::MsgTask t);
     void performTasks();

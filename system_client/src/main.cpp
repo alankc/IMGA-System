@@ -59,10 +59,10 @@ int main(int argc, char **argv)
   else
     std::cout << "deu ruim" << std::endl;*/
 
-  //GeneralController gc;
-  //gc.run();
+  GeneralController gc;
+  gc.run();
 
-  BatterySimulator bS(30, 5, 0.1);
+  /*BatterySimulator bS(30, 5, 0.1);
   ros::Rate r(2);
   uint16_t i = 0;
   double batt = bS.getRemaningBattery();
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     std::cout << i++ << "---" << batt << std::endl;
     r.sleep();
     batt = bS.getRemaningBattery();
-  }
+  }*/
   
 
   return 0;

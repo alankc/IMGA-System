@@ -20,6 +20,8 @@ GeneralController::GeneralController()
 
     stopTask = false;
     goToCharge = false;
+
+    bs = BatterySimulator(20, 1, 0.001);
 }
 
 void GeneralController::callbackPubSrvRequest(const system_client::MsgRequest &msg)
@@ -145,13 +147,13 @@ void GeneralController::performTask(const system_client::MsgTask t)
         while (ros::ok() && nav.stillNavigating())
         {
             //Used to cancel task in execution
-            if (stopTask)
+            if (stopTask || goToCharge)
             {
                 nav.cancel();
-                stopTask = false;
                 return;
             }
             r.sleep();
+            ros::spinOnce();
         }
         if (!nav.hasArrived())
         {
@@ -178,13 +180,13 @@ void GeneralController::performTask(const system_client::MsgTask t)
         while (ros::ok() && nav.stillNavigating())
         {
             //Used to cancel task in execution
-            if (stopTask)
+            if (stopTask || goToCharge)
             {
                 nav.cancel();
-                stopTask = false;
                 return;
             }
             r.sleep();
+            ros::spinOnce();
         }
         if (!nav.hasArrived())
         {
@@ -215,13 +217,13 @@ void GeneralController::performTask(const system_client::MsgTask t)
         nav.navigateTo(delivery->getX(), delivery->getY(), delivery->getA());
         while (ros::ok() && nav.stillNavigating())
         {
-            if (stopTask)
+            if (stopTask || goToCharge)
             {
                 nav.cancel();
-                stopTask = false;
                 return;
             }
             r.sleep();
+            ros::spinOnce();
         }
         if (!nav.hasArrived())
         {
@@ -248,13 +250,13 @@ void GeneralController::performTask(const system_client::MsgTask t)
         while (ros::ok() && nav.stillNavigating())
         {
             //Used to cancel task in execution
-            if (stopTask)
+            if (stopTask || goToCharge)
             {
                 nav.cancel();
-                stopTask = false;
                 return;
             }
             r.sleep();
+            ros::spinOnce();
         }
         if (!nav.hasArrived())
         {
@@ -298,6 +300,32 @@ void GeneralController::performTasks()
     }
 }
 
+void GeneralController::callbackBattery()
+{
+    ros::Rate r(1);
+
+    while (ros::ok())
+    {
+        rc.getRobot()->setRemainingBattery(bs.getRemaningBattery());
+        if (rc.getRobot()->getUtilRemainingBattery() <= 0)
+        {
+            goToCharge = true;
+            //Notificar cancelamento das tarefas
+            system_client::MsgTask tsk;
+            system_client::MsgRequest msg;
+            msg.type = system_client::MsgRequest::FAIL_TASK;
+            while (tc.getFirst(tsk))
+            {
+                msg.data = tsk.id;
+                callbackPubSrvRequest(msg);
+                tc.pop();
+            }
+        }
+        r.sleep();
+        ros::spinOnce();
+    }
+}
+
 void GeneralController::run()
 {
     //Get locations and distances
@@ -329,7 +357,13 @@ void GeneralController::run()
     pubSrvRobotData = nh.advertise<system_client::MsgRobotData>(srvRobotDataTopic, 10);
     pubSrvRequest = nh.advertise<system_client::MsgRequest>(srvRequestTopic, 10);
 
-    std::thread prfTks(&GeneralController::performTasks, this);
+    //Waiting topiscs start
+    ros::Duration d(1);
+    d.sleep();
+    ros::spinOnce();
+
+    std::thread thrTasks(&GeneralController::performTasks, this);
+    std::thread thrBattery(&GeneralController::callbackBattery, this);
     /*stopTask = true;
     goToCharge = true;
     //Notificar falha de todas
