@@ -97,7 +97,7 @@ void GeneralController::goToDepot()
     rc.getRobot()->setStatus(Robot::STATUS_TO_DEPOT);
     nav.navigateTo(depot->getX(), depot->getY(), depot->getA());
 
-    while (nav.stillNavigating())
+    while (ros::ok() && nav.stillNavigating())
         ; //wait arrive in depot
 
     if (nav.hasArrived())
@@ -142,7 +142,7 @@ void GeneralController::performTask(const system_client::MsgTask t)
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
         nav.navigateTo(pickUp->getX(), pickUp->getY(), pickUp->getA());
-        while (nav.stillNavigating())
+        while (ros::ok() && nav.stillNavigating())
         {
             //Used to cancel task in execution
             if (stopTask)
@@ -175,7 +175,7 @@ void GeneralController::performTask(const system_client::MsgTask t)
         //Turn around 180 degres
         std::cout << "Turn around 180 degres" << std::endl;
         nav.navigateTo(pickUp->getX(), pickUp->getY(), -pickUp->getA());
-        while (nav.stillNavigating())
+        while (ros::ok() && nav.stillNavigating())
         {
             //Used to cancel task in execution
             if (stopTask)
@@ -213,7 +213,7 @@ void GeneralController::performTask(const system_client::MsgTask t)
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
         nav.navigateTo(delivery->getX(), delivery->getY(), delivery->getA());
-        while (nav.stillNavigating())
+        while (ros::ok() && nav.stillNavigating())
         {
             if (stopTask)
             {
@@ -245,7 +245,7 @@ void GeneralController::performTask(const system_client::MsgTask t)
         //Turn around 180 degres
         std::cout << "Turn around 180 degres" << std::endl;
         nav.navigateTo(delivery->getX(), delivery->getY(), -delivery->getA());
-        while (nav.stillNavigating())
+        while (ros::ok() && nav.stillNavigating())
         {
             //Used to cancel task in execution
             if (stopTask)
@@ -290,7 +290,7 @@ void GeneralController::performTasks()
 
             goToDepot();
 
-            while (goToCharge) //Waiting untill fully charged
+            while (ros::ok() && goToCharge) //Waiting untill fully charged
                 r.sleep();
         }
 
