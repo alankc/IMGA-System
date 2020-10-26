@@ -52,14 +52,21 @@ void GeneralController::callbackCancelTask(uint32_t id)
     if (tc.getFirst(t))
     {
         if (id == t.id)
+        {
             stopTask = true;
-        else
-            tc.deleteTaskById(id);
+            system_client::MsgRequest msg;
+            msg.type = system_client::MsgRequest::CANCEL_TASK;
+            msg.data = id;
+            callbackPubSrvRequest(msg);
+        }
+        else if (tc.deleteTaskById(id))
+        {
+            system_client::MsgRequest msg;
+            msg.type = system_client::MsgRequest::CANCEL_TASK;
+            msg.data = id;
+            callbackPubSrvRequest(msg);
+        }
     }
-    system_client::MsgRequest msg;
-    msg.type = system_client::MsgRequest::CANCEL_TASK;
-    msg.data = id;
-    callbackPubSrvRequest(msg);
 }
 
 void GeneralController::callbackRobotCheck()
