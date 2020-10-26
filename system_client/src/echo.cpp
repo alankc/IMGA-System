@@ -11,8 +11,8 @@ void callback_RE(const system_server::MsgRequest &msg)
 
 void callback_RD(const system_server::MsgRobotData &msg)
 {
-    std::string s = "Robot: " + std::to_string(msg.id) + "--" + std::to_string(msg.minSpeed);
-    s += "--" + std::to_string(msg.battery);
+    std::string s = "Robot: " + std::to_string(msg.id) + "--" + std::to_string(msg.battery);
+    s += "--" + std::to_string(msg.minSpeed);
     s += "--" + std::to_string(msg.currLocation);
     s += "--" + msg.status;
     std::cout << s << std::endl;
