@@ -21,7 +21,7 @@ GeneralController::GeneralController()
     stopTask = false;
     goToCharge = false;
 
-    bs = BatterySimulator(100, 1, 5, 0.001);
+    bs = BatterySimulator(30, 1, 5, 0.001);
 }
 
 void GeneralController::callbackPubSrvRequest(const system_client::MsgRequest &msg)
@@ -289,14 +289,15 @@ void GeneralController::performTasks()
         else if (!inDepot) //Case performed all tasks and it is not in the depot, go to it
         {
             inDepot = true;
-
             goToDepot();
-
-            while (ros::ok() && goToCharge) //Waiting untill fully charged
-                r.sleep();
+        }
+        else if (goToCharge && inDepot && rc.getRobot()->getStatus() == Robot::STATUS_FREE) //iF BATTERY DOWN in depot just charge
+        {
+            rc.getRobot()->setStatus(Robot::STATUS_CHARGING);
         }
 
         r.sleep();
+        ros::spinOnce();
     }
 }
 
@@ -360,12 +361,12 @@ void GeneralController::run()
     t.deadline = 100;
     t.pickUp = 1;
     t.delivery = 2;
-    tc.push(t);
+    //tc.push(t);
     t.id = 1;
     t.deadline = 200;
     t.pickUp = 2;
     t.delivery = 3;
-    tc.push(t);
+    //tc.push(t);
 
     //Start listeners request and tasks
     subRequest = nh.subscribe("myResquestTopic", 10, &GeneralController::callbackSubRequest, this);
