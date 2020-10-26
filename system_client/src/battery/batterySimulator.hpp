@@ -7,27 +7,30 @@
 class BatterySimulator
 {
 private:
-    double startBattery;
+    double currBattery;
     double dischargeRate;
+    double chargeRate;
     double noise;
     std::chrono::steady_clock::time_point startTime;
 
 public:
     BatterySimulator();
-    BatterySimulator(double startBattery, double dischargeRate, double noise);
+    BatterySimulator(double currBattery, double dischargeRate, double chargeRate, double noise);
     ~BatterySimulator();
 
-    void setStartBattery(double startBattery);
+    void setCurrBattery(double currBattery);
     void setDischargeRate(double dischargeRate);
+    void setChargeRate(double chargeRate);
     void setNoise(double noise);
 
-    double getStartBattery();
+    double getCurrBattery();
     double getDischargeRate();
+    double getChargeRate();
     double getNoise();
 
     void start();
 
-    double getRemaningBattery();
+    double getRemaningBattery(bool charging = false);
 };
 
 #endif

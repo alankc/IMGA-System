@@ -21,7 +21,7 @@ GeneralController::GeneralController()
     stopTask = false;
     goToCharge = false;
 
-    bs = BatterySimulator(100, 1, 0.001);
+    bs = BatterySimulator(100, 1, 5, 0.001);
 }
 
 void GeneralController::callbackPubSrvRequest(const system_client::MsgRequest &msg)
@@ -306,8 +306,10 @@ void GeneralController::callbackBattery()
 
     while (ros::ok())
     {
-        rc.getRobot()->setRemainingBattery(bs.getRemaningBattery());
-        if (rc.getRobot()->getUtilRemainingBattery() <= 0)
+        auto rbt = rc.getRobot();
+        rbt->setRemainingBattery(bs.getRemaningBattery(rbt->getStatus() == Robot::STATUS_CHARGING));
+
+        if (rc.getRobot()->getUtilRemainingBattery() <= 0 && !goToCharge)
         {
             goToCharge = true;
             //Notificar cancelamento das tarefas
@@ -320,9 +322,21 @@ void GeneralController::callbackBattery()
                 callbackPubSrvRequest(msg);
                 tc.pop();
             }
-            //Carregar bateria quando chegar no deposityo
         }
-        auto rbt = rc.getRobot();
+        else if (goToCharge && (rbt->getStatus() == Robot::STATUS_CHARGING)) //Carregar bateria quando chegar no deposityo
+        {
+            if (rbt->getRemainingBattery() == 100)
+            {
+                goToCharge = false;
+                rbt->setStatus(Robot::STATUS_FREE);
+
+                system_client::MsgRequest msg; //notfy server
+                msg.type = system_client::MsgRequest::FREE_ROBOT;
+                msg.data = rbt->getId();
+                callbackPubSrvRequest(msg);
+            }
+        }
+
         std::cout << *rbt << std::endl;
         r.sleep();
         ros::spinOnce();

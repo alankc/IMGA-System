@@ -4,25 +4,26 @@
 
 BatterySimulator::BatterySimulator()
 {
-    this->startBattery = 100;
+    this->currBattery = 100;
     this->dischargeRate = 0.1;
     this->noise = 0;
     startTime = std::chrono::steady_clock::now();
 }
 
-BatterySimulator::BatterySimulator(double startBattery, double dischargeRate, double noise)
+BatterySimulator::BatterySimulator(double currBattery, double dischargeRate, double chargeRate, double noise)
 {
-    this->startBattery = startBattery;
+    this->currBattery = currBattery;
     this->dischargeRate = dischargeRate;
+    this->chargeRate = chargeRate;
     this->noise = noise;
     startTime = std::chrono::steady_clock::now();
 }
 
 BatterySimulator::~BatterySimulator() {}
 
-void BatterySimulator::setStartBattery(double startBattery)
+void BatterySimulator::setCurrBattery(double currBattery)
 {
-    this->startBattery = startBattery;
+    this->currBattery = currBattery;
 }
 
 void BatterySimulator::setDischargeRate(double dischargeRate)
@@ -30,19 +31,29 @@ void BatterySimulator::setDischargeRate(double dischargeRate)
     this->dischargeRate = dischargeRate;
 }
 
+void BatterySimulator::setChargeRate(double chargeRate)
+{
+    this->chargeRate = chargeRate;
+}
+
 void BatterySimulator::setNoise(double noise)
 {
     this->noise = noise;
 }
 
-double BatterySimulator::getStartBattery()
+double BatterySimulator::getCurrBattery()
 {
-    return this->startBattery;
+    return this->currBattery;
 }
 
 double BatterySimulator::getDischargeRate()
 {
     return this->dischargeRate;
+}
+
+double BatterySimulator::getChargeRate()
+{
+    return this->chargeRate;
 }
 
 double BatterySimulator::getNoise()
@@ -55,7 +66,7 @@ void BatterySimulator::start()
     startTime = std::chrono::steady_clock::now();
 }
 
-double BatterySimulator::getRemaningBattery()
+double BatterySimulator::getRemaningBattery(bool charging)
 {
     static std::random_device rd;
     static std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
@@ -66,5 +77,16 @@ double BatterySimulator::getRemaningBattery()
     double elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() / 1000.0;
     elapsedTime += noiseDist(gen);
 
-    return startBattery - elapsedTime * dischargeRate;
+    if (charging)
+        currBattery += elapsedTime * chargeRate;
+    else
+        currBattery -= elapsedTime * dischargeRate;
+
+    if (currBattery < 5)
+        currBattery = 5;
+    else if (currBattery > 100)
+        currBattery = 100;
+
+    startTime = std::chrono::steady_clock::now();
+    return currBattery;
 }
