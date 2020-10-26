@@ -56,6 +56,10 @@ void GeneralController::callbackCancelTask(uint32_t id)
         else
             tc.deleteTaskById(id);
     }
+    system_client::MsgRequest msg;
+    msg.type = system_client::MsgRequest::CANCEL_TASK;
+    msg.data = id;
+     callbackPubSrvRequest(msg);
 }
 
 void GeneralController::callbackRobotCheck()
