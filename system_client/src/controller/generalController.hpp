@@ -43,6 +43,7 @@ private:
 
     void callbackPubSrvRequest(const system_client::MsgRequest &msg);
     void callbackPubSrvRobotData();
+    void callbackRobotCheck();
     void callbackSubRequest(const system_client::MsgRequest &msg);
     void callbackCancelTask(uint32_t id);
     void callbackSubTask(const system_client::MsgTaskList &msg);
