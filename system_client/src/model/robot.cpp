@@ -74,7 +74,7 @@ void Robot::updateMediumVelocity(double distance, double time)
 	double tmpMedVel = distance / time;
 
 	if (tmpMedVel < this->mediumVelocity)
-		this->mediumVelocity = distance / time;
+		this->mediumVelocity = tmpMedVel;
 }
 
 uint32_t Robot::getId() const
