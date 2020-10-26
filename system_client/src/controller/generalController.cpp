@@ -352,6 +352,7 @@ void GeneralController::run()
 
     //Get robor data from DB
     rc.updateRobotFromDB();
+    rc.getRobot()->setStatus(Robot::STATUS_FREE);
 
     //Start navigation
     nav.start();
