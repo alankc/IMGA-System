@@ -1,6 +1,6 @@
 #include "location.hpp"
 
-Location::Location(uint32_t id, uint32_t x, uint32_t y, std::string description, bool isDepot)
+Location::Location(uint32_t id, double x, double y, std::string description, bool isDepot)
 {
 	this->id = id;
 	this->x = x;

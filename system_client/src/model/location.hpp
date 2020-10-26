@@ -14,7 +14,7 @@ class Location
 		bool isDepot;
 
 	public:
-		Location(uint32_t id = 0, uint32_t x = 0, uint32_t y = 0, std::string description = "Empty", bool isDepot = false);
+		Location(uint32_t id = 0, double x = 0, double y = 0, std::string description = "Empty", bool isDepot = false);
 		void setId(uint32_t id);
 		void setX(double x);
 		void setY(double y);
