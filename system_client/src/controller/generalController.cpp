@@ -382,12 +382,12 @@ void GeneralController::run()
     t.deadline = 100;
     t.pickUp = 1;
     t.delivery = 2;
-    //tc.push(t);
+    tc.push(t);
     t.id = 1;
     t.deadline = 200;
     t.pickUp = 2;
     t.delivery = 3;
-    //tc.push(t);
+    tc.push(t);
 
     //Start listeners request and tasks
     subRequest = nh.subscribe("myResquestTopic", 10, &GeneralController::callbackSubRequest, this);
