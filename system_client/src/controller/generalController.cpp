@@ -316,7 +316,7 @@ void GeneralController::performTasks()
             //Test if can perform the task
             double distance = lc.getDistance(t.pickUp, t.delivery);
             distance += lc.getDistance(rc.getRobot()->getCurrentLocation(), t.pickUp);
-            if (rc.getRobot()->canDo(distance))
+            if (rc.getRobot()->canDo(distance, 10.0))
             {
                 performTask(t);
             }
@@ -327,7 +327,7 @@ void GeneralController::performTasks()
                 msg.data = t.id;
                 callbackPubSrvRequest(msg);
             }
-            
+
             tc.pop();
         }
         else if (!inDepot) //Case performed all tasks and it is not in the depot, go to it
@@ -424,6 +424,17 @@ void GeneralController::run()
     t.delivery = 3;
     tc.push(t);
 
+    auto dm = lc.getDistanceMatrix();
+    dm->resize(10);
+    for (uint32_t i = 0; i < 5; i++)
+    {
+        dm->at(i).resize(10);
+        for (uint32_t j = 0; j < 5; j++)
+        {
+            dm->at(i).at(j) = 10;
+        }
+    }
+
     //Start listeners request and tasks
     subRequest = nh.subscribe("requests", 100, &GeneralController::callbackSubRequest, this);
     subTask = nh.subscribe("task_list", 100, &GeneralController::callbackSubTask, this);
@@ -436,8 +447,10 @@ void GeneralController::run()
     d.sleep();
     ros::spinOnce();
 
-    std::thread thrTasks(&GeneralController::performTasks, this);
     std::thread thrBattery(&GeneralController::callbackBattery, this);
+    d.sleep();
+    ros::spinOnce();
+    std::thread thrTasks(&GeneralController::performTasks, this);
 
     ros::spin();
 }

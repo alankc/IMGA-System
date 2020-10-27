@@ -50,7 +50,7 @@ public:
 
 	double computeTimeRequirement(double distanceInMeters);
 	double computeBatteryRequirement(double timeInSeconds);
-	bool canDo(double distanceInMeters);
+	bool canDo(double distanceInMeters, double waitingTime);
 
 	friend bool operator==(const Robot &r1, const Robot &r2);
 	bool operator<(const Robot &robotObj);

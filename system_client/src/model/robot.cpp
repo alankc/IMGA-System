@@ -142,9 +142,10 @@ double Robot::computeBatteryRequirement(double timeInSeconds)
 	return timeInSeconds * dischargeFactor;
 }
 
-bool Robot::canDo(double distanceInMeters)
+bool Robot::canDo(double distanceInMeters, double waitingTime)
 {
-	double batteryRequirement = remainingBattery - batteryThreshold - (distanceInMeters / mediumVelocity) * dischargeFactor;
+	double batteryRequirement = remainingBattery - batteryThreshold;
+	batteryRequirement -= (waitingTime + (distanceInMeters / mediumVelocity)) * dischargeFactor;
 	return batteryRequirement > 0.0;
 }
 
