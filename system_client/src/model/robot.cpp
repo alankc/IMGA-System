@@ -142,6 +142,12 @@ double Robot::computeBatteryRequirement(double timeInSeconds)
 	return timeInSeconds * dischargeFactor;
 }
 
+bool Robot::canDo(double distanceInMeters)
+{
+	double batteryRequirement = remainingBattery - batteryThreshold - distanceInMeters * dischargeFactor;
+	return batteryRequirement > 0.0;
+}
+
 bool operator==(const Robot &r1, const Robot &r2)
 {
 	return r1.id == r2.id;
