@@ -4,11 +4,14 @@
 #include <chrono>
 #include <tf/tf.h>
 
-Navigator::Navigator() {}
-
-Navigator::Navigator(std::string robot, std::string topic, std::string frame)
+Navigator::Navigator()
 {
-    this->robot = robot;
+    this->topic = "move_base";
+    this->frame = "map";
+}
+
+Navigator::Navigator(std::string topic, std::string frame)
+{
     this->topic = topic;
     this->frame = frame;
 }
@@ -19,7 +22,7 @@ Navigator::~Navigator()
 
 void Navigator::start()
 {
-    mbc.reset(new MoveBaseClient(robot + "/" + topic, true));
+    mbc.reset(new MoveBaseClient(topic, true));
     while (!mbc->waitForServer(ros::Duration(5.0)))
     {
         ROS_INFO("Waiting for the move_base action server to come up");

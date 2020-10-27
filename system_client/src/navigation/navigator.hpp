@@ -18,7 +18,7 @@ private:
 
 public:
     Navigator();
-    Navigator(std::string robot, std::string topic = "move_base", std::string frame = "map");
+    Navigator(std::string topic, std::string frame);
     ~Navigator();
     void start();
     void navigateTo(double x, double y, double w);
