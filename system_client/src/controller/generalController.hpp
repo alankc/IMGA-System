@@ -19,10 +19,17 @@
 class GeneralController
 {
 private:
-    std::string srvRequestTopic;
-    std::string srvRobotDataTopic;
-    std::string myResquestTopic;
-    std::string myTaskTopic;
+    std::uint32_t robot_id;
+    std::string host;
+    std::string user;
+    std::string pass;
+    std::string db;
+    std::string navigator_topic;
+    std::string navigator_frame;
+    std::string server_request;
+    std::string server_robot_data;
+    double battery_start;
+    double battery_noise;
 
     ros::NodeHandle nh;
     ros::Publisher pubSrvRequest;
@@ -49,11 +56,12 @@ private:
     void callbackSubTask(const system_client::MsgTaskList &msg);
     void goToDepot();
     void callbackBattery();
-    
+
     void performTask(const system_client::MsgTask t);
     void performTasks();
+
 public:
-    GeneralController();
+    GeneralController(std::uint32_t robot_id, std::string host, std::string user, std::string pass, std::string db, std::string navigator_topic, std::string navigator_frame, std::string server_request, std::string server_robot_data, double battery_start, double battery_noise);
     ~GeneralController(){};
     void run();
 };

@@ -3,25 +3,31 @@
 #include <chrono>
 #include <system_server/MsgRequest.h>
 
-GeneralController::GeneralController()
+GeneralController::GeneralController(std::uint32_t robot_id, std::string host, std::string user, std::string pass, std::string db, std::string navigator_topic, std::string navigator_frame, std::string server_request, std::string server_robot_data, double battery_start, double battery_noise)
 {
-    this->nav = Navigator();
-    std::string host = "localhost";
-    std::string user = "root";
-    std::string pass = "281094";
-    std::string db = "ServerDB";
+    this->robot_id = robot_id;
+    this->host = host;
+    this->user = user;
+    this->pass = pass;
+    this->db = db;
+    this->navigator_topic = navigator_topic;
+    this->navigator_frame = navigator_frame;
+    this->server_request = server_request;
+    this->server_robot_data = server_robot_data;
+    this->battery_start = battery_start;
+    this->battery_noise = battery_noise;
+
+    this->nav = Navigator(navigator_topic, navigator_frame);
 
     gd = GeneralDao(host, user, pass, db);
     lc = LocationController(&gd);
     rc = RobotController(&gd, 0);
     tc = TaskController();
-    srvRequestTopic = "/server_request";
-    srvRobotDataTopic = "/server_robot_data";
 
     stopTask = false;
     goToCharge = false;
 
-    bs = BatterySimulator(30, 1, 5, 0.001);
+    bs = BatterySimulator(battery_start, 0, 0, battery_noise);
 }
 
 void GeneralController::callbackPubSrvRequest(const system_client::MsgRequest &msg)
@@ -384,6 +390,10 @@ void GeneralController::run()
     rc.updateRobotFromDB();
     rc.getRobot()->setStatus(Robot::STATUS_FREE);
 
+    //Update battery simulator
+    bs.setDischargeRate(rc.getRobot()->getDischargeFactor());
+    bs.setChargeRate(rc.getRobot()->getDischargeFactor() * 10.0);
+
     //Start navigation
     nav.start();
 
@@ -402,9 +412,9 @@ void GeneralController::run()
     //Start listeners request and tasks
     subRequest = nh.subscribe("requests", 100, &GeneralController::callbackSubRequest, this);
     subTask = nh.subscribe("task_list", 100, &GeneralController::callbackSubTask, this);
-    
-    pubSrvRobotData = nh.advertise<system_client::MsgRobotData>(srvRobotDataTopic, 10);
-    pubSrvRequest = nh.advertise<system_client::MsgRequest>(srvRequestTopic, 10);
+
+    pubSrvRobotData = nh.advertise<system_client::MsgRobotData>(server_robot_data, 10);
+    pubSrvRequest = nh.advertise<system_client::MsgRequest>(server_request, 10);
 
     //Waiting topiscs start
     ros::Duration d(1);
@@ -413,14 +423,7 @@ void GeneralController::run()
 
     std::thread thrTasks(&GeneralController::performTasks, this);
     std::thread thrBattery(&GeneralController::callbackBattery, this);
-    /*stopTask = true;
-    goToCharge = true;
-    //Notificar falha de todas
-    tc.clear();
-    d.sleep();
-    d.sleep();
-    goToCharge = false;
-    tc.push(t);*/
+
 
     ros::spin();
 }
