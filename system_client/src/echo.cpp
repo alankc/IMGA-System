@@ -22,8 +22,8 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "echo");
     ros::NodeHandle nh;
-    ros::Subscriber subTask = nh.subscribe("rqt123", 10, callback_RE);
-    ros::Subscriber subRobt = nh.subscribe("robdata", 10, callback_RD);
+    ros::Subscriber subTask = nh.subscribe("server_request", 10, callback_RE);
+    ros::Subscriber subRobt = nh.subscribe("server_robot_data", 10, callback_RD);
     ros::spin();
 
     return 0;

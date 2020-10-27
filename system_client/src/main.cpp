@@ -4,8 +4,33 @@
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "talker");
+  ros::init(argc, argv, "system_client");
   ros::NodeHandle nh;
+
+  std::string ns = nh.getNamespace();
+  std::string host;
+  std::string user;
+  std::string pass;
+  std::string db;
+  std::string navigator_topic;
+  std::string navigator_frame;
+  std::string server_request;
+  std::string server_robot_data;
+  double battery_start;
+
+  ros::spinOnce();
+
+  nh.param<std::string>(ns + "/system_client/host", host, "localhost");
+  nh.param<std::string>(ns + "/system_client/user", user, "root");
+  nh.param<std::string>(ns + "/system_client/pass", pass, "281094");
+  nh.param<std::string>(ns + "/system_client/db", db, "ServerDB");
+  nh.param<std::string>(ns + "/system_client/navigator_topic", navigator_topic, "move_base");
+  nh.param<std::string>(ns + "/system_client/navigator_frame", navigator_frame, "map");
+  nh.param<std::string>(ns + "/system_client/server_request", server_request, "/server_request");
+  nh.param<std::string>(ns + "/system_client/server_robot_data", server_robot_data, "/server_robot_data");
+  nh.param<double>(ns + "/system_client/battery_start", battery_start, 100.0);
+
+  std::cout << "Host: " << host << std::endl;
 
   /*ros::NodeHandle vel;
   ros::Publisher vel_pub = vel.advertise<geometry_msgs::Twist>("/robot1/cmd_vel", 100);
@@ -73,7 +98,6 @@ int main(int argc, char **argv)
     r.sleep();
     batt = bS.getRemaningBattery();
   }*/
-  
 
   return 0;
 }

@@ -5,8 +5,7 @@
 
 GeneralController::GeneralController()
 {
-    this->nav = Navigator("robot1");
-
+    this->nav = Navigator();
     std::string host = "localhost";
     std::string user = "root";
     std::string pass = "281094";
@@ -16,8 +15,8 @@ GeneralController::GeneralController()
     lc = LocationController(&gd);
     rc = RobotController(&gd, 0);
     tc = TaskController();
-    srvRequestTopic = "rqt123";
-    srvRobotDataTopic = "robdata";
+    srvRequestTopic = "/server_request";
+    srvRobotDataTopic = "/server_robot_data";
 
     stopTask = false;
     goToCharge = false;
@@ -401,9 +400,9 @@ void GeneralController::run()
     tc.push(t);
 
     //Start listeners request and tasks
-    subRequest = nh.subscribe("myResquestTopic", 10, &GeneralController::callbackSubRequest, this);
-    subTask = nh.subscribe("myTaskTopic", 10, &GeneralController::callbackSubTask, this);
-
+    subRequest = nh.subscribe("requests", 100, &GeneralController::callbackSubRequest, this);
+    subTask = nh.subscribe("task_list", 100, &GeneralController::callbackSubTask, this);
+    
     pubSrvRobotData = nh.advertise<system_client::MsgRobotData>(srvRobotDataTopic, 10);
     pubSrvRequest = nh.advertise<system_client::MsgRequest>(srvRequestTopic, 10);
 

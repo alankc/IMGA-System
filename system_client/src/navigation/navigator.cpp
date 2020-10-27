@@ -71,7 +71,6 @@ Navigator &Navigator::operator=(const Navigator &navigator)
 {
     if (this != &navigator)
     {
-        robot = navigator.robot;
         topic = navigator.topic;
         frame = navigator.frame;
         mbc.reset(navigator.mbc.get());

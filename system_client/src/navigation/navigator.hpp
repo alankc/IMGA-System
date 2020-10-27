@@ -11,7 +11,6 @@ typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseCl
 class Navigator
 {
 private:
-    std::string robot;
     std::string topic;
     std::string frame;
     std::unique_ptr<MoveBaseClient> mbc;
