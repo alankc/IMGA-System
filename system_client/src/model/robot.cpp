@@ -144,7 +144,7 @@ double Robot::computeBatteryRequirement(double timeInSeconds)
 
 bool Robot::canDo(double distanceInMeters)
 {
-	double batteryRequirement = remainingBattery - batteryThreshold - distanceInMeters * dischargeFactor;
+	double batteryRequirement = remainingBattery - batteryThreshold - (distanceInMeters / mediumVelocity) * dischargeFactor;
 	return batteryRequirement > 0.0;
 }
 
@@ -170,6 +170,6 @@ std::ostream &operator<<(std::ostream &os, const Robot &r)
 	os << r.dischargeFactor << " ";
 	os << r.batteryThreshold << " ";
 	os << r.mediumVelocity << " ";
-	
+
 	return os;
 }

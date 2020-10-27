@@ -312,7 +312,22 @@ void GeneralController::performTasks()
         if (tc.getFirst(t) && !goToCharge)
         {
             inDepot = false;
-            performTask(t);
+
+            //Test if can perform the task
+            double distance = lc.getDistance(t.pickUp, t.delivery);
+            distance += lc.getDistance(rc.getRobot()->getCurrentLocation(), t.pickUp);
+            if (rc.getRobot()->canDo(distance))
+            {
+                performTask(t);
+            }
+            else
+            {
+                system_client::MsgRequest msg;
+                msg.type = system_client::MsgRequest::FAIL_TASK;
+                msg.data = t.id;
+                callbackPubSrvRequest(msg);
+            }
+            
             tc.pop();
         }
         else if (!inDepot) //Case performed all tasks and it is not in the depot, go to it
@@ -423,7 +438,6 @@ void GeneralController::run()
 
     std::thread thrTasks(&GeneralController::performTasks, this);
     std::thread thrBattery(&GeneralController::callbackBattery, this);
-
 
     ros::spin();
 }
