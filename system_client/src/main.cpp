@@ -7,7 +7,6 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "system_client");
   ros::NodeHandle nh;
 
-  std::string ns = nh.getNamespace();
   std::string host;
   std::string user;
   std::string pass;
@@ -20,17 +19,15 @@ int main(int argc, char **argv)
 
   ros::spinOnce();
 
-  nh.param<std::string>(ns + "/system_client/host", host, "localhost");
-  nh.param<std::string>(ns + "/system_client/user", user, "root");
-  nh.param<std::string>(ns + "/system_client/pass", pass, "281094");
-  nh.param<std::string>(ns + "/system_client/db", db, "ServerDB");
-  nh.param<std::string>(ns + "/system_client/navigator_topic", navigator_topic, "move_base");
-  nh.param<std::string>(ns + "/system_client/navigator_frame", navigator_frame, "map");
-  nh.param<std::string>(ns + "/system_client/server_request", server_request, "/server_request");
-  nh.param<std::string>(ns + "/system_client/server_robot_data", server_robot_data, "/server_robot_data");
-  nh.param<double>(ns + "/system_client/battery_start", battery_start, 100.0);
-
-  std::cout << "Host: " << host << std::endl;
+  nh.param<std::string>("system_client/host", host, "localhost");
+  nh.param<std::string>("system_client/user", user, "root");
+  nh.param<std::string>("system_client/pass", pass, "281094");
+  nh.param<std::string>("system_client/db", db, "ServerDB");
+  nh.param<std::string>("system_client/navigator_topic", navigator_topic, "move_base");
+  nh.param<std::string>("system_client/navigator_frame", navigator_frame, "map");
+  nh.param<std::string>("system_client/server_request", server_request, "/server_request");
+  nh.param<std::string>("system_client/server_robot_data", server_robot_data, "/server_robot_data");
+  nh.param<double>("system_client/battery_start", battery_start, 100.0);
 
   /*ros::NodeHandle vel;
   ros::Publisher vel_pub = vel.advertise<geometry_msgs::Twist>("/robot1/cmd_vel", 100);
