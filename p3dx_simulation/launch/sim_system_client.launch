@@ -1,0 +1,9 @@
+<launch>
+    <!-- BEGIN ROBOT 1-->
+    <group ns="robot1">
+        <node name="system_client" pkg="system_client" type="system_client_node" output="screen">
+            <param name="my_param" value="map"/>
+        </node>
+    </group>
+
+</launch>
