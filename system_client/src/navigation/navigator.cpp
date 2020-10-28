@@ -39,8 +39,8 @@ void Navigator::navigateTo(double x, double y, double w)
     goal.target_pose.pose.position.x = x;
     goal.target_pose.pose.position.y = y;
 
-    tf::Quaternion qt;
-    qt.setRPY(0, 0, w);
+    tf::Quaternion qt = tf::createQuaternionFromYaw(w);
+    //qt.setRPY(0, 0, w);
 
     goal.target_pose.pose.orientation.x = qt.getX();
     goal.target_pose.pose.orientation.y = qt.getY();
