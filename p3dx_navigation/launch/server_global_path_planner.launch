@@ -1,0 +1,36 @@
+<launch>
+
+  <arg name="map_file" default="$(find p3dx_navigation)/maps/alan_warehouse.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)">
+    <param name="frame_id" value="map"/>
+  </node>
+
+  <node name="transform1" pkg="tf" type="static_transform_publisher" args="1 1 0 0 0 0 map frame_tmp 100" />
+
+  <!-- move_base -->
+  <node pkg="global_planner" type="planner" name="global_planner" output="screen">
+    <param name="/costmap/cost_factor" value="0.55" />
+    <param name="/costmap/neutral_cost" value="66" />
+    <param name="/costmap/lethal_cost" value="253" />
+    <param name="/costmap/inflation_radius" value="0.7" />
+    <param name="/costmap/cost_scaling_factor" value="3" />
+    <param name="/costmap/frame_id" value="/map"/>
+    <param name="/costmap/static_map" value="true" />
+    <param name="/costmap/robot_base_frame" value="frame_tmp" />
+    <param name="/costmap/transform_tolerance" value="10" />
+    <remap from="map" to="/map"/>
+  </node>
+
+  <!--node pkg="costmap_2d" type="costmap_2d_markers" name="costmap_2d" output="screen">
+    <param name="~/costmap/static_map" value="true" />
+  </node>
+
+  <node pkg="costmap_2d" type="costmap_2d_node" name="costmap_node" output="screen">
+    <param name="~/costmap/static_map" value="true" />
+    <param name="~/costmap/inflation_radius" value="1" />
+    <param name="~/costmap/cost_scaling_factor" value="1" />
+    <param name="~/costmap/robot_radius" value="1" />
+    http://wiki.ros.org/tf2/Tutorials/Writing%20a%20tf2%20static%20broadcaster%20%28C%2B%2B%29
+  </node-->
+
+</launch>
