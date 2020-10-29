@@ -5,19 +5,20 @@
     <param name="frame_id" value="map"/>
   </node>
 
-  <node name="transform1" pkg="tf" type="static_transform_publisher" args="1 1 0 0 0 0 map frame_tmp 100" />
+  <!--node name="transform1" pkg="tf" type="static_transform_publisher" args="1 1 0 0 0 0 map frame_tmp 100" /-->
 
   <!-- move_base -->
-  <node pkg="global_planner" type="planner" name="global_planner" output="screen">
-    <param name="/costmap/cost_factor" value="0.55" />
-    <param name="/costmap/neutral_cost" value="66" />
-    <param name="/costmap/lethal_cost" value="253" />
-    <param name="/costmap/inflation_radius" value="0.7" />
-    <param name="/costmap/cost_scaling_factor" value="3" />
-    <param name="/costmap/frame_id" value="/map"/>
-    <param name="/costmap/static_map" value="true" />
-    <param name="/costmap/robot_base_frame" value="frame_tmp" />
-    <param name="/costmap/transform_tolerance" value="10" />
+  <node pkg="global_planner" type="planner" name="server_planner" output="screen">
+    <param name="~/planner/use_dijkstra" value="true"/>
+    <param name="~/costmap/cost_factor" value="0.55" />
+    <param name="~/costmap/neutral_cost" value="66" />
+    <param name="~/costmap/lethal_cost" value="253" />
+    <param name="~/costmap/inflation_radius" value="0.7" />
+    <param name="~/costmap/cost_scaling_factor" value="3" />
+    <param name="~/costmap/frame_id" value="/map"/>
+    <param name="~/costmap/static_map" value="true" />
+    <param name="~/costmap/robot_base_frame" value="server_frame" />
+    <param name="~/costmap/transform_tolerance" value="10.0" />
     <remap from="map" to="/map"/>
   </node>
 
@@ -30,7 +31,10 @@
     <param name="~/costmap/inflation_radius" value="1" />
     <param name="~/costmap/cost_scaling_factor" value="1" />
     <param name="~/costmap/robot_radius" value="1" />
+
+    
     http://wiki.ros.org/tf2/Tutorials/Writing%20a%20tf2%20static%20broadcaster%20%28C%2B%2B%29
+    http://wiki.ros.org/tf/Tutorials/Writing%20a%20tf%20broadcaster%20%28C%2B%2B%29
   </node-->
 
 </launch>
