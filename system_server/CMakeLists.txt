@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   message_generation  
+  tf
 )
 
 set(FULL_PATH_TO_MYSQL_CONNECTOR_CPP_DIR /usr)

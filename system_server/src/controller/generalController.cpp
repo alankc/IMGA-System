@@ -121,24 +121,16 @@ void GeneralController::callScheduler()
 #include "testController.hpp"
 void GeneralController::run()
 {
-    TestController tstController;
-    tstController.setControllers(&rc, &tc, &lc);
+    lc.run();
+    ros::spinOnce();
+    lc.updateLocationList();
+    lc.updateDistanceMatrix();
 
-    //TestController::hitRateTest(1000, 0.05, 0.3, 0.050);
-    //TestController::hitRateTest(100, 0.05, 0.05, 0.050);
-    //TestController::Experiment2(2, 0.15, 0.15, 0.05, 60, 100, 10);
-    //TestController::Experiment2(1000, 0.20, 0.30, 0.05, 10, 100, 10);
-
-    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    *   Verificar for (uint16_t k = 0; k < 4; k++) no island.cpp !!!!
-    *  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    */
-
-    TestController::ExperimentGAPure(1000, 5, 35, 5);
-    TestController::ExperimentGAPure(1000, 40, 50, 10);
-
-    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    *   Verificar for (uint16_t k = 0; k < 4; k++) no island.cpp !!!!
-    *  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    */
+    ros::Duration d(5);
+    d.sleep();
+    std::cout << "L1,L2,Distancia" << std::endl;
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    lc.computeDistanceMatrix(false);
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 }

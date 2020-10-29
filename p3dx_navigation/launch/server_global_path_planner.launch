@@ -5,7 +5,7 @@
     <param name="frame_id" value="map"/>
   </node>
 
-  <!--node name="transform1" pkg="tf" type="static_transform_publisher" args="1 1 0 0 0 0 map frame_tmp 100" /-->
+  <!--node name="transform1" pkg="tf" type="static_transform_publisher" args="-19 -12.5 0 0 0 0 map server_frame 100" /-->
 
   <!-- move_base -->
   <node pkg="global_planner" type="planner" name="server_planner" output="screen">
@@ -18,7 +18,7 @@
     <param name="~/costmap/frame_id" value="/map"/>
     <param name="~/costmap/static_map" value="true" />
     <param name="~/costmap/robot_base_frame" value="server_frame" />
-    <param name="~/costmap/transform_tolerance" value="10.0" />
+    <param name="~/costmap/transform_tolerance" value="1.0" />
     <remap from="map" to="/map"/>
   </node>
 
