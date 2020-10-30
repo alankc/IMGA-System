@@ -38,6 +38,7 @@ bool RobotDao::getRobotList(std::vector<Robot> &robotList, std::string status)
             tmp.setMediumVelocity(res->getDouble("medium_velocity"));
             tmp.setStatus(res->getString("status"));
             tmp.setDescription(res->getString("description"));
+            tmp.setWaitingTime(res->getUInt("waiting_time"));
 
             robotList.push_back(tmp);
         }
@@ -59,6 +60,7 @@ bool RobotDao::updateRobot(Robot &robot)
     stmtStream << "medium_velocity = '" << robot.getMediumVelocity() << "', ";
     stmtStream << "id_depot = '" << robot.getDepot() << "', ";
     stmtStream << "id_current_location = '" << robot.getCurrentLocation() << "' ";
+    stmtStream << "waiting_time = '" << robot.getWaitingTime() << "' ";
     stmtStream << "WHERE robot.id_robot =" << robot.getId() << ";";
 
     bool tst = gDao->executeUpdate(stmtStream.str());
@@ -83,6 +85,7 @@ bool RobotDao::updateRobot(std::vector<Robot> &robotList)
         stmtStream << "medium_velocity = '" << robot.getMediumVelocity() << "', ";
         stmtStream << "id_depot = '" << robot.getDepot() << "', ";
         stmtStream << "id_current_location = '" << robot.getCurrentLocation() << "' ";
+        stmtStream << "waiting_time = '" << robot.getWaitingTime() << "' ";
         stmtStream << "WHERE robot.id_robot =" << robot.getId() << ";";
 
         statementVector.push_back(stmtStream.str());
