@@ -81,6 +81,7 @@ void Island::solve()
     gaTmp.noChangeLimit = ((double)gaTmp.noChangeLimit / gaTmp.maxIterations) * maxSubIteration;
     gaList.reserve(36);
 
+    //Creatings islands
     for (uint16_t i = 0; i < 3; i++)
     {
         for (uint16_t j = 0; j < 3; j++)
@@ -98,8 +99,12 @@ void Island::solve()
     }
 
     std::vector<std::thread *> threadList;
-    for (uint64_t i = 0; i < gaP.maxIterations; i++)
+    uint64_t iterations = 0;
+    uint64_t noChangeCounter = 0;
+    double bestFitness = std::numeric_limits<double>::max();
+    while ((iterations < gaP.maxIterations) && (noChangeCounter < gaP.noChangeLimit))
     {
+        //Launching threads (islands)
         for (uint16_t j = 0; j < gaList.size(); j++)
         {
             auto &ga = gaList[j];
@@ -107,8 +112,10 @@ void Island::solve()
             threadList.push_back(t);
         }
 
+        //Checking if solutions was found
         uint16_t j = 0;
         bool breakTst = false;
+        double tmpFitness = bestFitness;
         for (auto &t : threadList)
         {
             t->join();
@@ -117,13 +124,30 @@ void Island::solve()
             auto &ga = gaList[j++];
             if (ga->getBest().allScheduled())
                 breakTst = true;
+
+            //Looking for a best individual than the current best
+            if (tmpFitness > ga->getBest().getFitness())
+                tmpFitness = ga->getBest().getFitness();
+        }
+
+        //if the best was improved, reset noChangeCounter
+        if (tmpFitness < bestFitness)
+        {
+            bestFitness = tmpFitness;
+            noChangeCounter = 0;
+        }
+        else
+        {
+            noChangeCounter++;
         }
 
         threadList.clear();
 
+        //Stop if solution was found
         if (breakTst)
             break;
 
+        //stop if maximum time was reached
         if (seconds > 0)
         {
             if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() >= seconds * 1000.0)
@@ -131,8 +155,11 @@ void Island::solve()
         }
 
         globalMigration();
+        iterations++;
     }
 
+    //creating list of best individuals
+    //and searching the best
     best = gaList[0]->getBest();
     listOfBests.clear();
     listOfBests.push_back(best);
