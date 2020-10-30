@@ -65,6 +65,11 @@ void Robot::setMediumVelocity(double mediumVelocity)
 	this->mediumVelocity = mediumVelocity;
 }
 
+void Robot::setWaitingTime(uint32_t waitingTime)
+{
+	this->waitingTime = waitingTime;
+}
+
 uint32_t Robot::getId() const
 {
 	return id;
@@ -118,6 +123,11 @@ double Robot::getBatteryThreshold() const
 double Robot::getMediumVelocity() const
 {
 	return mediumVelocity;
+}
+
+uint32_t Robot::getWaitingTime() const
+{
+	return waitingTime;
 }
 
 double Robot::computeTimeRequirement(double distanceInMeters)
