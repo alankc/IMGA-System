@@ -149,7 +149,7 @@ void GeneralController::goToDepot()
 void GeneralController::performTask(const system_client::MsgTask t)
 {
     ros::Rate r(5);
-    ros::Duration d(3.0);
+    ros::Duration d(rc.getRobot()->getWaitingTime());
     system_client::MsgRequest taskStatus;
     taskStatus.data = t.id;
     taskStatus.type = system_client::MsgRequest::PERFORMING_PICK_UP;
