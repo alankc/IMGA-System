@@ -125,12 +125,18 @@ void GeneralController::run()
     ros::spinOnce();
     lc.updateLocationList();
     lc.updateDistanceMatrix();
+    rc.updateAllRobots();
 
     ros::Duration d(5);
     d.sleep();
-    std::cout << "L1,L2,Distancia" << std::endl;
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-    lc.computeDistanceMatrix(false);
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+
+    auto c = tc.generateTasksCoordination(rc.getAllRobots(), lc.getDistanceMatrix());
+
+    auto tl = tc.getTaskList(); 
+    for (auto t : *tl)
+    {
+        std::cout << t;
+    }   
+    c.printResult();
+    ros::spin();
 }

@@ -31,6 +31,7 @@ public:
     std::size_t getTaskListSize();
 
     Chromosome generateTasks(uint32_t numberOfTasks, std::vector<Robot> *freeRobotList, std::vector<std::vector<double>> *distanceMatrix, uint32_t numberOfDepots);
+    Chromosome generateTasksCoordination(std::vector<Robot> *freeRobotList, std::vector<std::vector<double>> *distanceMatrix);
 };
 
 #endif
