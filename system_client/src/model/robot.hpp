@@ -19,6 +19,7 @@ private:
 	double dischargeFactor;
 	double batteryThreshold;
 	double mediumVelocity;
+	uint32_t waitingTime;
 
 public:
 	static double maximumBattery;
@@ -35,6 +36,7 @@ public:
 	void setBatteryThreshold(double batteryThreshold);
 	void setMediumVelocity(double mediumVelocity);
 	void updateMediumVelocity(double distance, double time);
+	void setWaitingTime(uint32_t waitingTime);
 
 	uint32_t getId() const;
 	std::string getDescription() const;
@@ -47,6 +49,7 @@ public:
 	double getDischargeFactor() const;
 	double getBatteryThreshold() const;
 	double getMediumVelocity() const;
+	uint32_t getWaitingTime() const;
 
 	double computeTimeRequirement(double distanceInMeters);
 	double computeBatteryRequirement(double timeInSeconds);

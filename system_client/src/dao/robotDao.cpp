@@ -37,6 +37,7 @@ bool RobotDao::getRobot(uint32_t id, Robot &r)
         r.setMediumVelocity(res->getDouble("medium_velocity"));
         r.setStatus(res->getString("status"));
         r.setDescription(res->getString("description"));
+        r.setWaitingTime(res->getUInt("waiting_time"));
     }
 
     return tst;
