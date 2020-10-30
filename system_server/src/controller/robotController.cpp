@@ -36,6 +36,11 @@ std::vector<Robot> *RobotController::getFreeRobots()
     return &freeRobots;
 }
 
+std::vector<Robot> *RobotController::getAllRobots()
+{
+    return &allRobots;
+}
+
 Robot *RobotController::getFreeRobotById(uint32_t id)
 {
     auto it = std::find(freeRobots.begin(), freeRobots.end(), id);

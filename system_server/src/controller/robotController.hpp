@@ -22,6 +22,7 @@ public:
     void updateFreeRobots();
 
     std::vector<Robot> *getFreeRobots();
+    std::vector<Robot> *getAllRobots();
     Robot *getFreeRobotById(uint32_t id);
     Robot *getFreeRobotByIndex(uint32_t index);
     void copyFreeRobotList(std::vector<Robot> &copy);
