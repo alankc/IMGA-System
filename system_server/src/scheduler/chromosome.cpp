@@ -506,7 +506,7 @@ void Chromosome::computeFitness()
 		double distanceInTask = distanceMaxtrix->at(task.getPickUpLocation()).at(task.getDeliveryLocation());
 		double totalDistance = distanceToTheTask + distanceInTask;
 		double timeInTask = robot.computeTimeRequirement(distanceInTask);
-		double totalTime = robot.computeTimeRequirement(totalDistance);
+		double totalTime = robot.computeTimeRequirement(totalDistance) + 2.0 * robot.getWaitingTime();
 		totalBatteryInTask += robot.computeBatteryRequirement(timeInTask);
 		double batteryToPerformTask = robot.computeBatteryRequirement(totalTime);
 		double totalBattery = batteryToPerformTask + batteryDemand[robots[i]];
