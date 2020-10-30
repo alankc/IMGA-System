@@ -185,17 +185,15 @@ Chromosome TaskController::generateTasksCoordination(std::vector<Robot> *freeRob
                 t.setPayload(robotList[i].getMaximumPayload());
 
                 uint32_t clusterP = clusterSelectDist(gen);
-                uint32_t clusterD = clusterSelectDist(gen);
                 uint32_t pickUp = clusterVectorDist[clusterP](gen);
-                uint32_t delivery = clusterVectorDist[clusterD](gen);
                 t.setPickUpLocation(pickUp);
-                t.setDeliveryLocation(delivery);
+                t.setDeliveryLocation(i + 8); //Each robot has an delivert location (task depot)
 
                 double timeToPickUp = r.computeTimeRequirement(dm[r.getCurrentLocation()][t.getPickUpLocation()]);
                 double timeToDelivery = r.computeTimeRequirement(dm[t.getPickUpLocation()][t.getDeliveryLocation()]);
                 //add 10% de folga
-                double timeInTravel = (timeToPickUp + timeToDelivery) * (1.0 + 10.0 / 100.0);
-                totalTime += timeInTravel;
+                double timeInTravel = (timeToPickUp + timeToDelivery + 2.0 * r.getWaitingTime()) * (1.0 + 10.0 / 100.0);
+                totalTime += std::ceil(timeInTravel);
                 t.setDeadline(totalTime);
 
                 t.setRobotInCharge(i);
@@ -203,6 +201,8 @@ Chromosome TaskController::generateTasksCoordination(std::vector<Robot> *freeRob
 
                 chrRobots.push_back(i);
                 chrTasks.push_back(taskId);
+                
+                r.setCurrentLocation(t.getDeliveryLocation());
 
                 taskId++;
             }
@@ -218,17 +218,15 @@ Chromosome TaskController::generateTasksCoordination(std::vector<Robot> *freeRob
                 t.setPayload(robotList[i].getMaximumPayload());
 
                 uint32_t clusterP = clusterSelectDist(gen);
-                uint32_t clusterD = clusterSelectDist(gen);
                 uint32_t pickUp = clusterVectorDist[clusterP](gen);
-                uint32_t delivery = clusterVectorDist[clusterD](gen);
                 t.setPickUpLocation(pickUp);
-                t.setDeliveryLocation(delivery);
+                t.setDeliveryLocation(i + 8); //Each robot has an delivert location (task depot)
 
                 double timeToPickUp = r.computeTimeRequirement(dm[r.getCurrentLocation()][t.getPickUpLocation()]);
                 double timeToDelivery = r.computeTimeRequirement(dm[t.getPickUpLocation()][t.getDeliveryLocation()]);
                 //add 10% de folga
-                double timeInTravel = (timeToPickUp + timeToDelivery) * (1.0 + 10.0 / 100.0);
-                totalTime += timeInTravel;
+                double timeInTravel = (timeToPickUp + timeToDelivery + 2.0 * r.getWaitingTime()) * (1.0 + 10.0 / 100.0);
+                totalTime += std::ceil(timeInTravel);
                 t.setDeadline(totalTime);
 
                 t.setRobotInCharge(i);
@@ -236,6 +234,8 @@ Chromosome TaskController::generateTasksCoordination(std::vector<Robot> *freeRob
 
                 chrRobots.push_back(i);
                 chrTasks.push_back(taskId);
+                
+                r.setCurrentLocation(t.getDeliveryLocation());
 
                 taskId++;
             }
@@ -251,17 +251,15 @@ Chromosome TaskController::generateTasksCoordination(std::vector<Robot> *freeRob
                 t.setPayload(robotList[i].getMaximumPayload());
 
                 uint32_t clusterP = clusterSelectDist(gen);
-                uint32_t clusterD = clusterSelectDist(gen);
                 uint32_t pickUp = clusterVectorDist[clusterP](gen);
-                uint32_t delivery = clusterVectorDist[clusterD](gen);
                 t.setPickUpLocation(pickUp);
-                t.setDeliveryLocation(delivery);
+                t.setDeliveryLocation(i + 8); //Each robot has an delivert location (task depot)
 
                 double timeToPickUp = r.computeTimeRequirement(dm[r.getCurrentLocation()][t.getPickUpLocation()]);
                 double timeToDelivery = r.computeTimeRequirement(dm[t.getPickUpLocation()][t.getDeliveryLocation()]);
                 //add 10% de folga
-                double timeInTravel = (timeToPickUp + timeToDelivery) * (1.0 + 10.0 / 100.0);
-                totalTime += timeInTravel;
+                double timeInTravel = (timeToPickUp + timeToDelivery + 2.0 * r.getWaitingTime()) * (1.0 + 10.0 / 100.0);
+                totalTime += std::ceil(timeInTravel);
                 t.setDeadline(totalTime);
 
                 t.setRobotInCharge(i);
@@ -269,6 +267,8 @@ Chromosome TaskController::generateTasksCoordination(std::vector<Robot> *freeRob
 
                 chrRobots.push_back(i);
                 chrTasks.push_back(taskId);
+                
+                r.setCurrentLocation(t.getDeliveryLocation());
 
                 taskId++;
             }
