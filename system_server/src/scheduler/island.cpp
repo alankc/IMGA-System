@@ -126,9 +126,7 @@ void Island::solve()
 
         if (seconds > 0)
         {
-            auto stop = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-            if (duration.count() >= seconds * 1000.0)
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() >= seconds * 1000.0)
                 break;
         }
 

@@ -232,8 +232,7 @@ void GA::solve()
 	//goalFitness < best.getFitness() work just in the first time
 	//No nedd sort becaus population its sorted during the migration
 	acumulateTotalFitnessFunction();
-	bool tstSeconds = true;
-	while (tstSeconds && (goalFitness < population[0].getFitness()) && (iteration < maxIterations) && (noChangeCounter < noChangeLimit))
+	while ((goalFitness < population[0].getFitness()) && (iteration < maxIterations) && (noChangeCounter < noChangeLimit))
 	{
 		//Elitism
 		for (uint16_t i = 0; i < elitismMaxIndex; i++)
@@ -274,11 +273,11 @@ void GA::solve()
 					  << "Best Fitness: " << best.getFitness() << "\n";*/
 		iteration++;
 
-		if ((seconds < 0) ||
-			(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - start).count() <=  seconds))
-			tstSeconds = true;
-		else
-			tstSeconds = false;
+		if (seconds > 0)
+		{
+			if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() >= seconds * 1000.0)
+				break;
+		}
 	}
 
 	//std::cout << "\n*** THE END ***\n";
