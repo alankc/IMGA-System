@@ -20,6 +20,7 @@ private:
 	static std::vector<Task> *taskList;
 	static std::vector<Robot> *robotList;
 	static std::vector<std::vector<double>> *distanceMaxtrix;
+	static double startTime;
 
 	std::vector<uint16_t> tasks;
 	std::vector<uint16_t> robots;
@@ -33,6 +34,7 @@ public:
 	static void setTaskList(std::vector<Task> *taskList);
 	static void setRobotList(std::vector<Robot> *robotList);
 	static void setDistanceMatrix(std::vector<std::vector<double>> *distanceMaxtrix);
+	static void setStartTime(double startTime);
 
 	static Chromosome crossover(Chromosome &c1, Chromosome &c2);
 	static Chromosome orderCrossover(Chromosome &c1, Chromosome &c2);

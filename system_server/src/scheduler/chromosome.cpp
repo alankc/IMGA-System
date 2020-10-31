@@ -9,6 +9,7 @@
 std::vector<Task> *Chromosome::taskList = NULL;
 std::vector<Robot> *Chromosome::robotList = NULL;
 std::vector<std::vector<double>> *Chromosome::distanceMaxtrix = NULL;
+double Chromosome::startTime = 0;
 
 Chromosome::Chromosome(bool initialize)
 {
@@ -33,6 +34,11 @@ void Chromosome::setRobotList(std::vector<Robot> *robotList)
 void Chromosome::setDistanceMatrix(std::vector<std::vector<double>> *distanceMaxtrix)
 {
 	Chromosome::distanceMaxtrix = distanceMaxtrix;
+}
+
+void Chromosome::setStartTime(double startTime)
+{
+	Chromosome::startTime = startTime;
 }
 
 Chromosome Chromosome::crossover(Chromosome &c1, Chromosome &c2)
@@ -486,7 +492,7 @@ void Chromosome::computeFitness()
 {
 	std::vector<Robot> robotsCopy;
 	std::copy(robotList->begin(), robotList->end(), std::back_inserter(robotsCopy));
-	std::vector<double> timeDemand(robotList->size(), 0.0);
+	std::vector<double> timeDemand(robotList->size(), Chromosome::startTime);
 	std::vector<double> batteryDemand(robotList->size(), 0.0);
 	uint16_t deadlineAttended = 0;
 	uint16_t batteryAttended = 0;
