@@ -17,6 +17,9 @@ private:
 	double deadline;
 	uint32_t robotInCharge;
 	uint32_t seqNumber;
+	double startTime;
+	double endTime;
+
 public:
 	Task(uint32_t id = 0, uint32_t pickUpLocation = 0, uint32_t deliveryLocation = 0, uint16_t payload = 0, double deadline = 0);
 
@@ -29,6 +32,8 @@ public:
 	void setDeadline(double deadline);
 	void setRobotInCharge(uint32_t robotInCharge);
 	void setSeqNumber(uint32_t seqNumber);
+	void setStartTime(double startTime);
+	void setEndTime(double endTime);
 
 	uint32_t getId() const;
 	std::string getDescription() const;
@@ -39,6 +44,8 @@ public:
 	double getDeadline() const;
 	uint32_t getRobotInCharge() const;
 	uint32_t getSeqNumber() const;
+	double getStartTime() const;
+	double getEndTime() const;
 
 	friend bool operator==(const Task &t1, const Task &t2);
 	friend std::ostream &operator<<(std::ostream &os, const Task &t);

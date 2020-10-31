@@ -56,6 +56,16 @@ void Task::setSeqNumber(uint32_t seqNumber)
 	this->seqNumber = seqNumber;
 }
 
+void Task::setStartTime(double startTime)
+{
+	this->startTime = startTime;
+}
+
+void Task::setEndTime(double endTime)
+{
+	this->endTime = endTime;
+}
+
 uint32_t Task::getId() const
 {
 	return id;
@@ -99,6 +109,16 @@ uint32_t Task::getSeqNumber() const
 double Task::getDeadline() const
 {
 	return deadline;
+}
+
+double Task::getStartTime() const
+{
+	return startTime;
+}
+
+double Task::getEndTime() const
+{
+	return endTime;
 }
 
 bool operator==(const Task &t1, const Task &t2)
