@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-TaskDao::TaskDao(){}
+TaskDao::TaskDao() {}
 
 TaskDao::TaskDao(GeneralDao *gDao)
 {
@@ -35,9 +35,16 @@ bool TaskDao::getTaskList(std::vector<Task> &taskList, std::string status)
             tmp.setDeadline(res->getUInt("deadline"));
             tmp.setStatus(res->getString("status"));
             tmp.setDescription(res->getString("description"));
-            tmp.setRobotInCharge(res->getUInt("id_robot_in_charge"));
-            tmp.setSeqNumber(res->getUInt("seq_number"));
 
+            if (!res->isNull("id_robot_in_charge"))
+                tmp.setRobotInCharge(res->getUInt("id_robot_in_charge"));
+            if (!res->isNull("seq_number"))
+                tmp.setSeqNumber(res->getUInt("seq_number"));
+            if (!res->isNull("start_time"))
+                tmp.setStartTime(res->getDouble("start_time"));
+            if (!res->isNull("end_time"))
+                tmp.setEndTime(res->getDouble("end_time"));
+                
             taskList.push_back(tmp);
         }
     }
@@ -56,7 +63,9 @@ bool TaskDao::updateTask(Task &task)
     stmtStream << "id_pick_up_location = '" << task.getPickUpLocation() << "', ";
     stmtStream << "id_delivery_location = '" << task.getDeliveryLocation() << "', ";
     stmtStream << "id_robot_in_charge = '" << task.getRobotInCharge() << "', ";
-    stmtStream << "seq_number = '" << task.getSeqNumber() << "' ";
+    stmtStream << "seq_number = '" << task.getSeqNumber() << "', ";
+    stmtStream << "start_time = '" << task.getStartTime() << "', ";
+    stmtStream << "end_time = '" << task.getEndTime() << "' ";
     stmtStream << "WHERE task.id_task = " << task.getId() << ";";
 
     bool tst = gDao->executeUpdate(stmtStream.str());
@@ -79,7 +88,9 @@ bool TaskDao::updateTask(std::vector<Task> &taskList)
         stmtStream << "id_pick_up_location = '" << task.getPickUpLocation() << "', ";
         stmtStream << "id_delivery_location = '" << task.getDeliveryLocation() << "', ";
         stmtStream << "id_robot_in_charge = '" << task.getRobotInCharge() << "', ";
-        stmtStream << "seq_number = '" << task.getSeqNumber() << "' ";
+        stmtStream << "seq_number = '" << task.getSeqNumber() << "', ";
+        stmtStream << "start_time = '" << task.getStartTime() << "', ";
+        stmtStream << "end_time = '" << task.getEndTime() << "' ";
         stmtStream << "WHERE task.id_task = " << task.getId() << ";";
 
         statementVector.push_back(stmtStream.str());
