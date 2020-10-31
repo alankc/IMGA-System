@@ -3,6 +3,18 @@
 
 GeneralController::GeneralController()
 {
+    //initialize tt, if does not the time is negative...
+    tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    //convert tt to broken time
+    bt = *std::localtime(&tt);
+    //set broken time to the beggining of the day, only way to set tt
+    bt.tm_hour = 0;
+    bt.tm_min = 0;
+    bt.tm_sec = 0;
+    //convert broken time back into std::time_t
+    tt = std::mktime(&bt);
+    // start of today in system_clock units
+    zero = std::chrono::system_clock::from_time_t(tt);
 }
 
 GeneralController::GeneralController(std::string host, std::string user, std::string pass, std::string database)
@@ -11,9 +23,36 @@ GeneralController::GeneralController(std::string host, std::string user, std::st
     this->rc = RobotController(&gdao);
     this->tc = TaskController(&gdao);
     this->lc = LocationController(&gdao);
+
+    //initialize tt, if does not the time is negative...
+    tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    //convert tt to broken time
+    bt = *std::localtime(&tt);
+    //set broken time to the beggining of the day, only way to set tt
+    bt.tm_hour = 0;
+    bt.tm_min = 0;
+    bt.tm_sec = 0;
+    //convert broken time back into std::time_t
+    tt = std::mktime(&bt);
+    // start of today in system_clock units
+    zero = std::chrono::system_clock::from_time_t(tt);
 }
 
 GeneralController::~GeneralController() {}
+
+double GeneralController::getCurrentTime_ms()
+{
+    auto now = std::chrono::system_clock::now();
+    auto lengthOfDay = now - zero;
+    return std::chrono::duration_cast<std::chrono::milliseconds>(lengthOfDay).count();
+}
+
+double GeneralController::getCurrentTime_s()
+{
+    auto now = std::chrono::system_clock::now();
+    auto lengthOfDay = now - zero;
+    return std::chrono::duration_cast<std::chrono::seconds>(lengthOfDay).count();
+}
 
 void GeneralController::callScheduler()
 {
@@ -144,7 +183,7 @@ void GeneralController::run()
     dis += lc.getDistance(28, 195);
     dis += lc.getDistance(195, 125);
 
-    std::cout << "Batt = " << (dis / 0.5) * (1.0 + 10.0/100.0) << std::endl;
+    std::cout << "Batt = " << (dis / 0.5) * (1.0 + 10.0 / 100.0) << std::endl;
 
     ros::spin();
 }

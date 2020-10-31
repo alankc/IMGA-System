@@ -24,6 +24,14 @@ private:
     TaskController tc;
     LocationController lc;
 
+    //Used to get current time in seconds
+    std::time_t tt;
+    std::tm bt;
+    std::chrono::_V2::system_clock::time_point zero;
+
+    double getCurrentTime_ms();
+    double getCurrentTime_s();
+
 public:
     GeneralController();
     GeneralController(std::string host, std::string user, std::string pass, std::string database);
