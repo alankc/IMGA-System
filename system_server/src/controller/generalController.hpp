@@ -4,6 +4,7 @@
 #include "robotController.hpp"
 #include "taskController.hpp"
 #include "locationController.hpp"
+#include "../dao/settingsDao.hpp"
 #include <ros/ros.h>
 #include <system_server/MsgRequest.h>
 
@@ -20,6 +21,9 @@ private:
 
 
     GeneralDao gdao;
+    SettingsDao sDao;
+    Settings settings;
+    
     RobotController rc;
     TaskController tc;
     LocationController lc;

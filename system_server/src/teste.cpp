@@ -19,7 +19,8 @@ https://answers.ros.org/question/218978/using-the-mysql-database-in-ros-jade-pro
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "servidor");
-    
+    ros::start();
+
     std::string host = "localhost";
     std::string user = "root";
     std::string pass = "281094";
@@ -27,7 +28,6 @@ int main(int argc, char **argv)
     GeneralController gc(host, user, pass, db);
 
     gc.run();
-    
-    
+
     return EXIT_SUCCESS;
 }

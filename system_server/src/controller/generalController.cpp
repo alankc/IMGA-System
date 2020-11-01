@@ -23,6 +23,7 @@ GeneralController::GeneralController(std::string host, std::string user, std::st
     this->rc = RobotController(&gdao);
     this->tc = TaskController(&gdao);
     this->lc = LocationController(&gdao);
+    this->sDao = SettingsDao(&gdao);
 
     //initialize tt, if does not the time is negative...
     tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -160,6 +161,21 @@ void GeneralController::callScheduler()
 #include "testController.hpp"
 void GeneralController::run()
 {
+    sDao.getSettings(0, settings);
+
+    std::cout << settings.getIdSetup() << " ";
+    std::cout << settings.getTaskPoolSize() << " ";
+    std::cout << settings.getRobotPoolSize() << " ";
+    std::cout << settings.getTimeInterval() << " ";
+    std::cout << settings.getGaIterations() << " ";
+    std::cout << settings.getGaSubIterations() << " ";
+    std::cout << settings.getGaPopulation() << " ";
+    std::cout << settings.getGaTimeLimit() << " ";
+    std::cout << settings.getGaNoChangeLimit() << " ";
+    std::cout << settings.getGaElitism() << " ";
+    std::cout << settings.getGaMutation() << " ";
+    std::cout << settings.getGaMigration() << std::endl;
+
     lc.run();
     ros::spinOnce();
     lc.updateLocationList();
