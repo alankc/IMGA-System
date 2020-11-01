@@ -44,7 +44,7 @@ bool TaskDao::getTaskList(std::vector<Task> &taskList, std::string status)
                 tmp.setStartTime(res->getDouble("start_time"));
             if (!res->isNull("end_time"))
                 tmp.setEndTime(res->getDouble("end_time"));
-                
+
             taskList.push_back(tmp);
         }
     }
@@ -118,6 +118,54 @@ bool TaskDao::updateTasksScheduled(std::vector<TaskScheduledData> &taskList)
     }
 
     bool tst = gDao->executeUpdate(statementVector);
+
+    return tst;
+}
+
+bool TaskDao::updateTask(uint32_t id, TaskDao::Column column, std::string data)
+{
+    std::ostringstream stmtStream;
+    stmtStream << "UPDATE task SET ";
+    switch (column)
+    {
+    case (TaskDao::Column::description):
+        stmtStream << "description = '" << data << "'";
+        break;
+    case (TaskDao::Column::status):
+        stmtStream << "status = '" << data << "'";
+        break;
+    case (TaskDao::Column::pickUpLocation):
+        stmtStream << "id_pick_up_location = " << data;
+        break;
+    case (TaskDao::Column::deliveryLocation):
+        stmtStream << "id_delivery_location = " << data;
+        break;
+    case (TaskDao::Column::payload):
+        stmtStream << "payload = " << data;
+        break;
+    case (TaskDao::Column::deadline):
+        stmtStream << "deadline = " << data;
+        break;
+    case (TaskDao::Column::robotInCharge):
+        stmtStream << "id_robot_in_charge = " << data;
+        break;
+    case (TaskDao::Column::seqNumber):
+        stmtStream << "seq_number = " << data;
+        break;
+    case (TaskDao::Column::startTime):
+        stmtStream << "start_time = " << data;
+        break;
+    case (TaskDao::Column::endTime):
+        stmtStream << "end_time = " << data;
+        break;
+
+    default:
+        return false;
+    }
+
+    stmtStream << " WHERE task.id_task = " << id << ";";
+
+    bool tst = gDao->executeUpdate(stmtStream.str());
 
     return tst;
 }

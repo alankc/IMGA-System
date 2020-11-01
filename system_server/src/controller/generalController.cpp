@@ -163,19 +163,20 @@ void GeneralController::run()
 {
     sDao.getSettings(0, settings);
 
-    std::cout << settings.getIdSetup() << " ";
-    std::cout << settings.getTaskPoolSize() << " ";
-    std::cout << settings.getRobotPoolSize() << " ";
-    std::cout << settings.getTimeInterval() << " ";
-    std::cout << settings.getGaIterations() << " ";
-    std::cout << settings.getGaSubIterations() << " ";
-    std::cout << settings.getGaPopulation() << " ";
-    std::cout << settings.getGaTimeLimit() << " ";
-    std::cout << settings.getGaNoChangeLimit() << " ";
-    std::cout << settings.getGaElitism() << " ";
-    std::cout << settings.getGaMutation() << " ";
-    std::cout << settings.getGaMigration() << std::endl;
+    TaskDao taskDaoTst(&gdao);
 
+    taskDaoTst.updateTask(0, TaskDao::Column::description, "Teste");
+    taskDaoTst.updateTask(0, TaskDao::Column::status, "TT");
+
+    for (uint32_t i = TaskDao::Column::pickUpLocation; i <= TaskDao::Column::endTime; i++)
+    {
+        if (static_cast<TaskDao::Column>(i) != TaskDao::Column::robotInCharge)
+            taskDaoTst.updateTask(0, static_cast<TaskDao::Column>(i), std::to_string(i));
+        else
+            taskDaoTst.updateTask(0, static_cast<TaskDao::Column>(i), "2");
+    }
+
+    return;
     lc.run();
     ros::spinOnce();
     lc.updateLocationList();

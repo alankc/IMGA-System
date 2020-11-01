@@ -26,6 +26,22 @@ public:
     bool updateTask(Task &task);
     bool updateTask(std::vector<Task> &taskList);
     bool updateTasksScheduled(std::vector<TaskScheduledData> &taskList);
+
+    enum Column
+    {
+        description = 0,
+        status = 1,
+        pickUpLocation = 2,
+        deliveryLocation = 3,
+        payload = 4,
+        deadline = 5,
+        robotInCharge = 6,
+        seqNumber = 7,
+        startTime = 8,
+        endTime = 9
+    };
+
+    bool updateTask(uint32_t id, TaskDao::Column column, std::string data);
 };
 
 #endif
