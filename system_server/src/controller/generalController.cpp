@@ -111,7 +111,7 @@ void GeneralController::schedulingLoop()
             //if it have tried three time and rave at least one robot and two tasks, runs scheduler
             else if (tc.getTaskListSize() > 1)
             {
-                rc.updateFreeRobots();
+                rc.searchFreeRobot(5);
                 if (rc.getFreeRobotListSize() < settings.getRobotPoolSize() && attemps < 3)
                 {
                     attemps++;
