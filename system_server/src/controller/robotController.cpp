@@ -31,19 +31,18 @@ void RobotController::updateAllRobots()
     }
 }
 
-/*void RobotController::updateFreeRobots()
+void RobotController::updateFreeRobots()
 {
     freeRobots.clear();
-    bool tst = rd.getRobotList(freeRobots, true, Robot::STATUS_FREE);
-    if (!tst)
-        std::cout << "Fail to update free robots list" << std::endl;
-    else
-        std::cout << "Free robots list has been updated" << std::endl;
-}*/
+    for (auto r : allRobots)
+    {
+        if (r.getStatus() == Robot::STATUS_FREE)
+            freeRobots.push_back(r);
+    }
+}
 
 void RobotController::searchFreeRobot(double waitingTime_s)
 {
-    freeRobots.clear();
     for (auto pub : pubRequest)
     {
         system_server::MsgRequest msg;
@@ -87,17 +86,9 @@ void RobotController::callbackRobotData(const system_server::MsgRobotData &msg)
         allRobotsIt->setCurrentLocation(msg.currLocation);
         allRobotsIt->setMediumVelocity(msg.minSpeed);
         allRobotsIt->setStatus(msg.status);
-        
-        //If the status is free must be in the free robots list
-        if (msg.status == Robot::STATUS_FREE)
-        {
-            auto freeRobotsIt = std::find(freeRobots.begin(), freeRobots.end(), msg.id);
-            
-            if (freeRobotsIt == freeRobots.end())
-                freeRobots.push_back(*freeRobotsIt);
-            else
-                *freeRobotsIt = *allRobotsIt;
-        }
+
+        //update database
+        std::cout << "FALTA ATUALIZAR O ROBO NO BANCO" << std::endl;        
     }
 }
 

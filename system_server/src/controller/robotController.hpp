@@ -29,7 +29,7 @@ public:
     ~RobotController();
 
     void updateAllRobots();
-    //void updateFreeRobots();
+    void updateFreeRobots();
     void searchFreeRobot(double waitingTime_s);
     void sendRequest(uint32_t idRobot, system_server::MsgRequest &msg);
     void sendTaskList(uint32_t idRobot, system_server::MsgTaskList &msg);
