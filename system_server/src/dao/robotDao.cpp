@@ -16,10 +16,14 @@ void RobotDao::setGeneralDao(GeneralDao *gDao)
     this->gDao = gDao;
 }
 
-bool RobotDao::getRobotList(std::vector<Robot> &robotList, std::string status)
+bool RobotDao::getRobotList(std::vector<Robot> &robotList, bool equalToStatus, std::string status)
 {
     std::unique_ptr<sql::ResultSet> res;
-    std::string stmt = "SELECT * FROM robot WHERE status LIKE '%" + status + "%' ORDER BY id_robot ASC";
+    std::string stmt;
+    if (equalToStatus)
+        stmt = "SELECT * FROM robot WHERE status LIKE '%" + status + "%' ORDER BY id_robot ASC";
+    else
+        stmt = "SELECT * FROM robot WHERE status NOT LIKE '%" + status + "%' ORDER BY id_robot ASC";
 
     bool tst = gDao->executeQuery(stmt, res);
 
