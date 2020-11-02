@@ -10,10 +10,10 @@ TaskController::TaskController(GeneralDao *gDao)
 
 TaskController::~TaskController() {}
 
-void TaskController::updateTasksToSchedule()
+void TaskController::updateTasksToSchedule(uint32_t numberOfTasks)
 {
     tasksToSchedule.clear();
-    bool tst = td.getTaskList(tasksToSchedule, Task::STATUS_NEW);
+    bool tst = td.getTaskList(tasksToSchedule, Task::STATUS_NEW, numberOfTasks);
     if (!tst)
         std::cout << "Fail to update tasks to schedule" << std::endl;
     else

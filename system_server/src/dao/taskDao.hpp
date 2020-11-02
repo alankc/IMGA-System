@@ -22,7 +22,7 @@ public:
     TaskDao(GeneralDao *gDao);
     ~TaskDao();
     void setGeneralDao(GeneralDao *gDao);
-    bool getTaskList(std::vector<Task> &taskList, std::string status);
+    bool getTaskList(std::vector<Task> &taskList, std::string status, uint32_t numberOfTasks);
     bool updateTask(Task &task);
     bool updateTask(std::vector<Task> &taskList);
     bool updateTasksScheduled(std::vector<TaskScheduledData> &taskList);

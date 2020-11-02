@@ -19,7 +19,6 @@ private:
 
     void callbackRequest(system_server::MsgRequest &msg);*/
 
-
     GeneralDao gdao;
     SettingsDao sDao;
     Settings settings;
@@ -35,13 +34,14 @@ private:
 
     double getCurrentTime_ms();
     double getCurrentTime_s();
+    void callScheduler();
+    void schedulingLoop();
 
 public:
     GeneralController();
     GeneralController(std::string host, std::string user, std::string pass, std::string database);
     ~GeneralController();
 
-    void callScheduler();
     void run();
 };
 

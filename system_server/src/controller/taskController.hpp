@@ -21,7 +21,7 @@ public:
     TaskController(GeneralDao *gDao);
     ~TaskController();
 
-    void updateTasksToSchedule();
+    void updateTasksToSchedule(uint32_t numberOfTasks);
     bool updateTaskScheduled(std::vector<uint32_t> &tasksScheduled, std::vector<uint32_t> &robots, std::vector<uint32_t> &tasksFailed);
 
     std::vector<Task> *getTaskList();
