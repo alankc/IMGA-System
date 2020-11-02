@@ -56,6 +56,10 @@ public:
 	bool operator<(const Robot &robotObj);
 
 	static const std::string STATUS_FREE;
+	static const std::string STATUS_WORKING;
+	static const std::string STATUS_TO_DEPOT;
+	static const std::string STATUS_FAIL;
+	static const std::string STATUS_CHARGING;
 };
 
 #endif
