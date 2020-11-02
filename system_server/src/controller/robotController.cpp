@@ -31,7 +31,7 @@ void RobotController::updateAllRobots()
     }
 }
 
-void RobotController::updateFreeRobots()
+/*void RobotController::updateFreeRobots()
 {
     freeRobots.clear();
     bool tst = rd.getRobotList(freeRobots, true, Robot::STATUS_FREE);
@@ -39,10 +39,11 @@ void RobotController::updateFreeRobots()
         std::cout << "Fail to update free robots list" << std::endl;
     else
         std::cout << "Free robots list has been updated" << std::endl;
-}
+}*/
 
 void RobotController::searchFreeRobot(double waitingTime_s)
 {
+    freeRobots.clear();
     for (auto pub : pubRequest)
     {
         system_server::MsgRequest msg;
@@ -77,6 +78,27 @@ void RobotController::sendTaskList(uint32_t idRobot, system_server::MsgTaskList 
 
 void RobotController::callbackRobotData(const system_server::MsgRobotData &msg)
 {
+    auto allRobotsIt = std::find(allRobots.begin(), allRobots.end(), msg.id);
+
+    //Must exist in the list of robots
+    if (allRobotsIt != allRobots.end())
+    {
+        allRobotsIt->setRemainingBattery(msg.battery);
+        allRobotsIt->setCurrentLocation(msg.currLocation);
+        allRobotsIt->setMediumVelocity(msg.minSpeed);
+        allRobotsIt->setStatus(msg.status);
+        
+        //If the status is free must be in the free robots list
+        if (msg.status == Robot::STATUS_FREE)
+        {
+            auto freeRobotsIt = std::find(freeRobots.begin(), freeRobots.end(), msg.id);
+            
+            if (freeRobotsIt == freeRobots.end())
+                freeRobots.push_back(*freeRobotsIt);
+            else
+                *freeRobotsIt = *allRobotsIt;
+        }
+    }
 }
 
 std::vector<Robot> *RobotController::getFreeRobots()
