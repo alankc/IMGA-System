@@ -14,21 +14,69 @@ RobotController::~RobotController() {}
 void RobotController::updateAllRobots()
 {
     allRobots.clear();
-    bool tst = rd.getRobotList(allRobots, "");
+    bool tst = rd.getRobotList(allRobots, false, Robot::STATUS_FAIL);
     if (!tst)
         std::cout << "Fail to update all robots list" << std::endl;
     else
+    {
+        pubRequest.clear();
+        pubTaskList.clear();
+        for (auto r : allRobots)
+        {
+            std::string topic = "/robot" + std::to_string(r.getId());
+            pubRequest[r.getId()] = nh.advertise<system_server::MsgRequest>(topic + "/requests", 100);
+            pubTaskList[r.getId()] = nh.advertise<system_server::MsgTaskList>(topic + "/task_list", 100);
+        }
         std::cout << "All robots list has been updated" << std::endl;
+    }
 }
 
 void RobotController::updateFreeRobots()
 {
     freeRobots.clear();
-    bool tst = rd.getRobotList(freeRobots, Robot::STATUS_FREE);
+    bool tst = rd.getRobotList(freeRobots, true, Robot::STATUS_FREE);
     if (!tst)
         std::cout << "Fail to update free robots list" << std::endl;
     else
         std::cout << "Free robots list has been updated" << std::endl;
+}
+
+void RobotController::searchFreeRobot(double waitingTime_s)
+{
+    for (auto pub : pubRequest)
+    {
+        system_server::MsgRequest msg;
+        msg.type = system_server::MsgRequest::FREE_ROBOT;
+        msg.data = 0;
+        pub.second.publish(msg);
+        ros::spinOnce();
+    }
+    ros::Duration d(waitingTime_s);
+    d.sleep();
+    ros::spinOnce();
+}
+
+void RobotController::sendRequest(uint32_t idRobot, system_server::MsgRequest &msg)
+{
+    auto pub = pubRequest.find(idRobot);
+    if (pub != pubRequest.end())
+    {
+        pub->second.publish(msg);
+        ros::spinOnce();
+    }
+}
+void RobotController::sendTaskList(uint32_t idRobot, system_server::MsgTaskList &msg)
+{
+    auto pub = pubTaskList.find(idRobot);
+    if (pub != pubTaskList.end())
+    {
+        pub->second.publish(msg);
+        ros::spinOnce();
+    }
+}
+
+void RobotController::callbackRobotData(const system_server::MsgRobotData &msg)
+{
 }
 
 std::vector<Robot> *RobotController::getFreeRobots()
