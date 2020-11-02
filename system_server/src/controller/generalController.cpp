@@ -58,6 +58,7 @@ double GeneralController::getCurrentTime_s()
 
 void GeneralController::callScheduler()
 {
+    rc.updateFreeRobots();
     lc.updateLocationList();
     lc.updateDistanceMatrix();
 
@@ -79,8 +80,10 @@ void GeneralController::callScheduler()
     best.printResult();
 
     //Send results
+    std::cout << "FALTA ENVIAR AS TAREFAS" << std::endl;
 
     //Update database
+    std::cout << "FALTA ATUALIZAR AS TAREFAS NO BANCO" << std::endl;
 }
 
 void GeneralController::schedulingLoop()
@@ -99,8 +102,8 @@ void GeneralController::schedulingLoop()
             start = std::chrono::system_clock::now();
 
             tc.updateTasksToSchedule(settings.getTaskPoolSize());
-            
-            //if number of tasks is smaller than the poll, it decreases the time interval 
+
+            //if number of tasks is smaller than the poll, it decreases the time interval
             if (tc.getTaskListSize() < settings.getTaskPoolSize() && attemps < 3)
             {
                 attemps++;
@@ -129,22 +132,20 @@ void GeneralController::schedulingLoop()
 
 void GeneralController::run()
 {
+    //Dont remove
     sDao.getSettings(0, settings);
+    //lc.updateLocationList();
+    //lc.updateDistanceMatrix();
+    rc.updateAllRobots();
+    //lc.run();
 
-    TaskDao taskDaoTst(&gdao);
+    ros::NodeHandle nh;
+    auto pub = nh.subscribe("/robot_data", 100, &RobotController::callbackRobotData, &rc);
 
-    taskDaoTst.updateTask(0, TaskDao::Column::description, "Teste");
-    taskDaoTst.updateTask(0, TaskDao::Column::status, "TT");
-
-    for (uint32_t i = TaskDao::Column::pickUpLocation; i <= TaskDao::Column::endTime; i++)
-    {
-        if (static_cast<TaskDao::Column>(i) != TaskDao::Column::robotInCharge)
-            taskDaoTst.updateTask(0, static_cast<TaskDao::Column>(i), std::to_string(i));
-        else
-            taskDaoTst.updateTask(0, static_cast<TaskDao::Column>(i), "2");
-    }
+    ros::spin();
 
     return;
+
     lc.run();
     ros::spinOnce();
     lc.updateLocationList();
@@ -172,28 +173,3 @@ void GeneralController::run()
 
     ros::spin();
 }
-
-/*
-All robots list has been updated
-0,Task 0,N,2,44.6602,161,131,0
-1,Task 1,N,2,112.098,151,180,0
-2,Task 2,N,2,240.316,143,32,0
-3,Task 3,N,2,367.468,187,27,0
-4,Task 4,N,2,122.8,110,188,1
-5,Task 5,N,2,216.09,140,175,1
-6,Task 6,N,2,321.664,203,105,1
-7,Task 7,N,5,119.109,79,104,2
-8,Task 8,N,5,193.306,51,80,2
-9,Task 9,N,5,281.037,56,37,2
-10,Task 10,N,5,147.489,199,45,3
-11,Task 11,N,5,262.992,138,143,3
-12,Task 12,N,5,389.214,180,43,3
-13,Task 13,N,10,98.4929,100,28,4
-14,Task 14,N,10,192.252,195,125,4
-    Robots:   0  0  0  0  1  1  1  2  2  2  3  3  3  4  4
-     Tasks:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14
-    Failed:  14
-   Fitness: 290.124
-
-
-*/

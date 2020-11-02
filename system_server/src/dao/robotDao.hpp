@@ -3,15 +3,7 @@
 
 #include "generalDao.hpp"
 #include "../model/robot.hpp"
-
-typedef struct _robotRequestData
-{
-    uint32_t id;
-    std::string status;
-    uint32_t currentLocation;
-    double remainingBattery;
-    double mediumVelocity;
-} RobotRequestData;
+#include <system_server/MsgRobotData.h>
 
 class RobotDao
 {
@@ -26,7 +18,7 @@ public:
     bool getRobotList(std::vector<Robot> &robotList, bool equalToStatus, std::string status);
     bool updateRobot(Robot &robot);
     bool updateRobot(std::vector<Robot> &robotList);
-    bool updateRobotRequest(RobotRequestData robotRequestData);
+    bool updateRobotRequest(system_server::MsgRobotData &robotRequestData);
 };
 
 #endif

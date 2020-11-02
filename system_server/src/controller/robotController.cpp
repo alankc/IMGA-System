@@ -88,7 +88,7 @@ void RobotController::callbackRobotData(const system_server::MsgRobotData &msg)
         allRobotsIt->setStatus(msg.status);
 
         //update database
-        std::cout << "FALTA ATUALIZAR O ROBO NO BANCO" << std::endl;        
+        rd.updateRobotRequest(const_cast<system_server::MsgRobotData&>(msg));      
     }
 }
 

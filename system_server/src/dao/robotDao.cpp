@@ -100,14 +100,14 @@ bool RobotDao::updateRobot(std::vector<Robot> &robotList)
     return tst;
 }
 
-bool RobotDao::updateRobotRequest(RobotRequestData robotRequestData)
+bool RobotDao::updateRobotRequest(system_server::MsgRobotData &robotRequestData)
 {
     std::ostringstream stmtStream;
     stmtStream << "UPDATE robot SET ";
     stmtStream << "status = '" << robotRequestData.status << "', ";
-    stmtStream << "remaining_battery = '" << robotRequestData.remainingBattery << "', ";
-    stmtStream << "medium_velocity = '" << robotRequestData.mediumVelocity << "', ";
-    stmtStream << "id_current_location = '" << robotRequestData.currentLocation << "' ";
+    stmtStream << "remaining_battery = '" << robotRequestData.battery << "', ";
+    stmtStream << "medium_velocity = '" << robotRequestData.minSpeed << "', ";
+    stmtStream << "id_current_location = '" << robotRequestData.currLocation << "' ";
     stmtStream << "WHERE robot.id_robot =" << robotRequestData.id << ";";
 
     bool tst = gDao->executeUpdate(stmtStream.str());
