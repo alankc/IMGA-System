@@ -668,8 +668,31 @@ void Chromosome::getResult(std::vector<uint32_t> &tasksScheduled, std::vector<ui
 		else
 		{
 			tasksFailed.push_back(taskList->at(tasks[i]).getId());
-		}		
-	}	
+		}
+	}
+}
+
+void Chromosome::getresult(std::map<uint32_t, system_server::MsgTaskList> &listOfTaskList, std::vector<uint32_t> &taskFailedId)
+{
+	listOfTaskList.clear();
+	taskFailedId.clear();
+
+	for (uint32_t i = 0; i < tasks.size(); i++)
+	{
+		if (scheduled[i])
+		{
+			system_server::MsgTask t;
+			t.id = taskList->at(tasks[i]).getId();
+			t.deadline = taskList->at(tasks[i]).getDeadline();
+			t.pickUp = taskList->at(tasks[i]).getPickUpLocation();
+			t.delivery = taskList->at(tasks[i]).getDeliveryLocation();
+			listOfTaskList[robotList->at(robots[i]).getId()].taskList.push_back(t);
+		}
+		else
+		{
+			taskFailedId.push_back(taskList->at(tasks[i]).getId());
+		}
+	}
 }
 
 double Chromosome::totalEnergy(bool allTasks)

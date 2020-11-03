@@ -2,6 +2,8 @@
 #define CHROMOSSOME_HPP
 
 #include <vector>
+#include <map>
+#include <system_server/MsgTaskList.h>
 #include <cstdint>
 #include "../model/task.hpp"
 #include "../model/robot.hpp"
@@ -46,7 +48,7 @@ public:
 	static void displacementMutation(Chromosome &c);
 	static void inversionMutation(Chromosome &c);
 	static void scrambleMutation(Chromosome &c);
-	
+
 	void initialize();
 	void computeFitness();
 	std::vector<uint16_t> &getTasks();
@@ -57,6 +59,9 @@ public:
 	bool allScheduled();
 	void printResult();
 	void getResult(std::vector<uint32_t> &tasksScheduled, std::vector<uint32_t> &robots, std::vector<uint32_t> &tasksFailed);
+	//std::vector<std::pair<robot's id, task list>> &listOfTaskList
+	// std::vector<task's id> &taskFailedid
+	void getresult(std::map<uint32_t, system_server::MsgTaskList> &listOfTaskList, std::vector<uint32_t> &taskFailedId);
 
 	//Methods to help with statics
 	double totalEnergy(bool allTasks);
@@ -74,6 +79,5 @@ public:
 		return (this->fitness < chromosomeObj.fitness);
 	}
 };
-
 
 #endif
