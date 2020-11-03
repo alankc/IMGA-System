@@ -39,6 +39,8 @@ public:
     std::vector<Robot> *getAllRobots();
     Robot *getFreeRobotById(uint32_t id);
     Robot *getFreeRobotByIndex(uint32_t index);
+    Robot *getRobotById(uint32_t id);
+    Robot *getRobotByIndex(uint32_t index);
     void copyFreeRobotList(std::vector<Robot> &copy);
     std::size_t getFreeRobotListSize();
     void generateRobots(uint32_t numberOfRobots, uint32_t minpayload, uint32_t maxPayload, double minSpeed, double maxSpeed, double minDisFac, double maxDisFac, uint32_t numberOfDepots);

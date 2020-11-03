@@ -88,7 +88,7 @@ void RobotController::callbackRobotData(const system_server::MsgRobotData &msg)
         allRobotsIt->setStatus(msg.status);
 
         //update database
-        rd.updateRobotRequest(const_cast<system_server::MsgRobotData&>(msg));      
+        rd.updateRobotRequest(const_cast<system_server::MsgRobotData &>(msg));
     }
 }
 
@@ -115,6 +115,21 @@ Robot *RobotController::getFreeRobotById(uint32_t id)
 Robot *RobotController::getFreeRobotByIndex(uint32_t index)
 {
     return &freeRobots[index];
+}
+
+Robot *RobotController::getRobotById(uint32_t id)
+{
+    auto it = std::find(allRobots.begin(), allRobots.end(), id);
+
+    if (it != allRobots.end())
+        return &(*it);
+
+    return NULL;
+}
+
+Robot *RobotController::getRobotByIndex(uint32_t index)
+{
+    return &allRobots[index];
 }
 
 void RobotController::copyFreeRobotList(std::vector<Robot> &copy)
