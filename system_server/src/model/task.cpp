@@ -1,6 +1,8 @@
 #include "task.hpp"
 
 const std::string Task::STATUS_NEW = "N";
+const std::string Task::STATUS_SCHEDULED = "S";
+const std::string Task::STATUS_FAILED = "F";
 
 Task::Task(uint32_t id, uint32_t pickUpLocation, uint32_t deliveryLocation, uint16_t payload, double deadline)
 {

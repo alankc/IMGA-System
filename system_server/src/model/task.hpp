@@ -52,6 +52,8 @@ public:
 	bool operator<(const Task &taskObj);
 
 	static const std::string STATUS_NEW;
+	static const std::string STATUS_SCHEDULED;
+	static const std::string STATUS_FAILED;
 };
 
 #endif
