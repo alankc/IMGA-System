@@ -80,7 +80,13 @@ void GeneralController::callScheduler()
     best.printResult();
 
     //Send results
-    std::cout << "FALTA ENVIAR AS TAREFAS" << std::endl;
+    std::map<uint32_t, system_server::MsgTaskList> listOfTaskList; 
+    std::vector<uint32_t> taskFailedId;
+    best.getResult(listOfTaskList, taskFailedId);
+    for (auto r : listOfTaskList)
+    {
+        rc.sendTaskList(r.first, r.second);
+    }
 
     //Update database
     std::cout << "FALTA ATUALIZAR AS TAREFAS NO BANCO" << std::endl;

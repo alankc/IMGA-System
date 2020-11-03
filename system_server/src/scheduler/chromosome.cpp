@@ -672,7 +672,7 @@ void Chromosome::getResult(std::vector<uint32_t> &tasksScheduled, std::vector<ui
 	}
 }
 
-void Chromosome::getresult(std::map<uint32_t, system_server::MsgTaskList> &listOfTaskList, std::vector<uint32_t> &taskFailedId)
+void Chromosome::getResult(std::map<uint32_t, system_server::MsgTaskList> &listOfTaskList, std::vector<uint32_t> &taskFailedId)
 {
 	listOfTaskList.clear();
 	taskFailedId.clear();
