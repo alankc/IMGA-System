@@ -22,6 +22,46 @@ void TaskController::updateTasksToSchedule(uint32_t numberOfTasks)
 
 bool TaskController::updateTaskScheduled(std::vector<uint32_t> &tasksScheduled, std::vector<uint32_t> &robots, std::vector<uint32_t> &tasksFailed)
 {
+    std::cout << "!!! NOT IMPLEMENTED !!!\n";
+    std::cout << "TaskController::updateTaskScheduled(std::vector<uint32_t> &tasksScheduled, std::vector<uint32_t> &robots, std::vector<uint32_t> &tasksFailed)\n";
+    std::cout << "!!! NOT IMPLEMENTED !!!" << std::endl;
+    return false;
+}
+
+bool TaskController::updateTaskScheduled(std::map<uint32_t, system_server::MsgTaskList> &listOfTaskList, std::vector<uint32_t> &taskFailedId)
+{
+    std::vector<TaskScheduledData> tsdList;
+
+    //List of tasks scheduled to uptate
+    for (auto ltl : listOfTaskList)
+    {
+        int64_t maxSeq;
+        if (td.getMaximumSeqNum(ltl.first, maxSeq))
+        {
+            for (auto t : ltl.second.taskList)
+            {
+                TaskScheduledData tsd;
+                tsd.id = t.id;
+                tsd.seqNumber = ++maxSeq;
+                tsd.status = Task::STATUS_SCHEDULED;
+                tsd.robotInCharge = ltl.first;
+                tsdList.push_back(tsd);
+            }
+        }
+        else
+            return false;
+    }
+
+    //List of tasks failed to uptate
+    for (auto tiD : taskFailedId)
+    {
+        TaskScheduledData tsd;
+        tsd.id = tiD;
+        tsd.status = Task::STATUS_FAILED;
+        tsdList.push_back(tsd);
+    }
+
+    return td.updateTasksScheduled(tsdList);
 }
 
 std::vector<Task> *TaskController::getTaskList()
@@ -201,7 +241,7 @@ Chromosome TaskController::generateTasksCoordination(std::vector<Robot> *freeRob
 
                 chrRobots.push_back(i);
                 chrTasks.push_back(taskId);
-                
+
                 r.setCurrentLocation(t.getDeliveryLocation());
 
                 taskId++;
@@ -234,7 +274,7 @@ Chromosome TaskController::generateTasksCoordination(std::vector<Robot> *freeRob
 
                 chrRobots.push_back(i);
                 chrTasks.push_back(taskId);
-                
+
                 r.setCurrentLocation(t.getDeliveryLocation());
 
                 taskId++;
@@ -267,7 +307,7 @@ Chromosome TaskController::generateTasksCoordination(std::vector<Robot> *freeRob
 
                 chrRobots.push_back(i);
                 chrTasks.push_back(taskId);
-                
+
                 r.setCurrentLocation(t.getDeliveryLocation());
 
                 taskId++;

@@ -52,6 +52,33 @@ bool TaskDao::getTaskList(std::vector<Task> &taskList, std::string status, uint3
     return tst;
 }
 
+bool TaskDao::getMaximumSeqNum(uint32_t idRobot, int64_t &maxSeNumber)
+{
+    std::unique_ptr<sql::ResultSet> res;
+    std::string stmt = "SELECT MAX(task.seq_number) AS MAX_SEQ_NUMBER\n";
+    stmt += "FROM task\n";
+    stmt += "INNER JOIN robot\n";
+    stmt += "ON task.id_robot_in_charge = robot.id_robot\n";
+    stmt += "WHERE robot.id_robot = " + std::to_string(idRobot) + ";";
+
+    bool tst = gDao->executeQuery(stmt, res);
+
+    if (tst)
+    {
+        if (res->next())
+        {
+            if (res->isNull("MAX_SEQ_NUMBER"))
+                maxSeNumber = -1;
+            else
+                maxSeNumber = res->getUInt("MAX_SEQ_NUMBER");
+        }
+        else
+            return false;
+    }
+
+    return tst;
+}
+
 bool TaskDao::updateTask(Task &task)
 {
     std::ostringstream stmtStream;
@@ -108,12 +135,21 @@ bool TaskDao::updateTasksScheduled(std::vector<TaskScheduledData> &taskList)
     for (auto task : taskList)
     {
         std::ostringstream stmtStream;
-        stmtStream << "UPDATE task SET ";
-        stmtStream << "status = '" << task.status << "', ";
-        stmtStream << "id_robot_in_charge = '" << task.robotInCharge << "', ";
-        stmtStream << "seq_number = '" << task.seqNumber << "' ";
-        stmtStream << "WHERE task.id_task = " << task.id << ";";
-
+        if (task.status == Task::STATUS_SCHEDULED)
+        {
+            stmtStream << "UPDATE task SET ";
+            stmtStream << "status = '" << task.status << "', ";
+            stmtStream << "id_robot_in_charge = '" << task.robotInCharge << "', ";
+            stmtStream << "seq_number = '" << task.seqNumber << "' ";
+            stmtStream << "WHERE task.id_task = " << task.id << ";";
+        }
+        else
+        {
+            stmtStream << "UPDATE task SET ";
+            stmtStream << "status = '" << task.status << "' ";
+            stmtStream << "WHERE task.id_task = " << task.id << ";";
+        }
+        
         statementVector.push_back(stmtStream.str());
     }
 

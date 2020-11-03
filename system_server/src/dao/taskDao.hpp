@@ -23,6 +23,7 @@ public:
     ~TaskDao();
     void setGeneralDao(GeneralDao *gDao);
     bool getTaskList(std::vector<Task> &taskList, std::string status, uint32_t numberOfTasks);
+    bool getMaximumSeqNum(uint32_t idRobot, int64_t &maxSeNumber);
     bool updateTask(Task &task);
     bool updateTask(std::vector<Task> &taskList);
     bool updateTasksScheduled(std::vector<TaskScheduledData> &taskList);

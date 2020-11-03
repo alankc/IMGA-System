@@ -80,7 +80,7 @@ void GeneralController::callScheduler()
     best.printResult();
 
     //Send results
-    std::map<uint32_t, system_server::MsgTaskList> listOfTaskList; 
+    std::map<uint32_t, system_server::MsgTaskList> listOfTaskList;
     std::vector<uint32_t> taskFailedId;
     best.getResult(listOfTaskList, taskFailedId);
     for (auto r : listOfTaskList)
@@ -89,7 +89,7 @@ void GeneralController::callScheduler()
     }
 
     //Update database
-    std::cout << "FALTA ATUALIZAR AS TAREFAS NO BANCO" << std::endl;
+    tc.updateTaskScheduled(listOfTaskList, taskFailedId);
 }
 
 void GeneralController::schedulingLoop()
@@ -145,9 +145,20 @@ void GeneralController::run()
     rc.updateAllRobots();
     //lc.run();
 
-    ros::NodeHandle nh;
-    auto pub = nh.subscribe("/robot_data", 100, &RobotController::callbackRobotData, &rc);
+    //ros::NodeHandle nh;
+    //auto pub = nh.subscribe("/robot_data", 100, &RobotController::callbackRobotData, &rc);
 
+    std::map<uint32_t, system_server::MsgTaskList> listOfTaskList;
+    system_server::MsgTask t;
+    t.id = 2;
+    listOfTaskList[1].taskList.push_back(t);
+    t.id = 0;
+    listOfTaskList[1].taskList.push_back(t);
+
+    std::vector<uint32_t> taskFailedId;
+    taskFailedId.push_back(1);
+
+    tc.updateTaskScheduled(listOfTaskList, taskFailedId);
     ros::spin();
 
     return;
