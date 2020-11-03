@@ -64,6 +64,11 @@ bool TaskController::updateTaskScheduled(std::map<uint32_t, system_server::MsgTa
     return td.updateTasksScheduled(tsdList);
 }
 
+bool TaskController::updateTask(uint32_t id, TaskDao::Column column, std::string data)
+{
+    return td.updateTask(id, column, data);
+}
+
 std::vector<Task> *TaskController::getTaskList()
 {
     return &tasksToSchedule;

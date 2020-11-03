@@ -11,13 +11,19 @@
 class GeneralController
 {
 private:
-    /*ros::NodeHandle nh;
+    ros::NodeHandle nh;
     ros::Subscriber subRequest;
     ros::Subscriber subRobotData;
-    std::map<uint32_t, ros::Publisher> pubRobotRequest;
-    std::map<uint32_t, ros::Publisher> pubRobotTask;
 
-    void callbackRequest(system_server::MsgRequest &msg);*/
+    void callbackRequest(const system_server::MsgRequest &msg);
+    void callbackRobotData(const system_server::MsgRobotData &msg);
+    void callbackRequestRobotCheck(const system_server::MsgRequest &msg);
+    void callbackRequestChargeBattery(const system_server::MsgRequest &msg);
+    void callbackRequestCancelTask(const system_server::MsgRequest &msg);
+    void callbackRequestPerformingPickUp(const system_server::MsgRequest &msg);
+    void callbackRequestPerformingDelivery(const system_server::MsgRequest &msg);
+    void callbackRequestSucessTask(const system_server::MsgRequest &msg);
+    void callbackRequestFailTask(const system_server::MsgRequest &msg);
 
     GeneralDao gdao;
     SettingsDao sDao;

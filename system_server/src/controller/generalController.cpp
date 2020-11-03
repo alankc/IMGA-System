@@ -136,29 +136,121 @@ void GeneralController::schedulingLoop()
     }
 }
 
+void GeneralController::callbackRequestRobotCheck(const system_server::MsgRequest &msg)
+{
+    std::cout << "!!!\tPOR FAZER\t!!!\n";
+    std::cout << "! GeneralController::callbackRequestRobotCheck(const system_server::MsgRequest &msg) !\n";
+    std::cout << "!!!\tPOR FAZER\t!!!" << std::endl;
+    //reset timer of check
+}
+
+void GeneralController::callbackRequestChargeBattery(const system_server::MsgRequest &msg)
+{
+    Robot *rbt;
+    rbt = rc.getRobotById(msg.data);
+    if (rbt != NULL)
+    {
+        system_server::MsgRequest msgResponse;
+        msgResponse.type = system_server::MsgRequest::CHARGE_BATTERY;
+        msgResponse.data = rbt->getDepot();
+        rc.sendRequest(msg.data, msgResponse);
+    }
+}
+
+void GeneralController::callbackRequestCancelTask(const system_server::MsgRequest &msg)
+{
+    tc.updateTask(msg.data, TaskDao::Column::status, Task::STATUS_CANCELLED);
+}
+
+void GeneralController::callbackRequestPerformingPickUp(const system_server::MsgRequest &msg)
+{
+    tc.updateTask(msg.data, TaskDao::Column::status, Task::STATUS_PERFORMING_PICK_UP);
+    tc.updateTask(msg.data, TaskDao::Column::startTime, std::to_string(getCurrentTime_s()));
+}
+
+void GeneralController::callbackRequestPerformingDelivery(const system_server::MsgRequest &msg)
+{
+    tc.updateTask(msg.data, TaskDao::Column::status, Task::STATUS_PERFORMING_DELIVERY);
+}
+
+void GeneralController::callbackRequestSucessTask(const system_server::MsgRequest &msg)
+{
+    tc.updateTask(msg.data, TaskDao::Column::status, Task::STATUS_SUCESS);
+    tc.updateTask(msg.data, TaskDao::Column::endTime, std::to_string(getCurrentTime_s()));
+}
+
+void GeneralController::callbackRequestFailTask(const system_server::MsgRequest &msg)
+{
+    tc.updateTask(msg.data, TaskDao::Column::status, Task::STATUS_FAILED);
+    tc.updateTask(msg.data, TaskDao::Column::endTime, std::to_string(getCurrentTime_s()));
+}
+
+void GeneralController::callbackRequest(const system_server::MsgRequest &msg)
+{
+    switch (msg.type)
+    {
+    case system_server::MsgRequest::ROBOT_CHECK:
+        callbackRequestRobotCheck(msg);
+        break;
+
+    case system_server::MsgRequest::CHARGE_BATTERY:
+        callbackRequestChargeBattery(msg);
+        break;
+
+    case system_server::MsgRequest::CANCEL_TASK:
+        callbackRequestCancelTask(msg);
+        break;
+
+    case system_server::MsgRequest::PERFORMING_PICK_UP:
+        callbackRequestPerformingPickUp(msg);
+        break;
+
+    case system_server::MsgRequest::PERFORMING_DELIVERY:
+        callbackRequestPerformingDelivery(msg);
+        break;
+
+    case system_server::MsgRequest::SUCESS_TASK:
+        callbackRequestSucessTask(msg);
+        break;
+
+    case system_server::MsgRequest::FAIL_TASK:
+        callbackRequestFailTask(msg);
+        break;
+
+        //case system_server::MsgRequest::FREE_ROBOT:
+        //do nothing
+        //break;
+
+    default:
+        break;
+    }
+}
+
+void GeneralController::callbackRobotData(const system_server::MsgRobotData &msg)
+{
+    //restart timer
+    std::cout << "!!!\tPOR FAZER\t!!!\n";
+    std::cout << "! restart timer !\n";
+    std::cout << "! GeneralController::callbackRobotData(const system_server::MsgRobotData &msg) !\n";
+    std::cout << "!!!\tPOR FAZER\t!!!" << std::endl;
+
+    rc.callbackRobotData(msg);
+}
+
 void GeneralController::run()
 {
     //Dont remove
     sDao.getSettings(0, settings);
-    //lc.updateLocationList();
-    //lc.updateDistanceMatrix();
+    lc.updateLocationList();
+    lc.updateDistanceMatrix();
     rc.updateAllRobots();
+    rc.updateFreeRobots();
     //lc.run();
 
-    //ros::NodeHandle nh;
-    //auto pub = nh.subscribe("/robot_data", 100, &RobotController::callbackRobotData, &rc);
+    subRequest = nh.subscribe("/server_request", 100, &GeneralController::callbackRequest, this);
+    subRobotData = nh.subscribe("/server_robot_data", 100, &GeneralController::callbackRobotData, this);
 
-    std::map<uint32_t, system_server::MsgTaskList> listOfTaskList;
-    system_server::MsgTask t;
-    t.id = 2;
-    listOfTaskList[1].taskList.push_back(t);
-    t.id = 0;
-    listOfTaskList[1].taskList.push_back(t);
-
-    std::vector<uint32_t> taskFailedId;
-    taskFailedId.push_back(1);
-
-    tc.updateTaskScheduled(listOfTaskList, taskFailedId);
+    schedulingLoop();
     ros::spin();
 
     return;
