@@ -1,8 +1,13 @@
 #include "task.hpp"
 
 const std::string Task::STATUS_NEW = "N";
-const std::string Task::STATUS_SCHEDULED = "S";
+const std::string Task::STATUS_SCHEDULED = "SC";
+const std::string Task::STATUS_PERFORMING_PICK_UP = "P";
+const std::string Task::STATUS_PERFORMING_DELIVERY = "D";
+const std::string Task::STATUS_SUCESS = "SU";
 const std::string Task::STATUS_FAILED = "F";
+const std::string Task::STATUS_TO_CANCEL = "TC";
+const std::string Task::STATUS_CANCELLED = "C";
 
 Task::Task(uint32_t id, uint32_t pickUpLocation, uint32_t deliveryLocation, uint16_t payload, double deadline)
 {
@@ -134,7 +139,7 @@ std::ostream &operator<<(std::ostream &os, const Task &t)
 	   << t.description << ","
 	   << t.status << ","
 	   << t.payload << ","
-	   << t.deadline << ","	   
+	   << t.deadline << ","
 	   << t.pickUpLocation << ","
 	   << t.deliveryLocation << ","
 	   << t.robotInCharge

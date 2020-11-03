@@ -53,7 +53,12 @@ public:
 
 	static const std::string STATUS_NEW;
 	static const std::string STATUS_SCHEDULED;
+	static const std::string STATUS_PERFORMING_PICK_UP;
+	static const std::string STATUS_PERFORMING_DELIVERY;
+	static const std::string STATUS_SUCESS;
 	static const std::string STATUS_FAILED;
+	static const std::string STATUS_TO_CANCEL;
+	static const std::string STATUS_CANCELLED;
 };
 
 #endif
