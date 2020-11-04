@@ -421,8 +421,8 @@ void GeneralController::run()
     subRequest = nh.subscribe("requests", 100, &GeneralController::callbackSubRequest, this);
     subTask = nh.subscribe("task_list", 100, &GeneralController::callbackSubTask, this);
 
-    pubSrvRobotData = nh.advertise<system_client::MsgRobotData>(server_robot_data, 10);
-    pubSrvRequest = nh.advertise<system_client::MsgRequest>(server_request, 10);
+    pubSrvRobotData = nh.advertise<system_client::MsgRobotData>(server_robot_data, 100);
+    pubSrvRequest = nh.advertise<system_client::MsgRequest>(server_request, 100);
 
     //Waiting topiscs start
     ros::Duration d(1);
