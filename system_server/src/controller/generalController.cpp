@@ -74,12 +74,14 @@ void GeneralController::callScheduler()
     auto robots = rc.getFreeRobots();
     auto distance = lc.getDistanceMatrix();
 
+    std::cout << "Running GA" << std::endl;
     Island is(gaP, settings.getGaSubIterations(), settings.getGaSubIterations(), tasks, robots, distance);
     is.solve();
     Chromosome best = is.getBest();
     best.printResult();
 
     //Send results
+    std::cout << "Sending GA results" << std::endl;
     std::map<uint32_t, system_server::MsgTaskList> listOfTaskList;
     std::vector<uint32_t> taskFailedId;
     best.getResult(listOfTaskList, taskFailedId);
@@ -89,6 +91,7 @@ void GeneralController::callScheduler()
     }
 
     //Update database
+    std::cout << "Updating GA results in database" << std::endl;
     tc.updateTaskScheduled(listOfTaskList, taskFailedId);
 }
 
