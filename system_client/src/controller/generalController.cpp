@@ -21,7 +21,7 @@ GeneralController::GeneralController(std::uint32_t robot_id, std::string host, s
 
     gd = GeneralDao(host, user, pass, db);
     lc = LocationController(&gd);
-    rc = RobotController(&gd, 0);
+    rc = RobotController(&gd, robot_id);
     tc = TaskController();
 
     stopTask = false;
