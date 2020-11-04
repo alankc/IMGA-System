@@ -247,8 +247,8 @@ void GeneralController::run()
     rc.updateFreeRobots();
     //lc.run();
 
-    subRequest = nh.subscribe("/server_request", 100, &GeneralController::callbackRequest, this);
-    subRobotData = nh.subscribe("/server_robot_data", 100, &GeneralController::callbackRobotData, this);
+    subRequest = nh.subscribe("server_request", 100, &GeneralController::callbackRequest, this);
+    subRobotData = nh.subscribe("server_robot_data", 100, &GeneralController::callbackRobotData, this);
 
     schedulingLoop();
     ros::spin();
