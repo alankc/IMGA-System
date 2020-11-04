@@ -18,8 +18,8 @@ LocationController::~LocationController()
 
 void LocationController::run()
 {
-    this->pubPosition = nh.advertise<geometry_msgs::PoseStamped>("/server_planner/goal", 10);
-    this->subPlan = nh.subscribe("/server_planner/planner/plan", 100, &LocationController::callbackPlanner, this);
+    this->pubPosition = nh.advertise<geometry_msgs::PoseStamped>("server_planner/goal", 10);
+    this->subPlan = nh.subscribe("server_planner/planner/plan", 100, &LocationController::callbackPlanner, this);
     this->threadServerTransform = new std::thread(&LocationController::loopTransform, this);
 }
 
