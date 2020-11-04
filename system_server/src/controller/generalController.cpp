@@ -63,7 +63,7 @@ void GeneralController::callScheduler()
     lc.updateDistanceMatrix();
 
     GAParameters gaP;
-    gaP.populationSize = settings.getGaPopulation();
+    gaP.populationSize = settings.getGaPopulation() * tc.getTaskList()->size();
     gaP.maxIterations = settings.getGaIterations();
     gaP.noChangeLimit = settings.getGaNoChangeLimit();
     gaP.goalFitness = 1.0;
