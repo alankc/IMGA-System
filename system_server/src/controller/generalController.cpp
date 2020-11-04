@@ -113,6 +113,7 @@ void GeneralController::schedulingLoop()
             if (tc.getTaskListSize() < settings.getTaskPoolSize() && attemps < 3)
             {
                 attemps++;
+                ros::spinOnce();
             }
             //if is the third attemp or task list is bigger than 1, or equal to the task pool
             //try check robots
@@ -121,6 +122,7 @@ void GeneralController::schedulingLoop()
             else if (tc.getTaskListSize() > 1)
             {
                 rc.searchFreeRobot(5);
+                ros::spinOnce();
                 if (rc.getFreeRobotListSize() < settings.getRobotPoolSize() && attemps < 3)
                 {
                     attemps++;
@@ -128,11 +130,13 @@ void GeneralController::schedulingLoop()
                 else if (rc.getFreeRobotListSize() >= 1)
                 {
                     callScheduler();
+                    ros::spinOnce();
                     attemps = 1;
                 }
             }
         }
         r.sleep();
+        ros::spinOnce();
     }
 }
 
@@ -250,7 +254,8 @@ void GeneralController::run()
     subRequest = nh.subscribe("server_request", 100, &GeneralController::callbackRequest, this);
     subRobotData = nh.subscribe("server_robot_data", 100, &GeneralController::callbackRobotData, this);
 
-    schedulingLoop();
+    std::thread scLoopThr(&GeneralController::schedulingLoop, this);
+    
     ros::spin();
 
     return;
