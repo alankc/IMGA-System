@@ -126,6 +126,7 @@ void GeneralController::goToDepot()
     }
     std::cout << "Going to depot" << std::endl;
     rc.getRobot()->setStatus(Robot::STATUS_TO_DEPOT);
+    callbackPubSrvRobotData();
     nav.navigateTo(depot->getX(), depot->getY(), depot->getA());
 
     while (ros::ok() && nav.stillNavigating())
@@ -138,6 +139,8 @@ void GeneralController::goToDepot()
             rc.getRobot()->setStatus(Robot::STATUS_CHARGING);
         else
             rc.getRobot()->setStatus(Robot::STATUS_FREE);
+        
+        callbackPubSrvRobotData();
     }
     else
     {
@@ -157,6 +160,7 @@ void GeneralController::performTask(const system_client::MsgTask t)
     stopTask = false;
 
     rc.getRobot()->setStatus(Robot::STATUS_WORKING);
+    callbackPubSrvRobotData();
     //Going to pickup
     callbackPubSrvRequest(taskStatus);
     std::cout << "Going to pickup" << std::endl;
@@ -338,6 +342,7 @@ void GeneralController::performTasks()
         else if (goToCharge && inDepot && rc.getRobot()->getStatus() == Robot::STATUS_FREE) //iF BATTERY DOWN in depot just charge
         {
             rc.getRobot()->setStatus(Robot::STATUS_CHARGING);
+            callbackPubSrvRobotData();
         }
 
         r.sleep();
@@ -412,29 +417,6 @@ void GeneralController::run()
     //Start navigation
     nav.start();
 
-    system_client::MsgTask t;
-    t.id = 0;
-    t.deadline = 100;
-    t.pickUp = 1;
-    t.delivery = 2;
-    tc.push(t);
-    t.id = 1;
-    t.deadline = 200;
-    t.pickUp = 2;
-    t.delivery = 3;
-    tc.push(t);
-
-    auto dm = lc.getDistanceMatrix();
-    dm->resize(10);
-    for (uint32_t i = 0; i < 5; i++)
-    {
-        dm->at(i).resize(10);
-        for (uint32_t j = 0; j < 5; j++)
-        {
-            dm->at(i).at(j) = 10;
-        }
-    }
-
     //Start listeners request and tasks
     subRequest = nh.subscribe("requests", 100, &GeneralController::callbackSubRequest, this);
     subTask = nh.subscribe("task_list", 100, &GeneralController::callbackSubTask, this);
@@ -446,11 +428,10 @@ void GeneralController::run()
     ros::Duration d(1);
     d.sleep();
     ros::spinOnce();
-
     std::thread thrBattery(&GeneralController::callbackBattery, this);
     d.sleep();
     ros::spinOnce();
     std::thread thrTasks(&GeneralController::performTasks, this);
-
+    callbackPubSrvRobotData();
     ros::spin();
 }
