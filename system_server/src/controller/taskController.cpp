@@ -218,12 +218,21 @@ void TaskController::deadlineCheck(std::vector<uint32_t> &idTasksToCancel, doubl
 
 void TaskController::toCancelCheck(std::vector<uint32_t> &idTasksToCancel)
 {
-    td.getTaskIdList(idTasksToCancel, Task::STATUS_TO_CANCEL_USER, 100);
-    for (auto &t : idTasksToCancel)
+    std::vector<uint32_t> tmpVec;
+    td.getTaskIdList(tmpVec, Task::STATUS_TO_CANCEL_USER, 100);
+    for (auto &t : tmpVec)
     {
         auto it = std::find(tasksRunning.begin(), tasksRunning.end(), t);
         if (it != tasksRunning.end())
-            it->setStatus(Task::STATUS_TO_CANCEL_USER);
+        {
+            auto stt = it->getStatus();
+            //If not started yet or just going to pickup it can be canceled
+            if ((stt == Task::STATUS_SCHEDULED) || (stt == Task::STATUS_PERFORMING_PICK_UP))
+            {
+                it->setStatus(Task::STATUS_TO_CANCEL_USER);
+                idTasksToCancel.push_back(t);
+            }
+        }
     }
 }
 
