@@ -27,7 +27,9 @@ bool SettingsDao::getSettings(uint32_t id, Settings &settings)
             settings.setIdSetup(id);
             settings.setTaskPoolSize(res->getUInt("task_pool_size"));
             settings.setRobotPoolSize(res->getUInt("robot_pool_size"));
-            settings.setTimeInterval(res->getUInt("time_interval"));
+            settings.setTaskTimeInterval(res->getUInt("task_time_interval"));
+            settings.setRobotTimeInterval(res->getUInt("robot_time_interval"));
+            settings.setGaTimeInterval(res->getUInt("ga_time_interval"));
             settings.setGaIterations(res->getUInt("ga_iterations"));
             settings.setGaSubIterations(res->getUInt("ga_sub_iterations"));
             settings.setGaPopulation(res->getUInt("ga_population"));
