@@ -142,6 +142,8 @@ bool TaskController::updateTaskStatus(uint32_t id, std::string status, double ti
                 it->setStatus(Task::STATUS_CANCELLED_USER);
             else if (it->getStatus() == Task::STATUS_TO_CANCEL_DEADLINE)
                 it->setStatus(Task::STATUS_CANCELLED_DEADLINE);
+            else
+                return false;
         }
         else
             it->setStatus(status);
