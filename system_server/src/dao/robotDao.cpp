@@ -114,3 +114,59 @@ bool RobotDao::updateRobotRequest(system_server::MsgRobotData &robotRequestData)
 
     return tst;
 }
+
+bool RobotDao::updateRobot(uint32_t id, RobotDao::Column column, std::string data)
+{
+    std::ostringstream stmtStream;
+    stmtStream << "UPDATE robot SET ";
+    switch (column)
+    {
+    case (RobotDao::Column::description):
+        stmtStream << "description = '" << data << "'";
+        break;
+
+    case (RobotDao::Column::status):
+        stmtStream << "status = '" << data << "'";
+        break;
+
+    case (RobotDao::Column::maximumPayload):
+        stmtStream << "max_payload = " << data;
+        break;
+    case (RobotDao::Column::remainingBattery):
+        stmtStream << "remaining_battery = " << data;
+        break;
+
+    case (RobotDao::Column::dischargeFactor):
+        stmtStream << "discharge_factor = " << data;
+        break;
+
+    case (RobotDao::Column::batteryThreshold):
+        stmtStream << "battery_threshold = " << data;
+        break;
+
+    case (RobotDao::Column::mediumVelocity):
+        stmtStream << "medium_velocity = " << data;
+        break;
+
+    case (RobotDao::Column::waitingTime):
+        stmtStream << "waiting_time = " << data;
+        break;
+
+    case (RobotDao::Column::depot):
+        stmtStream << "id_depot = " << data;
+        break;
+
+    case (RobotDao::Column::currentLocation):
+        stmtStream << "id_current_location = " << data;
+        break;
+
+    default:
+        return false;
+    }
+
+    stmtStream << " WHERE robot.id_robot = " << id << ";";
+
+    bool tst = gDao->executeUpdate(stmtStream.str());
+
+    return tst;
+}

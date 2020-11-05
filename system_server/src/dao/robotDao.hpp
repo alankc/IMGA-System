@@ -19,6 +19,23 @@ public:
     bool updateRobot(Robot &robot);
     bool updateRobot(std::vector<Robot> &robotList);
     bool updateRobotRequest(system_server::MsgRobotData &robotRequestData);
+
+    enum Column
+    {
+        id = 0,
+        description,
+        status,
+        depot,
+        currentLocation,
+        maximumPayload,
+        remainingBattery,
+        dischargeFactor,
+        batteryThreshold,
+        mediumVelocity,
+        waitingTime
+    };
+
+    bool updateRobot(uint32_t id, RobotDao::Column column, std::string data);
 };
 
 #endif
