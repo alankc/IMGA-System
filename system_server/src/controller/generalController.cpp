@@ -160,7 +160,18 @@ void GeneralController::checkRobotLoop()
             //In case of failed robots being listening, cancel all tasks
             for (auto r : failedRobots)
             {
-                std::cout << "MUST CANCEL TASKS FROM ROBOT " << r << std::endl;
+                std::vector<uint32_t> failedTasksFromRobot;
+                //Set as failed in task controller and database
+                tc.setFail(r, failedTasksFromRobot, getCurrentTime_s());
+
+                //send cancel requisition to the reboto
+                for (auto t : failedTasksFromRobot)
+                {
+                    system_server::MsgRequest msg;
+                    msg.type = system_server::MsgRequest::CANCEL_TASK;
+                    msg.data = t;
+                    rc.sendRequest(r, msg);
+                }
             }
             start = std::chrono::system_clock::now();
         }

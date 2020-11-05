@@ -33,6 +33,10 @@ public:
     //updatas task status. time is used when status are pickup ore sucess
     bool updateTaskStatus(uint32_t id, std::string status, double time = 0);
     bool getRobotincharge(uint32_t idTask, uint32_t &idRobot);
+    
+    //Will set all tasks with robot in charge = idRobot to failled and 
+    //add that tasks to idTasksFromRobot
+    bool setFail(uint32_t idRobot, std::vector<uint32_t> &idTasksFromRobot, double time);
 
     //Old functions...
     std::vector<Task> *getTasksToSchedule();

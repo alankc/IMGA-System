@@ -165,9 +165,27 @@ bool TaskController::getRobotincharge(uint32_t idTask, uint32_t &idRobot)
     if (it != tasksRunning.end())
     {
         idRobot = it->getRobotInCharge();
+        return true;
     }
 
     return false;
+}
+
+bool TaskController::setFail(uint32_t idRobot, std::vector<uint32_t> &idTasksFromRobot, double time)
+{
+    for (uint32_t i = 0; i < tasksRunning.size(); i++)
+    {
+        Task &t = tasksRunning[i];
+        if (t.getRobotInCharge() == idRobot)
+        {
+            idTasksFromRobot.push_back(t.getId());
+            t.setStatus(Task::STATUS_FAILED);
+            t.setEndTime(time);
+            td.updateTask(t.getId(), TaskDao::endTime, std::to_string(time));
+            td.updateTask(t.getId(), TaskDao::status, Task::STATUS_FAILED);
+            tasksRunning.erase(tasksRunning.begin() + i);
+        }
+    }
 }
 
 std::vector<Task> *TaskController::getTasksToSchedule()
