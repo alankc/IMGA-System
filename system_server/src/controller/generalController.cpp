@@ -77,11 +77,19 @@ void GeneralController::callScheduler()
     gaP.mutationRate = settings.getGaMutation();
 
     auto tasks = tc.getTasksToSchedule();
+    /***********IMPORTANT***********/
+    /*revoce this code if the tasks have real deadline*/
+    /***********IMPORTANT***********/
+    for (auto &t : *tasks)
+    {
+        t.setDeadline(t.getDeadline() + getCurrentTime_s());
+    }
     auto robots = rc.getFreeRobots();
     auto distance = lc.getDistanceMatrix();
 
     std::cout << "Running GA" << std::endl;
     Island is(gaP, settings.getGaSubIterations(), settings.getGaSubIterations(), tasks, robots, distance);
+    Chromosome::setStartTime(getCurrentTime_s());
     is.solve();
     Chromosome best = is.getBest();
     best.printResult();
