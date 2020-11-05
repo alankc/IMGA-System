@@ -1,5 +1,6 @@
 #include "taskController.hpp"
 #include <random>
+#include <string>
 
 TaskController::TaskController() {}
 
@@ -46,6 +47,16 @@ bool TaskController::updateTaskScheduled(std::map<uint32_t, system_server::MsgTa
                 tsd.status = Task::STATUS_SCHEDULED;
                 tsd.robotInCharge = ltl.first;
                 tsdList.push_back(tsd);
+
+                //updating tasks running
+                auto tasksToScheduleIt = std::find(tasksToSchedule.begin(), tasksToSchedule.end(), t.id);
+                if (tasksToScheduleIt != tasksToSchedule.end())
+                {
+                    tasksToScheduleIt->setSeqNumber(tsd.seqNumber);
+                    tasksToScheduleIt->setStatus(tsd.status);
+                    tasksToScheduleIt->setRobotInCharge(tsd.robotInCharge);
+                    tasksRunning.push_back(*tasksToScheduleIt);
+                }
             }
         }
         else
@@ -66,15 +77,105 @@ bool TaskController::updateTaskScheduled(std::map<uint32_t, system_server::MsgTa
 
 bool TaskController::updateTask(uint32_t id, TaskDao::Column column, std::string data)
 {
-    return td.updateTask(id, column, data);
+    auto it = std::find(tasksRunning.begin(), tasksRunning.end(), id);
+    if (it != tasksRunning.end())
+    {
+        switch (column)
+        {
+        case (TaskDao::Column::status):
+            it->setStatus(data);
+            break;
+
+        case (TaskDao::Column::seqNumber):
+            it->setSeqNumber(std::stoul(data, nullptr, 0));
+            break;
+
+        case (TaskDao::Column::startTime):
+            it->setStartTime(std::stod(data));
+            break;
+
+        case (TaskDao::Column::endTime):
+            it->setEndTime(std::stod(data));
+            break;
+
+        case (TaskDao::Column::robotInCharge):
+            it->setRobotInCharge(std::stoul(data, nullptr, 0));
+            break;
+
+        case (TaskDao::Column::description):
+            it->setDescription(data);
+            break;
+
+        case (TaskDao::Column::pickUpLocation):
+            it->setPickUpLocation(std::stoul(data, nullptr, 0));
+            break;
+
+        case (TaskDao::Column::deliveryLocation):
+            it->setDeliveryLocation(std::stoul(data, nullptr, 0));
+            break;
+
+        case (TaskDao::Column::payload):
+            it->setPayload(std::stoul(data, nullptr, 0));
+            break;
+
+        case (TaskDao::Column::deadline):
+            it->setDeadline(std::stod(data));
+            break;
+
+        default:
+            return false;
+        }
+        td.updateTask(id, column, data);
+        return true;
+    }
+    return false;
 }
 
-std::vector<Task> *TaskController::getTaskList()
+bool TaskController::updateTaskStatus(uint32_t id, std::string status, double time)
+{
+    auto it = std::find(tasksRunning.begin(), tasksRunning.end(), id);
+    if (it != tasksRunning.end())
+    {
+        it->setStatus(status);
+        td.updateTask(id, TaskDao::status, status);
+
+        if (status == Task::STATUS_PERFORMING_PICK_UP)
+        {
+            it->setStartTime(time);
+            td.updateTask(id, TaskDao::startTime, std::to_string(time));
+        }
+        else if ((status == Task::STATUS_SUCESS) ||
+                 (status == Task::STATUS_FAILED) ||
+                 (status == Task::STATUS_CANCELLED))
+        {
+            it->setEndTime(time);
+            td.updateTask(id, TaskDao::endTime, std::to_string(time));
+            tasksRunning.erase(it);
+        }
+
+        return true;
+    }
+    return false;
+}
+
+bool TaskController::getRobotincharge(uint32_t idTask, uint32_t &idRobot)
+{
+    auto it = std::find(tasksRunning.begin(), tasksRunning.end(), idTask);
+
+    if (it != tasksRunning.end())
+    {
+        idRobot = it->getRobotInCharge();
+    }
+
+    return false;
+}
+
+std::vector<Task> *TaskController::getTasksToSchedule()
 {
     return &tasksToSchedule;
 }
 
-Task *TaskController::getTaskById(uint32_t id)
+Task *TaskController::getTaskToScheduleById(uint32_t id)
 {
     auto it = std::find(tasksToSchedule.begin(), tasksToSchedule.end(), id);
 
@@ -84,17 +185,17 @@ Task *TaskController::getTaskById(uint32_t id)
     return NULL;
 }
 
-Task *TaskController::getTaskByIndex(uint32_t index)
+Task *TaskController::getTaskToScheduleByIndex(uint32_t index)
 {
     return &tasksToSchedule[index];
 }
 
-void TaskController::copyTaskList(std::vector<Task> &copy)
+void TaskController::copyTaskToSchedule(std::vector<Task> &copy)
 {
     copy = std::vector<Task>(tasksToSchedule);
 }
 
-std::size_t TaskController::getTaskListSize()
+std::size_t TaskController::getTaskToScheduleSize()
 {
     return tasksToSchedule.size();
 }

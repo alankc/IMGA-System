@@ -15,6 +15,7 @@ class TaskController
 private:
     TaskDao td;
     std::vector<Task> tasksToSchedule;
+    std::vector<Task> tasksRunning;
 
 public:
     TaskController();
@@ -26,13 +27,19 @@ public:
     //most of the paramters of system_server::MsgTask are no used in this method
     //but it make the callScheduler in generalController simple
     bool updateTaskScheduled(std::map<uint32_t, system_server::MsgTaskList> &listOfTaskList, std::vector<uint32_t> &taskFailedId);
-    bool updateTask(uint32_t id, TaskDao::Column column, std::string data);
     
-    std::vector<Task> *getTaskList();
-    Task *getTaskById(uint32_t id);
-    Task *getTaskByIndex(uint32_t index);
-    void copyTaskList(std::vector<Task> &copy);
-    std::size_t getTaskListSize();
+    //updata tasks withour remove, when neessary...
+    bool updateTask(uint32_t id, TaskDao::Column column, std::string data);
+    //updatas task status. time is used when status are pickup ore sucess
+    bool updateTaskStatus(uint32_t id, std::string status, double time = 0);
+    bool getRobotincharge(uint32_t idTask, uint32_t &idRobot);
+
+    //Old functions...
+    std::vector<Task> *getTasksToSchedule();
+    Task *getTaskToScheduleById(uint32_t id);
+    Task *getTaskToScheduleByIndex(uint32_t index);
+    void copyTaskToSchedule(std::vector<Task> &copy);
+    std::size_t getTaskToScheduleSize();
 
     Chromosome generateTasks(uint32_t numberOfTasks, std::vector<Robot> *freeRobotList, std::vector<std::vector<double>> *distanceMatrix, uint32_t numberOfDepots);
     Chromosome generateTasksCoordination(std::vector<Robot> *freeRobotList, std::vector<std::vector<double>> *distanceMatrix);
