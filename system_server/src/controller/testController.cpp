@@ -59,7 +59,7 @@ void TestController::hitRateTest(uint32_t repetitions, double min, double max, d
                 auto r = rc->getFreeRobots();
                 auto crResult = tc->generateTasks(15, r, d, 3);
 
-                auto tasks = tc->getTaskList();
+                auto tasks = tc->getTasksToSchedule();
                 auto robots = rc->getFreeRobots();
                 auto distance = lc->getDistanceMatrix();
 
@@ -136,7 +136,7 @@ void TestController::Experiment2(uint32_t repetitions, double minMig, double max
                 auto r = rc->getFreeRobots();
                 auto crResult = tc->generateTasks(15, r, d, 3);
 
-                auto tasks = tc->getTaskList();
+                auto tasks = tc->getTasksToSchedule();
                 auto robots = rc->getFreeRobots();
                 auto distance = lc->getDistanceMatrix();
 
@@ -218,7 +218,7 @@ void TestController::Experiment3(uint32_t repetitions, uint32_t minT, uint32_t m
             rc->generateRobots(nr, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
             auto robots = rc->getFreeRobots();
             auto goalChrm = tc->generateTasks(nt, robots, d, 3);
-            auto tasks = tc->getTaskList();
+            auto tasks = tc->getTasksToSchedule();
             auto distance = lc->getDistanceMatrix();
 
             Island is(gaP, 50, 0.05, tasks, robots, distance); //verificar!!
@@ -337,7 +337,7 @@ void TestController::ExperimentGAPure(uint32_t repetitions, uint32_t minT, uint3
             rc->generateRobots(nr, 1, 10, 0.5, 3, 1.0 / (8 * 60 * 60), 1.0 / (4 * 60 * 60), 3);
             auto robots = rc->getFreeRobots();
             auto goalChrm = tc->generateTasks(nt, robots, d, 3);
-            auto tasks = tc->getTaskList();
+            auto tasks = tc->getTasksToSchedule();
             auto distance = lc->getDistanceMatrix();
 
             GA ga(gaP); //verificar!!

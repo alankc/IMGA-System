@@ -63,14 +63,14 @@ void GeneralController::callScheduler()
     lc.updateDistanceMatrix();
 
     GAParameters gaP;
-    gaP.populationSize = settings.getGaPopulation() * tc.getTaskList()->size();
+    gaP.populationSize = settings.getGaPopulation() * tc.getTaskToScheduleSize();
     gaP.maxIterations = settings.getGaIterations();
     gaP.noChangeLimit = settings.getGaNoChangeLimit();
     gaP.goalFitness = 1.0;
     gaP.elitismRate = settings.getGaElitism();
     gaP.mutationRate = settings.getGaMutation();
 
-    auto tasks = tc.getTaskList();
+    auto tasks = tc.getTasksToSchedule();
     auto robots = rc.getFreeRobots();
     auto distance = lc.getDistanceMatrix();
 
@@ -80,21 +80,20 @@ void GeneralController::callScheduler()
     Chromosome best = is.getBest();
     best.printResult();
 
-    //Send results
-    std::cout << "Sending GA results" << std::endl;
     std::map<uint32_t, system_server::MsgTaskList> listOfTaskList;
     std::vector<uint32_t> taskFailedId;
     best.getResult(listOfTaskList, taskFailedId);
+
+    //Update database and list of running tasks
+    std::cout << "Updating GA results in database and running list" << std::endl;
+    tc.updateTaskScheduled(listOfTaskList, taskFailedId);
+
+    //Send results
+    std::cout << "Sending GA results" << std::endl;
     for (auto r : listOfTaskList)
     {
         rc.sendTaskList(r.first, r.second);
     }
-
-    //Update database
-    std::cout << "Updating GA results in database" << std::endl;
-    tc.updateTaskScheduled(listOfTaskList, taskFailedId);
-
-    //Add to list of followup tasks
 }
 
 void GeneralController::schedulingLoop()
@@ -115,7 +114,7 @@ void GeneralController::schedulingLoop()
             tc.updateTasksToSchedule(settings.getTaskPoolSize());
 
             //if number of tasks is smaller than the poll, it decreases the time interval
-            if (tc.getTaskListSize() < settings.getTaskPoolSize() && attemps < 3)
+            if (tc.getTaskToScheduleSize() < settings.getTaskPoolSize() && attemps < 3)
             {
                 attemps++;
                 ros::spinOnce();
@@ -124,7 +123,7 @@ void GeneralController::schedulingLoop()
             //try check robots
             //if it have task pool size ok, but robots pool size small, try three times too...
             //if it have tried three time and rave at least one robot and two tasks, runs scheduler
-            else if (tc.getTaskListSize() > 1)
+            else if (tc.getTaskToScheduleSize() > 1)
             {
                 rc.searchFreeRobot(5);
                 ros::spinOnce();
@@ -145,12 +144,34 @@ void GeneralController::schedulingLoop()
     }
 }
 
+void GeneralController::checkRobotLoop()
+{
+    //not using duration because the thread sleeps too mutch
+    ros::Rate r(5);
+    auto start = std::chrono::system_clock::now();
+    while (ros::ok())
+    {
+        auto end = std::chrono::system_clock::now();
+        double time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0;
+        if (time >= (double)settings.getRobotTimeInterval())
+        {
+            std::vector<uint32_t> failedRobots;
+            rc.checkRobots(failedRobots);
+            //In case of failed robots being listening, cancel all tasks
+            for (auto r : failedRobots)
+            {
+                std::cout << "MUST CANCEL TASKS FROM ROBOT " << r << std::endl;
+            }
+            start = std::chrono::system_clock::now();
+        }
+        r.sleep();
+        ros::spinOnce();
+    }
+}
+
 void GeneralController::callbackRequestRobotCheck(const system_server::MsgRequest &msg)
 {
-    std::cout << "!!!\tPOR FAZER\t!!!\n";
-    std::cout << "! GeneralController::callbackRequestRobotCheck(const system_server::MsgRequest &msg) !\n";
-    std::cout << "!!!\tPOR FAZER\t!!!" << std::endl;
-    //reset timer of check
+    rc.checkRobot(msg.data);
 }
 
 void GeneralController::callbackRequestChargeBattery(const system_server::MsgRequest &msg)
@@ -168,30 +189,52 @@ void GeneralController::callbackRequestChargeBattery(const system_server::MsgReq
 
 void GeneralController::callbackRequestCancelTask(const system_server::MsgRequest &msg)
 {
-    tc.updateTask(msg.data, TaskDao::Column::status, Task::STATUS_CANCELLED);
+    //update robot in charge
+    uint32_t idRobot;
+    if (tc.getRobotincharge(msg.data, idRobot))
+        rc.checkRobot(msg.data);
+
+    tc.updateTaskStatus(msg.data, Task::STATUS_CANCELLED, getCurrentTime_s());
 }
 
 void GeneralController::callbackRequestPerformingPickUp(const system_server::MsgRequest &msg)
 {
-    tc.updateTask(msg.data, TaskDao::Column::status, Task::STATUS_PERFORMING_PICK_UP);
-    tc.updateTask(msg.data, TaskDao::Column::startTime, std::to_string(getCurrentTime_s()));
+    //update robot in charge
+    uint32_t idRobot;
+    if (tc.getRobotincharge(msg.data, idRobot))
+        rc.checkRobot(msg.data);
+
+    tc.updateTaskStatus(msg.data, Task::STATUS_PERFORMING_PICK_UP, getCurrentTime_s());
 }
 
 void GeneralController::callbackRequestPerformingDelivery(const system_server::MsgRequest &msg)
 {
-    tc.updateTask(msg.data, TaskDao::Column::status, Task::STATUS_PERFORMING_DELIVERY);
+    //update robot in charge
+    uint32_t idRobot;
+    if (tc.getRobotincharge(msg.data, idRobot))
+        rc.checkRobot(msg.data);
+
+    tc.updateTaskStatus(msg.data, Task::STATUS_PERFORMING_DELIVERY);
 }
 
 void GeneralController::callbackRequestSucessTask(const system_server::MsgRequest &msg)
 {
-    tc.updateTask(msg.data, TaskDao::Column::status, Task::STATUS_SUCESS);
-    tc.updateTask(msg.data, TaskDao::Column::endTime, std::to_string(getCurrentTime_s()));
+    //update robot in charge
+    uint32_t idRobot;
+    if (tc.getRobotincharge(msg.data, idRobot))
+        rc.checkRobot(msg.data);
+
+    tc.updateTaskStatus(msg.data, Task::STATUS_SUCESS, getCurrentTime_s());
 }
 
 void GeneralController::callbackRequestFailTask(const system_server::MsgRequest &msg)
 {
-    tc.updateTask(msg.data, TaskDao::Column::status, Task::STATUS_FAILED);
-    tc.updateTask(msg.data, TaskDao::Column::endTime, std::to_string(getCurrentTime_s()));
+    //update robot in charge
+    uint32_t idRobot;
+    if (tc.getRobotincharge(msg.data, idRobot))
+        rc.checkRobot(msg.data);
+
+    tc.updateTaskStatus(msg.data, Task::STATUS_FAILED, getCurrentTime_s());
 }
 
 void GeneralController::callbackRequest(const system_server::MsgRequest &msg)
@@ -237,12 +280,7 @@ void GeneralController::callbackRequest(const system_server::MsgRequest &msg)
 
 void GeneralController::callbackRobotData(const system_server::MsgRobotData &msg)
 {
-    //restart timer
-    std::cout << "!!!\tPOR FAZER\t!!!\n";
-    std::cout << "! restart timer !\n";
-    std::cout << "! GeneralController::callbackRobotData(const system_server::MsgRobotData &msg) !\n";
-    std::cout << "!!!\tPOR FAZER\t!!!" << std::endl;
-
+    rc.checkRobot(msg.id);
     rc.callbackRobotData(msg);
 }
 
@@ -260,7 +298,7 @@ void GeneralController::run()
     subRobotData = nh.subscribe("server_robot_data", 100, &GeneralController::callbackRobotData, this);
 
     std::thread scLoopThr(&GeneralController::schedulingLoop, this);
-    
+    std::thread chkRbtLoopThr(&GeneralController::checkRobotLoop, this);
     ros::spin();
 
     return;
@@ -276,7 +314,7 @@ void GeneralController::run()
 
     auto c = tc.generateTasksCoordination(rc.getAllRobots(), lc.getDistanceMatrix());
 
-    auto tl = tc.getTaskList();
+    auto tl = tc.getTasksToSchedule();
     for (auto t : *tl)
     {
         std::cout << t;

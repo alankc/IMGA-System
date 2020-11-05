@@ -42,6 +42,7 @@ private:
     double getCurrentTime_s();
     void callScheduler();
     void schedulingLoop();
+    void checkRobotLoop();
 
 public:
     GeneralController();
