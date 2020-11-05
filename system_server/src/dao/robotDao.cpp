@@ -21,9 +21,9 @@ bool RobotDao::getRobotList(std::vector<Robot> &robotList, bool equalToStatus, s
     std::unique_ptr<sql::ResultSet> res;
     std::string stmt;
     if (equalToStatus)
-        stmt = "SELECT * FROM robot WHERE status LIKE '%" + status + "%' ORDER BY id_robot ASC";
+        stmt = "SELECT * FROM robot WHERE status = '" + status + "' ORDER BY id_robot ASC";
     else
-        stmt = "SELECT * FROM robot WHERE status NOT LIKE '%" + status + "%' ORDER BY id_robot ASC";
+        stmt = "SELECT * FROM robot WHERE status <> '" + status + "' ORDER BY id_robot ASC";
 
     bool tst = gDao->executeQuery(stmt, res);
 

@@ -19,7 +19,7 @@ void TaskDao::setGeneralDao(GeneralDao *gDao)
 bool TaskDao::getTaskList(std::vector<Task> &taskList, std::string status, uint32_t numberOfTasks)
 {
     std::unique_ptr<sql::ResultSet> res;
-    std::string stmt = "SELECT * FROM task WHERE status LIKE '%" + status + "%' ORDER BY id_task ASC LIMIT " + std::to_string(numberOfTasks) + ";";
+    std::string stmt = "SELECT * FROM task WHERE status = '" + status + "' ORDER BY id_task ASC LIMIT " + std::to_string(numberOfTasks) + ";";
 
     bool tst = gDao->executeQuery(stmt, res);
 
