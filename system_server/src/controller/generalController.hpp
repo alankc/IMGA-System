@@ -7,6 +7,7 @@
 #include "../dao/settingsDao.hpp"
 #include <ros/ros.h>
 #include <system_server/MsgRequest.h>
+#include <mutex>
 
 class GeneralController
 {
@@ -45,7 +46,7 @@ private:
     void checkRobotLoop();
     void checkTaskDeadlineLoop();
     void checkTaskToCancelLoop();
-
+    std::mutex *mtx;
 public:
     GeneralController();
     GeneralController(std::string host, std::string user, std::string pass, std::string database);

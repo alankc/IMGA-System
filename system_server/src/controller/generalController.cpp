@@ -16,6 +16,8 @@ GeneralController::GeneralController()
     tt = std::mktime(&bt);
     // start of today in system_clock units
     zero = std::chrono::system_clock::from_time_t(tt);
+
+    mtx = new std::mutex();
 }
 
 GeneralController::GeneralController(std::string host, std::string user, std::string pass, std::string database)
@@ -38,9 +40,13 @@ GeneralController::GeneralController(std::string host, std::string user, std::st
     tt = std::mktime(&bt);
     // start of today in system_clock units
     zero = std::chrono::system_clock::from_time_t(tt);
+    mtx = new std::mutex();
 }
 
-GeneralController::~GeneralController() {}
+GeneralController::~GeneralController() 
+{
+    delete(mtx);
+}
 
 double GeneralController::getCurrentTime_ms()
 {
@@ -84,6 +90,7 @@ void GeneralController::callScheduler()
     std::vector<uint32_t> taskFailedId;
     best.getResult(listOfTaskList, taskFailedId);
 
+    mtx->lock();
     //Update database and list of running tasks
     std::cout << "Updating GA results in database and running list" << std::endl;
     tc.updateTaskScheduled(listOfTaskList, taskFailedId);
@@ -94,6 +101,10 @@ void GeneralController::callScheduler()
     {
         rc.sendTaskList(r.first, r.second);
     }
+    ros::Duration d(2);
+    d.sleep();
+    ros::spinOnce();
+    mtx->unlock();
 }
 
 void GeneralController::schedulingLoop()
@@ -191,8 +202,10 @@ void GeneralController::checkTaskDeadlineLoop()
         double time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0;
         if (time >= (double)settings.getTaskTimeInterval())
         {
+            mtx->lock();
             std::vector<uint32_t> failedTasks;
             tc.deadlineCheck(failedTasks, getCurrentTime_s());
+            mtx->unlock();
             for (auto t : failedTasks)
             {
                 uint32_t idRobot;
@@ -222,8 +235,10 @@ void GeneralController::checkTaskToCancelLoop()
         double time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0;
         if (time >= (double)settings.getTaskTimeInterval())
         {
+            mtx->lock();
             std::vector<uint32_t> tasksToCancel;
             tc.toCancelCheck(tasksToCancel);
+            mtx->unlock();
             for (auto t : tasksToCancel)
             {
                 uint32_t idRobot;
