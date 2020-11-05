@@ -93,6 +93,8 @@ void GeneralController::callScheduler()
     //Update database
     std::cout << "Updating GA results in database" << std::endl;
     tc.updateTaskScheduled(listOfTaskList, taskFailedId);
+
+    //Add to list of followup tasks
 }
 
 void GeneralController::schedulingLoop()
@@ -105,7 +107,7 @@ void GeneralController::schedulingLoop()
     {
         auto end = std::chrono::system_clock::now();
         double time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0;
-        if (time >= (double)settings.getTimeInterval() / (double)attemps)
+        if (time >= (double)settings.getGaTimeInterval() / (double)attemps)
         {
             //It is in the begin, to its take into account processing below
             start = std::chrono::system_clock::now();
