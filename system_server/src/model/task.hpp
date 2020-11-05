@@ -57,7 +57,10 @@ public:
 	static const std::string STATUS_PERFORMING_DELIVERY;
 	static const std::string STATUS_SUCESS;
 	static const std::string STATUS_FAILED;
-	static const std::string STATUS_TO_CANCEL;
+	static const std::string STATUS_TO_CANCEL_USER;
+	static const std::string STATUS_CANCELLED_USER;
+	static const std::string STATUS_TO_CANCEL_DEADLINE;
+	static const std::string STATUS_CANCELLED_DEADLINE;
 	static const std::string STATUS_CANCELLED;
 };
 

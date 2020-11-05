@@ -6,7 +6,10 @@ const std::string Task::STATUS_PERFORMING_PICK_UP = "P";
 const std::string Task::STATUS_PERFORMING_DELIVERY = "D";
 const std::string Task::STATUS_SUCESS = "SU";
 const std::string Task::STATUS_FAILED = "F";
-const std::string Task::STATUS_TO_CANCEL = "TC";
+const std::string Task::STATUS_TO_CANCEL_USER = "UT";
+const std::string Task::STATUS_CANCELLED_USER= "UC";
+const std::string Task::STATUS_TO_CANCEL_DEADLINE = "DT";
+const std::string Task::STATUS_CANCELLED_DEADLINE = "DC";
 const std::string Task::STATUS_CANCELLED = "C";
 
 Task::Task(uint32_t id, uint32_t pickUpLocation, uint32_t deliveryLocation, uint16_t payload, double deadline)
