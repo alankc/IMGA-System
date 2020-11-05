@@ -180,6 +180,68 @@ void GeneralController::checkRobotLoop()
     }
 }
 
+void GeneralController::checkTaskDeadlineLoop()
+{
+    //not using duration because the thread sleeps too mutch
+    ros::Rate r(5);
+    auto start = std::chrono::system_clock::now();
+    while (ros::ok())
+    {
+        auto end = std::chrono::system_clock::now();
+        double time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0;
+        if (time >= (double)settings.getTaskTimeInterval())
+        {
+            std::vector<uint32_t> failedTasks;
+            tc.deadlineCheck(failedTasks, getCurrentTime_s());
+            for (auto t : failedTasks)
+            {
+                uint32_t idRobot;
+                if (tc.getRobotincharge(t, idRobot))
+                {
+                    system_server::MsgRequest msg;
+                    msg.type = system_server::MsgRequest::CANCEL_TASK;
+                    msg.data = t;
+                    rc.sendRequest(idRobot, msg);
+                }
+            }
+            start = std::chrono::system_clock::now();
+        }
+        r.sleep();
+        ros::spinOnce();
+    }
+}
+
+void GeneralController::checkTaskToCancelLoop()
+{
+    //not using duration because the thread sleeps too mutch
+    ros::Rate r(5);
+    auto start = std::chrono::system_clock::now();
+    while (ros::ok())
+    {
+        auto end = std::chrono::system_clock::now();
+        double time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0;
+        if (time >= (double)settings.getTaskTimeInterval())
+        {
+            std::vector<uint32_t> tasksToCancel;
+            tc.toCancelCheck(tasksToCancel);
+            for (auto t : tasksToCancel)
+            {
+                uint32_t idRobot;
+                if (tc.getRobotincharge(t, idRobot))
+                {
+                    system_server::MsgRequest msg;
+                    msg.type = system_server::MsgRequest::CANCEL_TASK;
+                    msg.data = t;
+                    rc.sendRequest(idRobot, msg);
+                }
+            }
+            start = std::chrono::system_clock::now();
+        }
+        r.sleep();
+        ros::spinOnce();
+    }
+}
+
 void GeneralController::callbackRequestRobotCheck(const system_server::MsgRequest &msg)
 {
     rc.checkRobot(msg.data);
@@ -310,6 +372,8 @@ void GeneralController::run()
 
     std::thread scLoopThr(&GeneralController::schedulingLoop, this);
     std::thread chkRbtLoopThr(&GeneralController::checkRobotLoop, this);
+    std::thread chkTaskDeadlineLoopThr(&GeneralController::checkTaskDeadlineLoop, this);
+    std::thread chkTaskToCancelLoopThr(&GeneralController::checkTaskToCancelLoop, this);
     ros::spin();
 
     return;

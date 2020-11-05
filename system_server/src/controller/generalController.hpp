@@ -43,6 +43,8 @@ private:
     void callScheduler();
     void schedulingLoop();
     void checkRobotLoop();
+    void checkTaskDeadlineLoop();
+    void checkTaskToCancelLoop();
 
 public:
     GeneralController();
