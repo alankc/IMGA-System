@@ -52,6 +52,24 @@ bool TaskDao::getTaskList(std::vector<Task> &taskList, std::string status, uint3
     return tst;
 }
 
+bool TaskDao::getTaskIdList(std::vector<uint32_t> &taskList, std::string status, uint32_t numberOfTasks)
+{
+    std::unique_ptr<sql::ResultSet> res;
+    std::string stmt = "SELECT id_task FROM task WHERE status = '" + status + "' ORDER BY id_task ASC LIMIT " + std::to_string(numberOfTasks) + ";";
+
+    bool tst = gDao->executeQuery(stmt, res);
+
+    if (tst)
+    {
+        while (res->next())
+        {
+            taskList.push_back(res->getUInt("id_task"));
+        }
+    }
+
+    return tst;
+}
+
 bool TaskDao::getMaximumSeqNum(uint32_t idRobot, int64_t &maxSeNumber)
 {
     std::unique_ptr<sql::ResultSet> res;
@@ -149,7 +167,7 @@ bool TaskDao::updateTasksScheduled(std::vector<TaskScheduledData> &taskList)
             stmtStream << "status = '" << task.status << "' ";
             stmtStream << "WHERE task.id_task = " << task.id << ";";
         }
-        
+
         statementVector.push_back(stmtStream.str());
     }
 
