@@ -17,6 +17,8 @@ private:
     RobotDao rd;
     std::vector<Robot> allRobots;
     std::vector<Robot> freeRobots;
+    //std::map<id from robot, number of checks>
+    std::map<uint32_t, uint8_t> robotsCheckCounter;
 
     ros::NodeHandle nh;
     //std::map<id from robot,ros::Publisher to the robot>
@@ -31,9 +33,12 @@ public:
     void updateAllRobots();
     void updateFreeRobots();
     void searchFreeRobot(double waitingTime_s);
+    void checkRobots(std::vector<uint32_t> &idRobotFailed);
+    void checkRobot(uint32_t idRobot);
     void sendRequest(uint32_t idRobot, system_server::MsgRequest &msg);
     void sendTaskList(uint32_t idRobot, system_server::MsgTaskList &msg);
     void callbackRobotData(const system_server::MsgRobotData &msg);
+    bool updateRobot(uint32_t id, RobotDao::Column column, std::string data);
 
     std::vector<Robot> *getFreeRobots();
     std::vector<Robot> *getAllRobots();

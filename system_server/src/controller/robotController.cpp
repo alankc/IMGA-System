@@ -26,6 +26,7 @@ void RobotController::updateAllRobots()
             std::string topic = "/robot" + std::to_string(r.getId());
             pubRequest[r.getId()] = nh.advertise<system_server::MsgRequest>(topic + "/requests", 100);
             pubTaskList[r.getId()] = nh.advertise<system_server::MsgTaskList>(topic + "/task_list", 100);
+            robotsCheckCounter[r.getId()] = 0;
         }
         std::cout << "All robots list has been updated" << std::endl;
     }
@@ -54,6 +55,35 @@ void RobotController::searchFreeRobot(double waitingTime_s)
     ros::Duration d(waitingTime_s);
     d.sleep();
     ros::spinOnce();
+}
+
+void RobotController::checkRobots(std::vector<uint32_t> &idRobotFailed)
+{
+    idRobotFailed.clear();
+    for (auto &cr : robotsCheckCounter)
+    {
+        cr.second = cr.second + 1;
+        if ((cr.second >= 2) && (cr.second < 5))
+        {
+            system_server::MsgRequest msg;
+            msg.type = system_server::MsgRequest::ROBOT_CHECK;
+
+            pubRequest[cr.first].publish(msg);
+            ros::spinOnce();
+        }
+        else if (cr.second == 5)
+        {
+            idRobotFailed.push_back(cr.first);
+            rd.updateRobot(cr.first, RobotDao::Column::status, Robot::STATUS_FAIL);
+        }
+    }
+}
+
+void RobotController::checkRobot(uint32_t idRobot)
+{
+    auto chkRobot = robotsCheckCounter.find(idRobot);
+    if (chkRobot != robotsCheckCounter.end())
+        chkRobot->second = 0;
 }
 
 void RobotController::sendRequest(uint32_t idRobot, system_server::MsgRequest &msg)
@@ -110,6 +140,11 @@ void RobotController::callbackRobotData(const system_server::MsgRobotData &msg)
             rd.updateRobotRequest(const_cast<system_server::MsgRobotData &>(msg));
         }
     }
+}
+
+bool RobotController::updateRobot(uint32_t id, RobotDao::Column column, std::string data)
+{
+    return rd.updateRobot(id, column, data);
 }
 
 std::vector<Robot> *RobotController::getFreeRobots()
