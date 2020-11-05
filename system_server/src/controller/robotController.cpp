@@ -101,15 +101,6 @@ void RobotController::callbackRobotData(const system_server::MsgRobotData &msg)
         //Must exist in the list of robots
         if (allRobotsIt != allRobots.end())
         {
-            //create topics if it does not exist
-            std::string topic = "/robot" + std::to_string(msg.id);
-
-            if (pubRequest.find(msg.id) == pubRequest.end())
-                pubRequest[msg.id] = nh.advertise<system_server::MsgRequest>(topic + "/requests", 100);
-
-            if (pubTaskList.find(msg.id) == pubTaskList.end())
-                pubTaskList[msg.id] = nh.advertise<system_server::MsgTaskList>(topic + "/task_list", 100);
-
             allRobotsIt->setRemainingBattery(msg.battery);
             allRobotsIt->setCurrentLocation(msg.currLocation);
             allRobotsIt->setMediumVelocity(msg.minSpeed);
