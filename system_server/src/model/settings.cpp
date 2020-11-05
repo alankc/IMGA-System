@@ -15,9 +15,19 @@ void Settings::setRobotPoolSize(uint32_t robotPoolSize)
     this->robotPoolSize = robotPoolSize;
 }
 
-void Settings::setTimeInterval(uint32_t timeInterval)
+void Settings::setTaskTimeInterval(uint32_t taskTimeInterval)
 {
-    this->timeInterval = timeInterval;
+    this->taskTimeInterval = taskTimeInterval;
+}
+
+void Settings::setRobotTimeInterval(uint32_t robotTimeInterval)
+{
+    this->robotTimeInterval = robotTimeInterval;
+}
+
+void Settings::setGaTimeInterval(uint32_t gaTimeInterval)
+{
+    this->gaTimeInterval = gaTimeInterval;
 }
 
 void Settings::setGaIterations(uint32_t gaIterations)
@@ -75,9 +85,19 @@ uint32_t Settings::getRobotPoolSize() const
     return robotPoolSize;
 }
 
-uint32_t Settings::getTimeInterval() const
+uint32_t Settings::getTaskTimeInterval() const
 {
-    return timeInterval;
+    return taskTimeInterval;
+}
+
+uint32_t Settings::getRobotTimeInterval() const
+{
+    return robotTimeInterval;
+}
+
+uint32_t Settings::getGaTimeInterval() const
+{
+    return gaTimeInterval;
 }
 
 uint32_t Settings::getGaIterations() const

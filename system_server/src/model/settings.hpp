@@ -9,7 +9,9 @@ private:
     uint32_t idSetup;
     uint32_t taskPoolSize;
     uint32_t robotPoolSize;
-    uint32_t timeInterval;
+    uint32_t taskTimeInterval;
+    uint32_t robotTimeInterval;
+    uint32_t gaTimeInterval;
     uint32_t gaIterations;
     uint32_t gaSubIterations;
     uint32_t gaPopulation;
@@ -20,13 +22,15 @@ private:
     double gaMigration;
 
 public:
-    Settings(/* args */){}
-    ~Settings(){}
+    Settings(/* args */) {}
+    ~Settings() {}
 
     void setIdSetup(uint32_t idSetup);
     void setTaskPoolSize(uint32_t taskPoolSize);
     void setRobotPoolSize(uint32_t robotPoolSize);
-    void setTimeInterval(uint32_t timeInterval);
+    void setTaskTimeInterval(uint32_t taskTimeInterval);
+    void setRobotTimeInterval(uint32_t robotTimeInterval);
+    void setGaTimeInterval(uint32_t gaTimeInterval);
     void setGaIterations(uint32_t gaIterations);
     void setGaSubIterations(uint32_t gaSubIterations);
     void setGaPopulation(uint32_t gaPopulation);
@@ -39,7 +43,9 @@ public:
     uint32_t getIdSetup() const;
     uint32_t getTaskPoolSize() const;
     uint32_t getRobotPoolSize() const;
-    uint32_t getTimeInterval() const;
+    uint32_t getTaskTimeInterval() const;
+    uint32_t getRobotTimeInterval() const;
+    uint32_t getGaTimeInterval() const;
     uint32_t getGaIterations() const;
     uint32_t getGaSubIterations() const;
     uint32_t getGaPopulation() const;
