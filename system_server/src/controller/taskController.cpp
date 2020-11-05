@@ -199,6 +199,34 @@ bool TaskController::setFail(uint32_t idRobot, std::vector<uint32_t> &idTasksFro
     }
 }
 
+void TaskController::deadlineCheck(std::vector<uint32_t> &idTasksToCancel, double time)
+{
+    for (auto &t : tasksRunning)
+    {
+        if (time >= t.getDeadline())
+        {
+            auto stt = t.getStatus();
+            //If not started yet or just going to pickup it can be canceled
+            if ((stt == Task::STATUS_SCHEDULED) || (stt == Task::STATUS_PERFORMING_PICK_UP))
+            {
+                t.setStatus(Task::STATUS_TO_CANCEL_DEADLINE);
+                idTasksToCancel.push_back(t.getId());
+            }
+        }
+    }
+}
+
+void TaskController::toCancelCheck(std::vector<uint32_t> &idTasksToCancel)
+{
+    td.getTaskIdList(idTasksToCancel, Task::STATUS_TO_CANCEL_USER, 100);
+    for (auto &t : idTasksToCancel)
+    {
+        auto it = std::find(tasksRunning.begin(), tasksRunning.end(), t);
+        if (it != tasksRunning.end())
+            it->setStatus(Task::STATUS_TO_CANCEL_USER);
+    }
+}
+
 std::vector<Task> *TaskController::getTasksToSchedule()
 {
     return &tasksToSchedule;
