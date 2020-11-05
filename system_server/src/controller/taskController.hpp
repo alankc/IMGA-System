@@ -38,6 +38,11 @@ public:
     //add that tasks to idTasksFromRobot
     bool setFail(uint32_t idRobot, std::vector<uint32_t> &idTasksFromRobot, double time);
 
+    //Will check if there is tasks with missing deadline
+    void deadlineCheck();
+    //Will check if there is tasks to cancel requested by user
+    void toCancelCheck();
+
     //Old functions...
     std::vector<Task> *getTasksToSchedule();
     Task *getTaskToScheduleById(uint32_t id);

@@ -136,8 +136,17 @@ bool TaskController::updateTaskStatus(uint32_t id, std::string status, double ti
     auto it = std::find(tasksRunning.begin(), tasksRunning.end(), id);
     if (it != tasksRunning.end())
     {
-        it->setStatus(status);
-        td.updateTask(id, TaskDao::status, status);
+        if (status == Task::STATUS_CANCELLED)
+        {
+            if (it->getStatus() == Task::STATUS_TO_CANCEL_USER)
+                it->setStatus(Task::STATUS_CANCELLED_USER);
+            else if (it->getStatus() == Task::STATUS_TO_CANCEL_DEADLINE)
+                it->setStatus(Task::STATUS_CANCELLED_DEADLINE);
+        }
+        else
+            it->setStatus(status);
+
+        td.updateTask(id, TaskDao::status, it->getStatus());
 
         if (status == Task::STATUS_PERFORMING_PICK_UP)
         {
