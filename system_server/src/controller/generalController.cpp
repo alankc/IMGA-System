@@ -384,7 +384,7 @@ void GeneralController::callbackRobotData(const system_server::MsgRobotData &msg
     rc.checkRobot(msg.id);
     rc.callbackRobotData(msg);
 }
-
+#include "testController.hpp"
 void GeneralController::run()
 {
     //Dont remove
@@ -393,6 +393,30 @@ void GeneralController::run()
     lc.updateDistanceMatrix();
     rc.updateAllRobots();
     rc.updateFreeRobots();
+
+    /*TEMPORARY CODE BELOW
+    {
+        TaskDao tdao(&gdao);
+        std::vector<Task> tasks;
+        tdao.getTaskList(tasks, Task::STATUS_NEW, 50);
+        auto robots = rc.getFreeRobots();
+        auto distance = lc.getDistanceMatrix();
+        TestController::Compute_deadline_and_energy(tasks, *robots, *distance);
+        std::cout << "Robots" << std::endl;
+        for (auto r : *robots)
+        {
+            std::cout << r.getId() << " " << r.getRemainingBattery() << std::endl;
+        }
+
+        std::cout << "Tasks" << std::endl;
+        for (auto t : tasks)
+        {
+            std::cout << t.getId() << " " << t.getRobotInCharge() << " " << t.getSeqNumber() << " " << t.getDeadline() << std::endl;
+        }
+        ros::spin();
+    }
+    TEMPORARY CODE ABOVE*/
+
     //lc.run();
 
     subRequest = nh.subscribe("server_request", 100, &GeneralController::callbackRequest, this);
