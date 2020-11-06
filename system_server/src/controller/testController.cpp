@@ -405,7 +405,7 @@ void TestController::ExperimentGAPure(uint32_t repetitions, uint32_t minT, uint3
 void TestController::Compute_deadline_and_energy(std::vector<Task> &tasks, std::vector<Robot> &freeRobots, std::vector<std::vector<double>> &distanceMatrix)
 {
 
-    for (uint32_t i; i < freeRobots.size(); i++)
+    for (uint32_t i = 0; i < freeRobots.size(); i++)
     {
         auto &r = freeRobots[i];
         uint32_t idRobot = r.getId();
