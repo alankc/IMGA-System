@@ -431,8 +431,6 @@ void TestController::Compute_deadline_and_energy(std::vector<Task> &tasks, std::
                 tasks.begin(), tasks.end(),
                 [&idRobot, &seqNumber](const Task &t) { return ((t.getRobotInCharge() == idRobot) && (t.getSeqNumber() == seqNumber)); });
         }
-        //to have battery during GA scheduling
-        totalEnergy += r.computeBatteryRequirement(90.0);
         r.setRemainingBattery(totalEnergy);
     }
 }
