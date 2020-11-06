@@ -403,33 +403,4 @@ void GeneralController::run()
     std::thread chkTaskDeadlineLoopThr(&GeneralController::checkTaskDeadlineLoop, this);
     std::thread chkTaskToCancelLoopThr(&GeneralController::checkTaskToCancelLoop, this);
     ros::spin();
-
-    return;
-
-    lc.run();
-    ros::spinOnce();
-    lc.updateLocationList();
-    lc.updateDistanceMatrix();
-    rc.updateAllRobots();
-
-    ros::Duration d(5);
-    //d.sleep();
-
-    auto c = tc.generateTasksCoordination(rc.getAllRobots(), lc.getDistanceMatrix());
-
-    auto tl = tc.getTasksToSchedule();
-    for (auto t : *tl)
-    {
-        std::cout << t;
-    }
-    c.printResult();
-
-    double dis = lc.getDistance(2, 100);
-    dis += lc.getDistance(100, 28);
-    dis += lc.getDistance(28, 195);
-    dis += lc.getDistance(195, 125);
-
-    std::cout << "Batt = " << (dis / 0.5) * (1.0 + 10.0 / 100.0) << std::endl;
-
-    ros::spin();
 }
