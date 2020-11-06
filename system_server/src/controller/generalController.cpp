@@ -43,9 +43,9 @@ GeneralController::GeneralController(std::string host, std::string user, std::st
     mtx = new std::mutex();
 }
 
-GeneralController::~GeneralController() 
+GeneralController::~GeneralController()
 {
-    delete(mtx);
+    delete (mtx);
 }
 
 double GeneralController::getCurrentTime_ms()
@@ -77,13 +77,18 @@ void GeneralController::callScheduler()
     gaP.mutationRate = settings.getGaMutation();
 
     auto tasks = tc.getTasksToSchedule();
-    /***********IMPORTANT***********/
-    /*revoce this code if the tasks have real deadline*/
-    /***********IMPORTANT***********/
+    /*******************IMPORTANT**************************/
+    /***revove this code if the tasks have real deadline***/
+    /******************IMPORTANT BELOW*********************/
     for (auto &t : *tasks)
     {
         t.setDeadline(t.getDeadline() + getCurrentTime_s());
+        TaskDao tdTmp(&gdao);
+        tdTmp.updateTask(t.getId(), TaskDao::Column::deadline, std::to_string(t.getDeadline()));
     }
+    /******************IMPORTANT ABOVE*********************/
+    /***revove this code if the tasks have real deadline***/
+    /*******************IMPORTANT**************************/
     auto robots = rc.getFreeRobots();
     auto distance = lc.getDistanceMatrix();
 

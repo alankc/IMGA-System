@@ -73,7 +73,7 @@ Visualization Manager:
       Shaft Length: 0.23000000417232513
       Shaft Radius: 0.009999999776482582
       Shape: Arrow (Flat)
-      Topic: /robot1/particlecloud
+      Topic: /robot0/particlecloud
       Unreliable: false
       Value: true
     - Alpha: 1
@@ -89,7 +89,7 @@ Visualization Manager:
       Shaft Length: 0.23000000417232513
       Shaft Radius: 0.009999999776482582
       Shape: Arrow (Flat)
-      Topic: /robot2/particlecloud
+      Topic: /robot1/particlecloud
       Unreliable: false
       Value: true
     - Alpha: 1
@@ -105,7 +105,7 @@ Visualization Manager:
       Shaft Length: 0.23000000417232513
       Shaft Radius: 0.009999999776482582
       Shape: Arrow (Flat)
-      Topic: /robot3/particlecloud
+      Topic: /robot2/particlecloud
       Unreliable: false
       Value: true
     - Alpha: 1
@@ -121,7 +121,7 @@ Visualization Manager:
       Shaft Length: 0.23000000417232513
       Shaft Radius: 0.009999999776482582
       Shape: Arrow (Flat)
-      Topic: /robot4/particlecloud
+      Topic: /robot3/particlecloud
       Unreliable: false
       Value: true
     - Alpha: 1
@@ -137,7 +137,7 @@ Visualization Manager:
       Shaft Length: 0.23000000417232513
       Shaft Radius: 0.009999999776482582
       Shape: Arrow (Flat)
-      Topic: /robot5/particlecloud
+      Topic: /robot4/particlecloud
       Unreliable: false
       Value: true
     - Alpha: 1
