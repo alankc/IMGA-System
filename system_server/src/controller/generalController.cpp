@@ -119,7 +119,7 @@ void GeneralController::schedulingLoop()
 {
     //not using duration because the thread sleeps too mutch
     ros::Rate r(5);
-    auto start = std::chrono::system_clock::now();
+    auto start = zero;
     uint32_t attemps = 1;
     while (ros::ok())
     {
