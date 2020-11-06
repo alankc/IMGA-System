@@ -401,3 +401,38 @@ void TestController::ExperimentGAPure(uint32_t repetitions, uint32_t minT, uint3
         // std::cout << avgTime << "\t" << stdTime << "\t" << globalHitRate << std::endl;
     }
 }
+
+void TestController::Compute_deadline_and_energy(std::vector<Task> &tasks, std::vector<Robot> &freeRobots, std::vector<std::vector<double>> &distanceMatrix)
+{
+
+    for (uint32_t i; i < freeRobots.size(); i++)
+    {
+        auto &r = freeRobots[i];
+        uint32_t idRobot = r.getId();
+        uint32_t seqNumber = 0;
+        auto it = std::find_if(
+            tasks.begin(), tasks.end(),
+            [&idRobot, &seqNumber](const Task &t) { return ((t.getRobotInCharge() == idRobot) && (t.getSeqNumber() == seqNumber)); });
+
+        double totalTime = 0;
+        double totalEnergy = r.getBatteryThreshold();
+        while (it != tasks.end())
+        {
+            double distanceToPickUp = distanceMatrix[r.getCurrentLocation()][it->getPickUpLocation()];
+            double distanceToDelivery = distanceMatrix[it->getPickUpLocation()][it->getDeliveryLocation()];
+            double totalDistance = distanceToPickUp + distanceToDelivery;
+            double taskTime = (totalDistance / r.getMediumVelocity()) * 1.10;
+            totalTime += taskTime;
+            totalEnergy += r.computeBatteryRequirement(taskTime);
+            it->setDeadline(totalTime);
+            r.setCurrentLocation(it->getDeliveryLocation());
+            seqNumber++;
+            it = std::find_if(
+                tasks.begin(), tasks.end(),
+                [&idRobot, &seqNumber](const Task &t) { return ((t.getRobotInCharge() == idRobot) && (t.getSeqNumber() == seqNumber)); });
+        }
+        //to have battery during GA scheduling
+        totalEnergy += r.computeBatteryRequirement(90.0);
+        r.setRemainingBattery(totalEnergy);
+    }
+}

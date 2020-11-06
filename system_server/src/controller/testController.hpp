@@ -8,25 +8,25 @@
 
 typedef struct _Exp3Result
 {
-	int64_t timeToScheduling = 0;
-	double scheduledPercentage = 0.0;
+    int64_t timeToScheduling = 0;
+    double scheduledPercentage = 0.0;
 
-	double energyExpected = 0.0;
-	double energyObtained = 0.0;
-	double timeExpected = 0.0;
-	double timeObtained = 0.0;
- 	uint64_t payloadExpected = 0;
-	uint64_t payloadObtained = 0;
+    double energyExpected = 0.0;
+    double energyObtained = 0.0;
+    double timeExpected = 0.0;
+    double timeObtained = 0.0;
+    uint64_t payloadExpected = 0;
+    uint64_t payloadObtained = 0;
 
-	double meanNormEnergyE = 0.0;
-	double stdNormEnergyE = 0.0;
-	double meanNormEnergyO = 0.0;
-	double stdNormEnergyO = 0.0;
-	
-	double meanNormPayloadE = 0.0;
-	double stdNormPayloadE = 0.0;	
-	double meanNormPayloadO = 0.0;	
-	double stdNormPayloadO = 0.0;	
+    double meanNormEnergyE = 0.0;
+    double stdNormEnergyE = 0.0;
+    double meanNormEnergyO = 0.0;
+    double stdNormEnergyO = 0.0;
+
+    double meanNormPayloadE = 0.0;
+    double stdNormPayloadE = 0.0;
+    double meanNormPayloadO = 0.0;
+    double stdNormPayloadO = 0.0;
 } Exp3Result;
 
 class TestController
@@ -56,7 +56,7 @@ public:
     * Evaluate Hit Rate of islands varing migration and subiterations 
     */
     void static Experiment2(uint32_t repetitions, double minMig, double maxMig, double stepMig, uint32_t minSubIt, uint32_t maxSubIt, uint32_t stepSubIt);
-   
+
     /*
     * Evaluate Hit Rate of islands varing tasnks and robots
     *   Number of robots is defined by a function
@@ -68,6 +68,12 @@ public:
     *   Number of robots is defined by a function
     */
     void static ExperimentGAPure(uint32_t repetitions, uint32_t minT, uint32_t maxT, uint32_t stepT);
+
+    /*
+    * Compute deadline for each tasks and energy necessary for each robot
+    * Tasks must have robotInCharge informed and seq_number
+    */
+    void static Compute_deadline_and_energy(std::vector<Task> &tasks, std::vector<Robot> &freeRobots, std::vector<std::vector<double>> &distanceMatrix);
 };
 
 template <typename T>
