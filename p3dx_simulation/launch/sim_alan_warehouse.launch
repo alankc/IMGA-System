@@ -197,7 +197,7 @@
 
         <node name="system_client" pkg="system_client" type="system_client_node" output="screen">
             <param name="robot_id" value="4"/>
-            <param name="battery_start" value="60"/>
+            <param name="battery_start" value="62"/>
         </node>
     </group>
 
