@@ -421,7 +421,7 @@ void TestController::Compute_deadline_and_energy(std::vector<Task> &tasks, std::
             double distanceToPickUp = distanceMatrix[r.getCurrentLocation()][it->getPickUpLocation()];
             double distanceToDelivery = distanceMatrix[it->getPickUpLocation()][it->getDeliveryLocation()];
             double totalDistance = distanceToPickUp + distanceToDelivery;
-            double taskTime = (totalDistance / r.getMediumVelocity()) * 1.20;
+            double taskTime = (r.getWaitingTime() + (totalDistance / r.getMediumVelocity())) * 1.20;
             totalTime += taskTime;
             totalEnergy += r.computeBatteryRequirement(taskTime);
             it->setDeadline(totalTime);
