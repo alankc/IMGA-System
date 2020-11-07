@@ -414,14 +414,14 @@ void TestController::Compute_deadline_and_energy(std::vector<Task> &tasks, std::
             tasks.begin(), tasks.end(),
             [&idRobot, &seqNumber](const Task &t) { return ((t.getRobotInCharge() == idRobot) && (t.getSeqNumber() == seqNumber)); });
 
-        double totalTime = 0;
+        double totalTime = 90;
         double totalEnergy = r.getBatteryThreshold();
         while (it != tasks.end())
         {
             double distanceToPickUp = distanceMatrix[r.getCurrentLocation()][it->getPickUpLocation()];
             double distanceToDelivery = distanceMatrix[it->getPickUpLocation()][it->getDeliveryLocation()];
             double totalDistance = distanceToPickUp + distanceToDelivery;
-            double taskTime = (totalDistance / r.getMediumVelocity()) * 1.10;
+            double taskTime = (totalDistance / r.getMediumVelocity()) * 1.20;
             totalTime += taskTime;
             totalEnergy += r.computeBatteryRequirement(taskTime);
             it->setDeadline(totalTime);
@@ -431,6 +431,7 @@ void TestController::Compute_deadline_and_energy(std::vector<Task> &tasks, std::
                 tasks.begin(), tasks.end(),
                 [&idRobot, &seqNumber](const Task &t) { return ((t.getRobotInCharge() == idRobot) && (t.getSeqNumber() == seqNumber)); });
         }
+        totalEnergy += r.computeBatteryRequirement(90);
         r.setRemainingBattery(totalEnergy);
     }
 }
