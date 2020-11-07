@@ -85,7 +85,7 @@
 
         <node name="system_client" pkg="system_client" type="system_client_node" output="screen">
             <param name="robot_id" value="1"/>
-            <param name="battery_start" value="27"/>
+            <param name="battery_start" value="29"/>
         </node>
     </group>
 
@@ -122,7 +122,7 @@
 
         <node name="system_client" pkg="system_client" type="system_client_node" output="screen">
             <param name="robot_id" value="2"/>
-            <param name="battery_start" value="42"/>
+            <param name="battery_start" value="43"/>
         </node>
     </group>
 
@@ -197,7 +197,7 @@
 
         <node name="system_client" pkg="system_client" type="system_client_node" output="screen">
             <param name="robot_id" value="4"/>
-            <param name="battery_start" value="62"/>
+            <param name="battery_start" value="63"/>
         </node>
     </group>
 

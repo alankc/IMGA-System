@@ -406,7 +406,7 @@ void GeneralController::run()
         std::cout << "Robots" << std::endl;
         for (auto r : *robots)
         {
-            std::cout << r.getId() << " " << r.getRemainingBattery() << std::endl;
+            std::cout << r.getId() << " " << std::ceil(r.getRemainingBattery()) << std::endl;
         }
 
         std::cout << "Tasks" << std::endl;
