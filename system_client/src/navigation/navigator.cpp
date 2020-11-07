@@ -53,6 +53,9 @@ void Navigator::navigateTo(double x, double y, double w)
 void Navigator::cancel()
 {
     mbc->cancelAllGoals();
+    ros::spinOnce();
+    ros::Duration d(1);
+    d.sleep();
 }
 
 bool Navigator::stillNavigating()
