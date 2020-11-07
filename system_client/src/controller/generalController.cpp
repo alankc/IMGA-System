@@ -1,5 +1,6 @@
 #include "generalController.hpp"
 #include <iostream>
+#include <sstream>
 #include <chrono>
 #include <system_server/MsgRequest.h>
 
@@ -139,8 +140,13 @@ void GeneralController::goToDepot()
             rc.getRobot()->setStatus(Robot::STATUS_CHARGING);
         else
             rc.getRobot()->setStatus(Robot::STATUS_FREE);
-        
+
         callbackPubSrvRobotData();
+        std::stringstream s;
+        s <<  "=====ALL DONE=====\n";
+        s << *rc.getRobot() << "\n";
+        s <<  "==================";
+        std::cout << s.str() << std::endl;
     }
     else
     {
