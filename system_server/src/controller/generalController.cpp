@@ -95,6 +95,7 @@ void GeneralController::callScheduler()
     std::cout << "Running GA" << std::endl;
     Island is(gaP, settings.getGaSubIterations(), settings.getGaSubIterations(), tasks, robots, distance);
     Chromosome::setStartTime(getCurrentTime_s());
+    is.setTimeLimit(settings.getGaTimeLimit());
     is.solve();
     Chromosome best = is.getBest();
     best.printResult();
