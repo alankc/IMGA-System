@@ -412,7 +412,7 @@ void GeneralController::run()
         std::cout << "Tasks" << std::endl;
         for (auto t : tasks)
         {
-            std::cout << t.getId() << " " << t.getRobotInCharge() << " " << t.getSeqNumber() << " " << t.getDeadline() << std::endl;
+            std::cout << t.getId() << " " << t.getRobotInCharge() << " " << t.getSeqNumber() << " " << std::ceil(t.getDeadline()) << std::endl;
         }
         ros::spin();
     }
