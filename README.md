@@ -15,3 +15,6 @@
 
 ## Banco de dados
 ### [database](https://github.com/alankc/GA-System/tree/master/database)
+
+## Resultados
+### [results](https://github.com/alankc/GA-System/tree/master/results)
