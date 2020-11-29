@@ -21,11 +21,12 @@ Para executar a simulação, é necessário que o usuário clone este repositór
 ### Para rodar o ambiente
 roslaunch p3dx_simulation sim_alan_warehouse.launch
 
-### Para rodar o coordenador
-rosrun system_server system_server_node
 
 ### Para rodar o sistema interno dos robôs
 roslaunch p3dx_simulation sim_system_client.launch
+
+### Para rodar o coordenador
+rosrun system_server system_server_node
 
 ### [p3dx_control](https://github.com/alankc/GA-System/tree/master/p3dx_control)
 ### [p3dx_description](https://github.com/alankc/GA-System/tree/master/p3dx_description)
