@@ -11,6 +11,22 @@ As avaliações do sistema mostram que ele é capaz de alocar mais tarefas que o
 Por fim, os resultados indicam que em um ambiente real de média escala pode-se utilizar o sistema. Para ambientes maiores, a obtenção de soluções otimizadas demanda um tempo para alocar tarefas que cresce exponencialmente com o número delas.
   
 ## Simulação
+
+Pare realizar a simulação foi construido um ambiente de aproximadamente 50mx30m utilizando as prateleiras do pacote small-warehouse da Amazon: https://github.com/aws-robotics/aws-robomaker-small-warehouse-world
+
+O modelo dos robôs utilizados na simulação foi adaptado do repositório: https://github.com/RafBerkvens/ua_ros_p3dx
+
+Para executar a simulação, é necessário que o usuário clone este repositório no seu workspace do ROS, compile o sistema e tenha o banco de dados instalado e configurado com as tabelas do sistema. Com os requisitos atendidos basta executar os seguintes comandos na ordem em que aparecem:
+
+### Para rodar o ambiente
+roslaunch p3dx_simulation sim_alan_warehouse.launch
+
+### Para rodar o coordenador
+rosrun system_server system_server_node
+
+### Para rodar o sistema interno dos robôs
+roslaunch p3dx_simulation sim_system_client.launch
+
 ### [p3dx_control](https://github.com/alankc/GA-System/tree/master/p3dx_control)
 ### [p3dx_description](https://github.com/alankc/GA-System/tree/master/p3dx_description)
 ### [p3dx_gazebo](https://github.com/alankc/GA-System/tree/master/p3dx_gazebo)
