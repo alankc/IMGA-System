@@ -9,6 +9,18 @@ O sistema desenvolvido utiliza os pacotes de navegação e comunicação do ROS.
 As avaliações do sistema mostram que ele é capaz de alocar mais tarefas que o AG padrão quando utilizando a mesma heurística. Além disso, a abordagem desenvolvida encontra soluções onde a estimativa de consumo energético é menor que o esperado e atende restrições de carga de transporte, bateria e prazo. Também demonstraram que o sistema é funcional na coordenação de um grupo de robôs em um ambiente simulado.
 
 Por fim, os resultados indicam que em um ambiente real de média escala pode-se utilizar o sistema. Para ambientes maiores, a obtenção de soluções otimizadas demanda um tempo para alocar tarefas que cresce exponencialmente com o número delas.
+
+**Abstract**
+
+The technological advances have led more consumers to adhere to e-commerce shopping. Consequently, the need for efficiency has increased in warehouses. The new technologies also had allowed the use of commercial mobile robots in several areas, including logistics, once that robots are less susceptible to failures, which can increase warehouse efficiency. Besides that, its operational cost does not increase with time, as staff salaries. However, to robots being efficient, it is necessary optimization in the management of task allocation.
+  
+This process can use several techniques, methods as auction and Genetic Algorithm (GA) are among the most used. However, the approaches already developed do not meet restrictions related to deadline, energy consumption and payload capacities simultaneously. Therefore, this research has developed an architecture that uses the Island Model GA, in multi-robot task allocation, that satisfies the restrictions mentioned above. 
+
+The developed system uses packages from ROS to navigation and communication. Thus any robot set that utilizes a version of this operating system can use the developed architecture.
+  
+The system evaluation has shown that it allocate more tasks than the standard GA when using the same heuristic. Also, the developed approach finds solutions where the estimated energy consumption is smaller than the expected and meets restrictions of payload, battery and deadline. It has shown also that the system is functional to coordinate a group of robots in a simulated environment. 
+  
+Finally, the results show that a medium scale real environment can use the system. To larger systems, the approach can find optimized solutions, but the time to execute the allocations process grows exponentially depending on the task set size.
   
 ## Simulação
 
