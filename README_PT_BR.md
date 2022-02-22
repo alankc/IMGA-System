@@ -12,7 +12,7 @@ Por fim, os resultados indicam que em um ambiente real de média escala pode-se 
 
 ## Simulação
 
-Pare realizar a simulação foi construído um ambiente de aproximadamente 50mx30m utilizando as prateleiras do pacote small-warehouse da Amazon: https://github.com/aws-robotics/aws-robomaker-small-warehouse-world 
+Para realizar a simulação foi construído um ambiente de aproximadamente 50mx30m utilizando as prateleiras do pacote small-warehouse da Amazon: https://github.com/aws-robotics/aws-robomaker-small-warehouse-world 
 
 O modelo dos robôs utilizados na simulação foi adaptado do repositório: https://github.com/RafBerkvens/ua_ros_p3dx 
 
