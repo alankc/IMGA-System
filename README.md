@@ -18,7 +18,7 @@ To perform the simulation, an environment of approximately 50mx30m was built usi
 
 The model of the robots used in the simulation was adapted from the repository: https://github.com/RafBerkvens/ua_ros_p3dx 
 
-To run the simulation, the user needs to clone this repository in his ROS workspace. Then, compile the system and install and configure the with the system tables. With the requirements met, just run the following commands in the order they appear:
+To run the simulation, the user needs to clone this repository in his ROS workspace. Then, compile the system and install and configure the database with the system tables. With the requirements met, just run the following commands in the order they appear:
 
 ### To run the environment
 roslaunch p3dx_simulation sim_alan_warehouse.launch
