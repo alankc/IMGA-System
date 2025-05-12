@@ -1,4 +1,4 @@
-# GA-System
+# IMGA-System
 
 The technological advances have led more consumers to adhere to e-commerce shopping. Consequently, the need for efficiency has increased in warehouses. The new technologies also had allowed the use of commercial mobile robots in several areas, including logistics, once that robots are less susceptible to failures, which can increase warehouse efficiency. Besides that, its operational cost does not increase with time, as staff salaries. However, to robots being efficient, it is necessary optimization in the management of task allocation.
   
@@ -12,7 +12,7 @@ Finally, the results show that a medium scale real environment can use the syste
 
 [Portuguese version](https://github.com/alankc/GA-System/blob/master/README_PT_BR.md)
   
-## Simulação
+## Simulation
 
 To perform the simulation, an environment of approximately 50mx30m was built using the shelves of the small-warehouse package from Amazon: https://github.com/aws-robotics/aws-robomaker-small-warehouse-world 
 
